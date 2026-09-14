@@ -1,9 +1,9 @@
 import { supabase, isSupabaseConfigured } from './supabase'
 import { MOCK_PRODUCTS, GENRES } from '../data/productsData'
 
-const LOCAL_STORAGE_ORDERS_KEY = 'outframe_labs_orders'
-const LOCAL_STORAGE_USER_KEY = 'outframe_labs_user'
-const LOCAL_STORAGE_ADDRESSES_KEY = 'outframe_labs_addresses'
+const LOCAL_STORAGE_ORDERS_KEY = 'halfrate_orders'
+const LOCAL_STORAGE_USER_KEY = 'halfrate_user'
+const LOCAL_STORAGE_ADDRESSES_KEY = 'halfrate_addresses'
 
 // Helper for local storage
 const getLocalData = (key, fallback = []) => {
@@ -23,7 +23,7 @@ const setLocalData = (key, value) => {
   }
 }
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'outframe_labs_products'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_products'
 
 // ── 1. PRODUCTS & CATEGORIES ──
 export async function getProducts(options = {}) {
@@ -134,7 +134,7 @@ export async function saveProduct(product) {
 
 // ── 2. ORDERS & SHIPROCKET LIVE TRACKING ──
 export async function createOrder(orderPayload) {
-  const orderNumber = 'SCP-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000)
+  const orderNumber = 'HR-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000)
   const estimatedDelivery = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString()
 
   const initialTrackingEvents = [
@@ -142,14 +142,14 @@ export async function createOrder(orderPayload) {
       id: 'evt-1',
       status: 'PLACED',
       activity: 'Order placed & payment verified',
-      location: 'Scope International Official Store',
+      location: 'halfrate.co Official Store',
       event_time: new Date().toISOString(),
     },
     {
       id: 'evt-2',
       status: 'CONFIRMED',
-      activity: 'Order confirmed: Hardware allocated for QC inspection & packaging',
-      location: 'Scope International Central Facility, Bengaluru',
+      activity: 'Order confirmed: Quality inspection & Sabse Sasta value pack verified',
+      location: 'HalfRate Central Hub, Bengaluru',
       event_time: new Date(Date.now() + 1000 * 60 * 5).toISOString(),
     },
   ]
@@ -286,7 +286,7 @@ export async function createOrder(orderPayload) {
               order_id: orderRecord.id,
               status: evt.status || 'PLACED',
               activity: evt.activity || 'Order placed',
-              location: evt.location || 'Scope International Global Portal',
+              location: evt.location || 'HalfRate Logistics Network',
               event_time: evt.event_time || new Date().toISOString(),
             }))
             const { error: trkErr } = await supabase.from('tracking_events').insert(trkRows)
@@ -455,7 +455,7 @@ export function advanceOrderStatus(orderNumber) {
     }
 
     const activityMap = {
-      PACKED: { activity: 'Hardware inspected and sealed in signature presentation box with warranty card', location: 'Scope International Central Facility, Bengaluru' },
+      PACKED: { activity: 'Hardware inspected and sealed in signature presentation box with warranty card', location: 'HalfRate Central Facility, Bengaluru' },
       SHIPPED: { activity: 'Handed over to express courier partner (Blue Dart Express)', location: 'Bengaluru Sort Facility' },
       IN_TRANSIT: { activity: 'Package in transit between distribution hubs', location: 'National Sorting Center' },
       OUT_FOR_DELIVERY: { activity: 'Out for delivery with courier delivery executive', location: order.shipping_address?.city || 'Local Delivery Hub' },
@@ -1108,7 +1108,7 @@ export function initAuthListener(onUserChange) {
 }
 
 // ── 6. PERSISTENT ACCOUNT CART ──
-const LOCAL_STORAGE_CART_KEY = 'outframe_labs_cart'
+const LOCAL_STORAGE_CART_KEY = 'halfrate_cart'
 
 export function getLocalCart() {
   const current = getCurrentCustomer()

@@ -129,7 +129,7 @@ export default function OrderConfirmedPage() {
 
             {/* Thank you subtitle */}
             <p className="mt-2 text-sm text-[#78716C] fade-in-up-1">
-              Thank you for ordering with Scope International!
+              Thank you for ordering with <strong className="text-[#1C1917]">halfrate.co</strong> — Sabse Sasta Guaranteed!
             </p>
 
             {/* Summary Card */}
@@ -218,7 +218,7 @@ export default function OrderConfirmedPage() {
 
         {/* Footer */}
         <footer className="border-t border-[#E7E2D9] py-4 text-center text-xs text-[#78716C]">
-          © 2026 Scope International. All rights reserved.
+          © 2026 halfrate.co — Sabse Sasta. All rights reserved.
         </footer>
       </div>
     </>

@@ -373,7 +373,10 @@ export default function CheckoutPage() {
             <ArrowLeft className="h-4 w-4" />
             <span>Return to Catalog</span>
           </Link>
-          <span className="font-heading text-base font-bold tracking-wider text-[#1C1917]">Scope International</span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-heading text-base font-black tracking-tight text-[#1C1917]">halfrate<span className="text-[#991B33]">.co</span></span>
+            <span className="text-[9px] font-black uppercase tracking-wider bg-amber-400 text-stone-900 px-1.5 py-0.5 rounded-full">Sabse Sasta</span>
+          </div>
           <Link to="/" className="text-xs font-bold uppercase tracking-wider text-[#78716C] hover:text-[#991B33]">
             CANCEL
           </Link>
@@ -396,7 +399,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="border-t border-[#E7E2D9] py-4 text-center text-xs text-[#78716C]">
-          © 2026 Scope International. All rights reserved.
+          © 2026 halfrate.co — Sabse Sasta. All rights reserved.
         </div>
       </div>
     )
@@ -426,9 +429,12 @@ export default function CheckoutPage() {
             </button>
 
             {/* Brand Title */}
-            <div className="flex items-center gap-2">
-              <span className="font-heading text-base font-extrabold tracking-[0.15em] text-[#1C1917]">
-                Scope International
+            <div className="flex items-center gap-1.5">
+              <span className="font-heading text-base font-black tracking-tight text-[#1C1917]">
+                halfrate<span className="text-[#991B33]">.co</span>
+              </span>
+              <span className="text-[9px] font-black uppercase tracking-wider bg-amber-400 text-stone-900 px-1.5 py-0.5 rounded-full">
+                Sabse Sasta
               </span>
             </div>
 
@@ -593,7 +599,7 @@ export default function CheckoutPage() {
               <div className="rounded-2xl border border-[#E7E2D9] bg-white p-6 space-y-4 shadow-md animate-fade-in-up">
                 <div className="flex items-center justify-between pb-3 border-b border-[#E7E2D9]">
                   <h3 className="font-heading text-lg font-bold text-[#1C1917]">
-                    {authMode === 'signup' ? 'Create Scope Account' : 'Sign in to Scope International'}
+                    {authMode === 'signup' ? 'Create HalfRate Account' : 'Sign in to halfrate.co'}
                   </h3>
                   <button
                     onClick={() => setIsAuthFormOpen(false)}
@@ -1379,7 +1385,7 @@ export default function CheckoutPage() {
                   <p className="text-xs text-[#78716C]">
                     {paymentMethod === 'COD'
                       ? 'Pay cash upon arrival'
-                      : 'Priority dispatch from Scope International fulfillment hub'}
+                      : 'Priority express dispatch from halfrate.co fulfillment hub'}
                   </p>
                 </div>
                 <span className="text-xs font-mono font-bold text-[#991B33]">₹{totalAmount}</span>

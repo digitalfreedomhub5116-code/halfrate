@@ -1,19 +1,16 @@
-# SCOPE INTERNATIONALS — Luxury Consumer Electronics & Tech Store
+# halfrate.co — Sabse Sasta! ⚡
 
-A modern, ultra-premium consumer electronics e-commerce platform built with React, Vite, Tailwind CSS, and Supabase.
+**halfrate.co** is India's premier value electronics and lifestyle e-commerce platform. Built with React 19, Vite, Tailwind CSS v4, and Supabase, delivering curated electronic devices, acoustics, smart accessories, and lifestyle essentials at direct factory half rates.
 
-## 🌟 Highlights & Features
+## 🌟 Tagline: "Sabse Sasta"
 
-- **Light Aesthetic**: Elegant beige (`#FAF8F5`) canvas, crimson brand accents (`#991B33`), pure white cards, and Playfair Display editorial typography.
-- **Curated Flagship Collection**: 20 precision-engineered electronic devices across 5 tech collections:
-  - Smart Audio & Sound
-  - Wearables & Smart Tech
-  - GaN Power & Fast Charging
-  - Peripherals & Computing
-  - Smart Home & Security
-- **Technical Specifications**: Detailed hardware specs table for every device (Chipsets, Battery Life, Dimensions, Compliances).
+- **Unbeatable Value**: Up to 50% - 70% off retail pricing with our "Sabse Sasta Guarantee".
+- **Light Aesthetic**: Warm beige (`#FAF8F5`) canvas, crimson brand accents (`#991B33`), pure white cards, and editorial typography.
+- **Curated Collections**: Smart Audio, Wearables, Fast Charging, Mobile Essentials & Lifestyle Craft.
+- **Live Search & Deal Filters**: Real-time product search with auto-suggest and "Under ₹999 / Under ₹1,999 / Flat 50% Off" filters.
+- **Pincode Delivery Estimator**: Instant delivery date calculations across India.
 - **Multi-step Checkout**: Smooth 3-step checkout with address management, Cash on Delivery (COD), and Prepaid UPI.
-- **Order Tracking**: Comprehensive live courier tracking pipeline.
+- **Order Tracking**: Comprehensive live courier tracking pipeline (`HR-2026-XXXX`).
 - **Admin Dashboard**: Realtime operations portal for inventory management, orders, and fulfillment.
 
 ## 🚀 Getting Started

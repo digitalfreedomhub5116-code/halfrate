@@ -287,13 +287,16 @@ export default function Hero() {
               <span className="text-[11px] font-extrabold text-[#1C1917]">4.9</span>
             </div>
             <span className="text-[10px] font-semibold text-[#78716C]">
-              · 12,000+ Happy Customers Across India
+              · 15,000+ Happy Customers Across India
             </span>
           </div>
 
           {/* Centered Headline */}
           <h1 className="font-serif text-2xl sm:text-3xl font-bold text-[#1C1917] tracking-tight leading-[1.2] max-w-xs sm:max-w-sm">
-            Artisanal Crafts, Luxury Jewellery & Premium Tech.
+            Direct Tech & Lifestyle at Half Rate.
+            <span className="block text-[#991B33] text-lg sm:text-xl mt-1 font-sans font-black uppercase tracking-wider">
+              Sabse Sasta Guaranteed ⚡
+            </span>
           </h1>
 
           {/* Dual CTAs (Side by side for mobile vertical compactness) */}
@@ -302,14 +305,14 @@ export default function Hero() {
               onClick={handleScrollToProducts}
               className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full bg-[#991B33] hover:bg-[#7E1227] text-white px-4 py-2.5 text-xs font-bold tracking-wide transition-all shadow-md shadow-[#991B33]/20 active:scale-98 cursor-pointer whitespace-nowrap"
             >
-              <span>Shop All</span>
+              <span>Explore Deals</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </button>
             <button
               onClick={handleScrollToProducts}
               className="flex-1 inline-flex items-center justify-center rounded-full border border-[#E7E2D9] bg-white hover:bg-[#F4EFEA] text-[#1C1917] px-4 py-2.5 text-xs font-bold tracking-wide transition-all shadow-xs hover:border-[#D6D0C5] active:scale-98 cursor-pointer whitespace-nowrap"
             >
-              <span>Best Sellers</span>
+              <span>Under ₹999</span>
             </button>
           </div>
 
@@ -326,7 +329,7 @@ export default function Hero() {
                 {count1.toFixed(1)} ★
               </span>
               <span className="text-[9px] font-bold tracking-wider text-[#78716C] uppercase mt-0.5 leading-tight">
-                Customer Satisfaction
+                Customer Rating
               </span>
             </div>
 
@@ -341,7 +344,7 @@ export default function Hero() {
                 {count2}%
               </span>
               <span className="text-[9px] font-bold tracking-wider text-[#78716C] uppercase mt-0.5 leading-tight">
-                Authentic & Handcrafted
+                Half Rate Savings
               </span>
             </div>
 
@@ -356,7 +359,7 @@ export default function Hero() {
                 {count3.toLocaleString('en-IN')}+
               </span>
               <span className="text-[9px] font-bold tracking-wider text-[#78716C] uppercase mt-0.5 leading-tight">
-                Happy Customers
+                Happy Buyers
               </span>
             </div>
 
@@ -522,23 +525,38 @@ export default function Hero() {
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <h1 className="font-serif text-[46px] xl:text-[52px] font-bold text-[#1C1917] tracking-tight leading-[1.14]">
-              Artisanal Crafts, Luxury Jewellery & Premium Tech.
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#E7E2D9] shadow-xs mb-4 w-fit">
+              <span className="flex h-2 w-2 rounded-full bg-[#991B33] animate-pulse"></span>
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#991B33]">
+                Sabse Sasta Guarantee ⚡
+              </span>
+              <span className="text-stone-300">|</span>
+              <span className="text-[11px] font-bold text-stone-600">
+                Up to 70% Off Market Price
+              </span>
+            </div>
+
+            <h1 className="font-serif text-[42px] xl:text-[48px] font-bold text-[#1C1917] tracking-tight leading-[1.12]">
+              Direct Factory Tech & Lifestyle at Half Rate.
             </h1>
+
+            <p className="mt-3.5 text-sm xl:text-base text-[#78716C] leading-relaxed max-w-lg">
+              India's premier value destination. Certified electronics, audiophile acoustics, fast GaN chargers, and royal handcrafted jewelry with all-India express delivery.
+            </p>
 
             <div className="mt-7 flex flex-row items-center gap-3">
               <button
                 onClick={handleScrollToProducts}
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[#991B33] hover:bg-[#7E1227] text-white px-6 py-3.5 text-sm font-bold tracking-wide transition-all shadow-md shadow-[#991B33]/20 hover:shadow-lg hover:shadow-[#991B33]/30 active:scale-98 cursor-pointer"
               >
-                <span>Shop All Collections</span>
+                <span>Explore Half Rate Deals</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
               <button
                 onClick={handleScrollToProducts}
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-[#E7E2D9] bg-white hover:bg-[#F4EFEA] text-[#1C1917] px-6 py-3.5 text-sm font-bold tracking-wide transition-all shadow-xs hover:border-[#D6D0C5] active:scale-98 cursor-pointer"
               >
-                <span>Explore Best Sellers</span>
+                <span>Deals Under ₹999</span>
               </button>
             </div>
           </div>
@@ -808,7 +826,7 @@ export default function Hero() {
               {count1.toFixed(1)} ★
             </span>
             <span className="text-[10px] sm:text-xs font-bold tracking-wider text-[#78716C] uppercase mt-1">
-              Customer Satisfaction
+              Customer Rating
             </span>
           </div>
 
@@ -823,7 +841,7 @@ export default function Hero() {
               {count2}%
             </span>
             <span className="text-[10px] sm:text-xs font-bold tracking-wider text-[#78716C] uppercase mt-1">
-              Genuine Certified Tech
+              Direct Half Rate Savings
             </span>
           </div>
 
@@ -838,7 +856,7 @@ export default function Hero() {
               {count3.toLocaleString('en-IN')}+
             </span>
             <span className="text-[10px] sm:text-xs font-bold tracking-wider text-[#78716C] uppercase mt-1">
-              Devices Delivered
+              Happy Buyers Across India
             </span>
           </div>
 
@@ -865,10 +883,10 @@ export default function Hero() {
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 rounded-full bg-[#00A859] hover:bg-[#008f4c] text-white px-4 py-2.5 text-xs sm:text-sm font-bold shadow-lg shadow-[#00A859]/30 transition-all duration-300 hover:scale-105 active:scale-95"
-        title="Contact Scope International Concierge Support"
+        title="Contact halfrate.co WhatsApp Concierge Support"
       >
         <MessageCircle className="h-4 w-4 fill-white" />
-        <span>Concierge Desk</span>
+        <span>Sabse Sasta Help</span>
       </a>
     </section>
   )

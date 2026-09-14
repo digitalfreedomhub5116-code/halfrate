@@ -17,6 +17,8 @@ function ProductCard({ product }) {
   const toggleWishlist = useCartStore((s) => s.toggleWishlist)
   const isWishlisted = useCartStore((s) => s.isWishlisted(product.id))
   const isOutOfStock = product.inStock === false
+  const originalPrice = product.originalPrice || Math.round(product.price * 2)
+  const savings = originalPrice - product.price
 
   const handleCardClick = () => {
     navigate(`/product/${product.slug}`)
@@ -51,11 +53,24 @@ function ProductCard({ product }) {
           loading="lazy"
         />
 
+        {/* Top-Left: Sabse Sasta Deal Badge */}
+        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1">
+          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-[#991B33] text-white shadow-sm border border-white/30">
+            <Sparkles className="h-2.5 w-2.5 text-amber-300" />
+            <span>Sabse Sasta</span>
+          </span>
+          {savings > 0 && (
+            <span className="inline-block px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-emerald-700 text-white shadow-xs">
+              Save ₹{savings.toLocaleString('en-IN')}
+            </span>
+          )}
+        </div>
+
         {/* Out of Stock badge on image */}
         {isOutOfStock && (
-          <div className="absolute top-2.5 left-2.5 z-10">
+          <div className="absolute bottom-2.5 left-2.5 z-10">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider uppercase bg-stone-900/85 backdrop-blur-md text-rose-300 border border-rose-500/40 shadow-sm">
-              In Backorder
+              Out of Stock
             </span>
           </div>
         )}

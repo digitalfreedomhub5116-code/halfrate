@@ -36,11 +36,25 @@ export default function ProductPage() {
 
   const isWishlisted = useCartStore((s) => (product ? s.isWishlisted(product.id) : false))
 
+  const addReview = useCartStore((s) => s.addReview)
+
   const [activeImageIndex, setActiveImageIndex] = useState(0)
   const [activeTab, setActiveTab] = useState('image')
   const [isCopied, setIsCopied] = useState(false)
   const [showAllReviews, setShowAllReviews] = useState(false)
   const [showNavbar, setShowNavbar] = useState(true)
+
+  // Pincode Delivery Estimator State
+  const [pincode, setPincode] = useState('')
+  const [pincodeResult, setPincodeResult] = useState(null)
+  const [pincodeChecking, setPincodeChecking] = useState(false)
+
+  // Customer Review Submission State
+  const [isWritingReview, setIsWritingReview] = useState(false)
+  const [reviewerName, setReviewerName] = useState('')
+  const [reviewerRating, setReviewerRating] = useState(5)
+  const [reviewerText, setReviewerText] = useState('')
+  const [reviewSubmitted, setReviewSubmitted] = useState(false)
 
   const imageSectionRef = useRef(null)
   const descSectionRef = useRef(null)
@@ -211,7 +225,7 @@ export default function ProductPage() {
     if (navigator.share) {
       navigator.share({
         title: product.fullName,
-        text: `Check out ${product.fullName} on Scope International`,
+        text: `Check out ${product.fullName} on halfrate.co — Sabse Sasta Guaranteed!`,
         url: window.location.href,
       }).catch(() => {})
     } else {
@@ -225,7 +239,46 @@ export default function ProductPage() {
     (p) => p.genre === product.genre && p.id !== product.id && !p.isHidden
   ).slice(0, 4)
 
-  const genreData = GENRES.find((g) => g.id === product.genre)
+  const handleCheckPincode = (e) => {
+    if (e) e.preventDefault()
+    if (!/^\d{6}$/.test(pincode.trim())) {
+      setPincodeResult({ valid: false, message: 'Please enter a valid 6-digit Indian PIN code.' })
+      return
+    }
+    setPincodeChecking(true)
+    setTimeout(() => {
+      setPincodeChecking(false)
+      const deliveryDate = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+      const dateStr = deliveryDate.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' })
+      setPincodeResult({
+        valid: true,
+        message: `Express Delivery by ${dateStr} to PIN ${pincode.trim()} • Cash on Delivery Eligible`,
+      })
+    }, 400)
+  }
+
+  const handleSubmitReview = (e) => {
+    e.preventDefault()
+    if (!reviewerName.trim() || !reviewerText.trim()) return
+    const newRev = {
+      id: 'rev-' + Date.now(),
+      name: reviewerName.trim(),
+      rating: reviewerRating,
+      text: reviewerText.trim(),
+      date: 'Verified Buyer · Today',
+      verified: true,
+    }
+    if (addReview) {
+      addReview(product.id, newRev)
+    }
+    setReviewSubmitted(true)
+    setTimeout(() => {
+      setIsWritingReview(false)
+      setReviewSubmitted(false)
+      setReviewerName('')
+      setReviewerText('')
+    }, 1800)
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-[#1C1917] selection:bg-[#991B33] selection:text-white pb-20 sm:pb-0">
@@ -489,6 +542,15 @@ export default function ProductPage() {
 
               {/* Pricing Section */}
               <div className="mt-6 p-4 rounded-2xl border border-[#E7E2D9] bg-white shadow-xs">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider bg-[#991B33] text-white">
+                    <Sparkles className="h-3 w-3 text-amber-300" /> Sabse Sasta Deal
+                  </span>
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    Save ₹{(product.originalPrice || product.price * 2) - product.price} (Half Rate)
+                  </span>
+                </div>
+
                 <div className="flex items-baseline gap-2.5 sm:gap-3 flex-nowrap">
                   <span className="font-heading text-3xl sm:text-4xl font-extrabold text-[#991B33]">
                     ₹{product.price}
@@ -501,19 +563,59 @@ export default function ProductPage() {
                   </span>
                 </div>
                 <p className="mt-1.5 text-xs text-[#78716C]">
-                  All prices inclusive of taxes. Standard Courier Delivery: ₹60.
+                  All prices inclusive of all taxes. Standard Express Delivery: ₹60.
                 </p>
 
                 {/* Stock status */}
                 {!isOutOfStock ? (
                   <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-700">
                     <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />
-                    <span>In Stock · Dispatched within 24 Hours</span>
+                    <span>In Stock · Ready for Immediate Dispatch</span>
                   </div>
                 ) : (
                   <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-rose-600">
                     <span className="h-2 w-2 rounded-full bg-rose-500" />
                     <span>Currently In Backorder · Notification sent upon restock</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Interactive Pincode Delivery Estimator */}
+              <div className="mt-4 p-3.5 rounded-2xl border border-[#E7E2D9] bg-[#FAF8F5]">
+                <span className="text-xs font-bold text-[#1C1917] flex items-center gap-1.5 mb-2">
+                  <Truck className="h-3.5 w-3.5 text-[#991B33]" />
+                  <span>Check Delivery & Cash on Delivery</span>
+                </span>
+                <form onSubmit={handleCheckPincode} className="flex gap-2">
+                  <input
+                    type="text"
+                    maxLength={6}
+                    placeholder="Enter 6-digit Pincode (e.g. 400001)"
+                    value={pincode}
+                    onChange={(e) => {
+                      setPincode(e.target.value.replace(/\D/g, ''))
+                      setPincodeResult(null)
+                    }}
+                    className="flex-1 bg-white border border-[#E7E2D9] rounded-xl px-3 py-2 text-xs text-[#1C1917] outline-none font-medium focus:border-[#991B33]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={pincodeChecking}
+                    className="px-4 py-2 rounded-xl bg-[#1C1917] hover:bg-[#991B33] text-white text-xs font-bold transition-colors cursor-pointer disabled:opacity-50"
+                  >
+                    {pincodeChecking ? 'Checking...' : 'Check'}
+                  </button>
+                </form>
+                {pincodeResult && (
+                  <div className={`mt-2.5 p-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 ${
+                    pincodeResult.valid
+                      ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                      : 'bg-rose-50 text-rose-700 border border-rose-200'
+                  }`}>
+                    {pincodeResult.valid ? (
+                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
+                    ) : null}
+                    <span>{pincodeResult.message}</span>
                   </div>
                 )}
               </div>
@@ -647,35 +749,117 @@ export default function ProductPage() {
               </p>
             </div>
 
-            {/* Overall Rating Box */}
-            <div className="flex items-center gap-4 p-4 rounded-2xl border border-[#E7E2D9] bg-white shadow-xs">
-              <div className="text-center">
-                <span className="font-heading text-4xl font-extrabold text-[#991B33] block">
-                  {product.rating}
-                </span>
-                <span className="text-[11px] text-[#78716C]">out of 5</span>
-              </div>
-              <div className="border-l border-[#E7E2D9] pl-4">
-                <div className="flex items-center text-amber-500 mb-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < Math.floor(product.rating)
-                          ? 'fill-amber-400 text-amber-400'
-                          : i < product.rating
-                          ? 'fill-amber-400/50 text-amber-400'
-                          : 'text-stone-300 fill-stone-200'
-                      }`}
-                    />
-                  ))}
+            {/* Overall Rating Box & Write Review Button */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <div className="flex items-center gap-4 p-4 rounded-2xl border border-[#E7E2D9] bg-white shadow-xs">
+                <div className="text-center">
+                  <span className="font-heading text-4xl font-extrabold text-[#991B33] block">
+                    {product.rating}
+                  </span>
+                  <span className="text-[11px] text-[#78716C]">out of 5</span>
                 </div>
-                <span className="text-xs font-semibold text-[#1C1917]">
-                  {product.reviewCount} customer ratings
-                </span>
+                <div className="border-l border-[#E7E2D9] pl-4">
+                  <div className="flex items-center text-amber-500 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${
+                          i < Math.floor(product.rating)
+                            ? 'fill-amber-400 text-amber-400'
+                            : i < product.rating
+                            ? 'fill-amber-400/50 text-amber-400'
+                            : 'text-stone-300 fill-stone-200'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs font-semibold text-[#1C1917]">
+                    {product.reviewCount} customer ratings
+                  </span>
+                </div>
               </div>
+
+              <button
+                type="button"
+                onClick={() => setIsWritingReview(!isWritingReview)}
+                className="px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF8F5] border border-[#E7E2D9] hover:border-[#991B33] text-xs font-bold uppercase tracking-wider text-[#1C1917] transition-all cursor-pointer shadow-xs"
+              >
+                {isWritingReview ? 'Cancel' : 'Write a Review'}
+              </button>
             </div>
           </div>
+
+          {/* Collapsible Write Review Form */}
+          {isWritingReview && (
+            <div className="mb-8 p-5 rounded-2xl border border-[#991B33]/30 bg-white shadow-md animate-fade-in">
+              <h4 className="font-heading text-base font-bold text-[#1C1917] mb-3">
+                Write Verified Buyer Review for {product.shortName || product.name}
+              </h4>
+              {reviewSubmitted ? (
+                <div className="p-3 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  <span>Thank you! Your verified review has been published.</span>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmitReview} className="space-y-3">
+                  <div>
+                    <label className="text-xs font-semibold text-stone-600 block mb-1">Rating</label>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setReviewerRating(star)}
+                          className="p-1 hover:scale-110 transition-transform"
+                        >
+                          <Star
+                            className={`h-5 w-5 ${
+                              star <= reviewerRating
+                                ? 'fill-amber-400 text-amber-400'
+                                : 'text-stone-300 fill-stone-200'
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-xs font-semibold text-stone-600 block mb-1">Your Name</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Arjun Sharma"
+                        value={reviewerName}
+                        onChange={(e) => setReviewerName(e.target.value)}
+                        className="w-full bg-[#FAF8F5] border border-[#E7E2D9] rounded-xl px-3 py-2 text-xs text-[#1C1917] outline-none focus:border-[#991B33]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-stone-600 block mb-1">Review Details</label>
+                    <textarea
+                      required
+                      rows={3}
+                      placeholder="How was the build quality, sound, or design at this half rate price?"
+                      value={reviewerText}
+                      onChange={(e) => setReviewerText(e.target.value)}
+                      className="w-full bg-[#FAF8F5] border border-[#E7E2D9] rounded-xl px-3 py-2 text-xs text-[#1C1917] outline-none focus:border-[#991B33]"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="px-6 py-2.5 rounded-xl bg-[#991B33] hover:bg-[#7E1227] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer"
+                  >
+                    Post Review
+                  </button>
+                </form>
+              )}
+            </div>
+          )}
 
           {/* Reviews Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -9,10 +9,16 @@ import AdminPanelPage from './pages/AdminPanelPage'
 import AuthCallbackPage from './pages/AuthCallbackPage'
 import CheckoutPage from './pages/CheckoutPage'
 import OrderConfirmedPage from './pages/OrderConfirmedPage'
+import CategoriesDrawer from './components/CategoriesDrawer'
+import BottomNav from './components/BottomNav'
+import AuthModal from './components/AuthModal'
 
 import { initAuthListener, loadAccountCart } from './lib/db'
 
 export default function App() {
+  const isAuthOpen = useCartStore((s) => s.isAuthOpen)
+  const closeAuth = useCartStore((s) => s.closeAuth)
+
   // Sync persistent account cart on auth change & listen to persistent user session
   useEffect(() => {
     const unsub = initAuthListener(async (user) => {
@@ -30,7 +36,12 @@ export default function App() {
 
   // Re-open checkout if customer returned from Google OAuth redirect
   useEffect(() => {
-    if (sessionStorage.getItem('scope_checkout_pending') === 'true' || sessionStorage.getItem('outframe_checkout_pending') === 'true') {
+    if (
+      sessionStorage.getItem('halfrate_checkout_pending') === 'true' ||
+      sessionStorage.getItem('scope_checkout_pending') === 'true' ||
+      sessionStorage.getItem('outframe_checkout_pending') === 'true'
+    ) {
+      sessionStorage.removeItem('halfrate_checkout_pending')
       sessionStorage.removeItem('scope_checkout_pending')
       sessionStorage.removeItem('outframe_checkout_pending')
       if (window.location.pathname !== '/checkout') {
@@ -53,6 +64,9 @@ export default function App() {
         <Route path="/:genreSlug" element={<CategoryPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <CategoriesDrawer />
+      <BottomNav />
+      <AuthModal isOpen={isAuthOpen} onClose={closeAuth} />
     </BrowserRouter>
   )
 }

@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { MOCK_PRODUCTS, GENRES } from '../data/productsData'
 import { getLocalCart, saveCartToAccount, saveProduct } from '../lib/db'
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'scope_International_catalog_v3'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v1'
 
 // Helper to load products from localStorage with fallback to default catalog
 const loadInitialProducts = () => {
@@ -202,6 +202,53 @@ export const useCartStore = create((set, get) => ({
   openCheckout: () => set({ isCheckoutOpen: true }),
   closeCheckout: () => set({ isCheckoutOpen: false }),
   activeReviewProduct: null, // Product whose reviews modal is currently open
+
+  // ── Global Search & Sabse Sasta Filters ──
+  searchQuery: '',
+  setSearchQuery: (query) => set({ searchQuery: query }),
+  priceFilter: 'ALL', // 'ALL' | 'UNDER_999' | 'UNDER_1999' | 'HALF_RATE' | 'RATED_48'
+  setPriceFilter: (filter) => set({ priceFilter: filter }),
+
+  // ── Categories Drawer State ──
+  isCategoriesOpen: false,
+  openCategories: () => set({ isCategoriesOpen: true }),
+  closeCategories: () => set({ isCategoriesOpen: false }),
+  toggleCategoriesDrawer: () => set((state) => ({ isCategoriesOpen: !state.isCategoriesOpen })),
+
+  // ── Auth Modal & Profile State ──
+  isAuthOpen: false,
+  openAuth: () => set({ isAuthOpen: true }),
+  closeAuth: () => set({ isAuthOpen: false }),
+  toggleAuth: () => set((state) => ({ isAuthOpen: !state.isAuthOpen })),
+  openProfile: () => set({ isAuthOpen: true }),
+
+  // ── Add Verified Customer Review ──
+  addReview: (productId, newReview) => {
+    const nextProducts = get().products.map((p) => {
+      if (p.id === productId) {
+        const existingReviews = p.reviews || []
+        const updatedReviews = [newReview, ...existingReviews]
+        const newCount = (p.reviewCount || 0) + 1
+        const newRating = Math.min(5, Math.max(1, Number((((p.rating || 4.8) * (p.reviewCount || 1) + newReview.rating) / newCount).toFixed(1))))
+        return {
+          ...p,
+          reviewCount: newCount,
+          rating: newRating,
+          reviews: updatedReviews,
+        }
+      }
+      return p
+    })
+    set({ products: nextProducts })
+    persistProducts(nextProducts)
+    // Also update activeReviewProduct if currently open
+    const currentActive = get().activeReviewProduct
+    if (currentActive && currentActive.id === productId) {
+      set({
+        activeReviewProduct: nextProducts.find((p) => p.id === productId) || currentActive,
+      })
+    }
+  },
 
   // ── Wishlist State ──
   wishlist: [],

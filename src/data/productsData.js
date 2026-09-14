@@ -651,7 +651,7 @@ const RAW_PRODUCTS = [
       'Threaded brass shackle locking screw pin keeps keys 100% secure from dropping',
       'Unlacquered raw brass naturally patinas and darkens with everyday skin oils',
       'Smooth hand-polished corners that glide easily into trouser pockets without snagging',
-      'Laser-engraved with the signature Scope International compass motif',
+      'Laser-engraved with the signature HalfRate authenticity insignia',
     ],
     specs: {
       'Material': '100% Solid sand-cast brass',

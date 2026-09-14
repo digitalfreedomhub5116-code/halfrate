@@ -68,7 +68,8 @@ export default function AuthCallbackPage() {
         }
       }
 
-      const returnTo = sessionStorage.getItem('scope_oauth_return_to') || '/'
+      const returnTo = sessionStorage.getItem('halfrate_oauth_return_to') || sessionStorage.getItem('scope_oauth_return_to') || '/'
+      sessionStorage.removeItem('halfrate_oauth_return_to')
       sessionStorage.removeItem('scope_oauth_return_to')
 
       setTimeout(() => {
@@ -87,7 +88,7 @@ export default function AuthCallbackPage() {
     <div className="min-h-screen bg-[#FAF8F5] flex flex-col items-center justify-center text-[#1C1917] p-4 text-center">
       <div className="h-10 w-10 rounded-full border-2 border-[#991B33] border-t-transparent animate-spin mb-4" />
       <p className="text-sm font-heading font-semibold tracking-wide text-[#1C1917] mb-1">{statusText}</p>
-      <p className="text-xs text-[#78716C]">Securing your session with Scope International Official Store...</p>
+      <p className="text-xs text-[#78716C]">Securing your session with halfrate.co Official Store...</p>
     </div>
   )
 }
