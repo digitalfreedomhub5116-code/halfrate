@@ -15,8 +15,7 @@ import {
   ChevronLeft,
   ChevronDown,
   Minus,
-  Plus,
-  Zap
+  Plus
 } from 'lucide-react'
 import { MOCK_PRODUCTS, useCartStore, GENRES } from '../store/cartStore'
 import Footer from '../components/Footer'
@@ -725,7 +724,6 @@ export default function ProductPage() {
                       : 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-stone-950 shadow-lg shadow-amber-500/20 active:scale-98 border border-amber-600/30'
                   }`}
                 >
-                  <Zap className="h-4 w-4 fill-stone-950 text-stone-950" />
                   <span>{isOutOfStock ? 'Unavailable' : `Buy Now · ₹${(product.price * quantity).toLocaleString('en-IN')}`}</span>
                 </button>
               </div>
@@ -1075,7 +1073,7 @@ export default function ProductPage() {
             <span>Bag</span>
           </button>
 
-          {/* ⚡ Buy Now */}
+          {/* Buy Now */}
           <button
             onClick={handleBuyNow}
             disabled={isOutOfStock}
@@ -1085,7 +1083,6 @@ export default function ProductPage() {
                 : 'bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 shadow-md border border-amber-600/30'
             }`}
           >
-            <Zap className="h-3.5 w-3.5 fill-stone-950 text-stone-950" />
             <span>Buy Now · ₹{(product.price * quantity).toLocaleString('en-IN')}</span>
           </button>
         </div>
