@@ -292,18 +292,93 @@ export const useCartStore = create((set, get) => ({
   openCart: () => set({ isOpen: true }),
   closeCart: () => set({ isOpen: false }),
 
-  addItem: (product) => {
+  // ── Coupon & Free Shipping State ──
+  appliedCoupon: null,
+  couponError: '',
+
+  applyCoupon: (code) => {
+    if (!code || !code.trim()) {
+      set({ couponError: 'Please enter a coupon code.' })
+      return { success: false, message: 'Please enter a coupon code.' }
+    }
+    const cleanCode = code.trim().toUpperCase()
+    const found = AVAILABLE_COUPONS.find((c) => c.code === cleanCode)
+    if (!found) {
+      const err = `Invalid coupon code "${cleanCode}". Try HALFRATE50 or SABSE100.`
+      set({ couponError: err })
+      return { success: false, message: err }
+    }
+
+    const subtotal = get().getTotal()
+    if (subtotal < found.minOrderValue) {
+      const err = `Min. order value of ₹${found.minOrderValue} required for ${found.code}. Add ₹${found.minOrderValue - subtotal} more.`
+      set({ couponError: err })
+      return { success: false, message: err }
+    }
+
+    set({ appliedCoupon: found, couponError: '' })
+    return { success: true, message: `Coupon ${found.code} applied successfully!` }
+  },
+
+  removeCoupon: () => {
+    set({ appliedCoupon: null, couponError: '' })
+  },
+
+  getCouponDiscount: () => {
+    const coupon = get().appliedCoupon
+    if (!coupon) return 0
+    const subtotal = get().getTotal()
+    if (subtotal < coupon.minOrderValue) return 0
+
+    if (coupon.discountType === 'FLAT') {
+      return Math.min(coupon.discountValue, subtotal)
+    }
+    if (coupon.discountType === 'PERCENT') {
+      const discount = Math.round((subtotal * coupon.discountValue) / 100)
+      return Math.min(discount, coupon.maxDiscount || discount)
+    }
+    return 0
+  },
+
+  getShippingFee: () => {
+    const subtotal = get().getTotal()
+    const coupon = get().appliedCoupon
+    if (subtotal >= FREE_SHIPPING_THRESHOLD || coupon?.discountType === 'SHIPPING' || coupon?.code === 'FREESHIP') {
+      return 0
+    }
+    return subtotal > 0 ? 60 : 0
+  },
+
+  getRemainingForFreeShipping: () => {
+    const subtotal = get().getTotal()
+    return Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal)
+  },
+
+  getFreeShippingProgress: () => {
+    const subtotal = get().getTotal()
+    return Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100))
+  },
+
+  getFinalTotal: () => {
+    const subtotal = get().getTotal()
+    const shipping = get().getShippingFee()
+    const discount = get().getCouponDiscount()
+    return Math.max(0, subtotal + shipping - discount)
+  },
+
+  addItem: (product, quantity = 1) => {
     if (product.inStock === false) return
+    const addQty = Math.max(1, Number(quantity) || 1)
     const existing = get().items.find((item) => item.id === product.id)
     let nextItems
     if (existing) {
       nextItems = get().items.map((item) =>
         item.id === product.id
-          ? { ...item, quantity: item.quantity + 1 }
+          ? { ...item, quantity: item.quantity + addQty }
           : item
       )
     } else {
-      nextItems = [...get().items, { ...product, quantity: 1 }]
+      nextItems = [...get().items, { ...product, quantity: addQty }]
     }
     set({ items: nextItems })
     saveCartToAccount(nextItems)
@@ -338,5 +413,43 @@ export const useCartStore = create((set, get) => ({
     return get().items.reduce((sum, item) => sum + item.quantity, 0)
   },
 }))
+
+export const AVAILABLE_COUPONS = [
+  {
+    code: 'HALFRATE50',
+    discountType: 'FLAT',
+    discountValue: 50,
+    minOrderValue: 499,
+    description: 'Flat ₹50 OFF on orders above ₹499',
+    badge: 'SAVE ₹50',
+  },
+  {
+    code: 'SABSE100',
+    discountType: 'FLAT',
+    discountValue: 100,
+    minOrderValue: 999,
+    description: 'Flat ₹100 OFF on orders above ₹999',
+    badge: 'SAVE ₹100',
+  },
+  {
+    code: 'EXTRA10',
+    discountType: 'PERCENT',
+    discountValue: 10,
+    maxDiscount: 200,
+    minOrderValue: 299,
+    description: '10% Instant Discount (up to ₹200)',
+    badge: '10% OFF',
+  },
+  {
+    code: 'FREESHIP',
+    discountType: 'SHIPPING',
+    discountValue: 60,
+    minOrderValue: 0,
+    description: '100% Free Express Courier Delivery',
+    badge: 'FREE DELIVERY',
+  },
+]
+
+export const FREE_SHIPPING_THRESHOLD = 999
 
 export { MOCK_PRODUCTS, GENRES }

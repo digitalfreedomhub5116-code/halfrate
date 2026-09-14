@@ -13,7 +13,10 @@ import {
   Heart,
   ChevronRight,
   ChevronLeft,
-  ChevronDown
+  ChevronDown,
+  Minus,
+  Plus,
+  Zap
 } from 'lucide-react'
 import { MOCK_PRODUCTS, useCartStore, GENRES } from '../store/cartStore'
 import Footer from '../components/Footer'
@@ -203,11 +206,19 @@ export default function ProductPage() {
   }
 
   const isOutOfStock = product.inStock === false
+  const [quantity, setQuantity] = useState(1)
 
   const handleAddToCart = () => {
     if (isOutOfStock) return
-    addItem(product)
+    addItem(product, quantity)
     openCart()
+  }
+
+  const handleBuyNow = () => {
+    if (isOutOfStock) return
+    addItem(product, quantity)
+    navigate('/checkout')
+    window.scrollTo({ top: 0, behavior: 'instant' })
   }
 
   const scrollToSection = (section) => {
@@ -653,20 +664,71 @@ export default function ProductPage() {
               </div>
             </div>
 
-            {/* Desktop Add to Cart Button */}
-            <div className="mt-8 pt-6 border-t border-[#E7E2D9]">
-              <button
-                onClick={handleAddToCart}
-                disabled={isOutOfStock}
-                className={`w-full flex items-center justify-center gap-3 rounded-2xl py-3.5 sm:py-4 text-sm font-bold uppercase tracking-widest transition-all cursor-pointer ${
-                  isOutOfStock
-                    ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
-                    : 'bg-[#991B33] text-white hover:bg-[#7E1227] shadow-lg shadow-[#991B33]/20 active:scale-98'
-                }`}
-              >
-                <ShoppingBag className="h-5 w-5" />
-                <span>{isOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
-              </button>
+            {/* Desktop Quantity & Action Buttons */}
+            <div className="mt-8 pt-6 border-t border-[#E7E2D9] space-y-3.5">
+              {/* Quantity Selector */}
+              {!isOutOfStock && (
+                <div className="flex items-center justify-between p-3 rounded-2xl bg-[#FAF8F5] border border-[#E7E2D9]">
+                  <div className="flex flex-col">
+                    <span className="text-xs font-bold text-[#1C1917]">Select Quantity</span>
+                    <span className="text-[11px] text-[#78716C]">Direct factory half rate savings apply</span>
+                  </div>
+                  <div className="flex items-center gap-2 rounded-full border border-[#E7E2D9] bg-white px-3 py-1 shadow-xs">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                      disabled={quantity <= 1}
+                      className="rounded-full p-1 text-[#78716C] transition-colors hover:text-[#991B33] disabled:opacity-30 cursor-pointer"
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus className="h-3.5 w-3.5" />
+                    </button>
+                    <span className="min-w-[1.5rem] text-center text-sm font-bold text-[#1C1917]">
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity((prev) => Math.min(10, prev + 1))}
+                      disabled={quantity >= 10}
+                      className="rounded-full p-1 text-[#78716C] transition-colors hover:text-[#991B33] disabled:opacity-30 cursor-pointer"
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  disabled={isOutOfStock}
+                  className={`w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                    isOutOfStock
+                      ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
+                      : 'bg-white text-[#991B33] border-2 border-[#991B33] hover:bg-[#991B33] hover:text-white shadow-xs active:scale-98'
+                  }`}
+                >
+                  <ShoppingBag className="h-4 w-4" />
+                  <span>{isOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  disabled={isOutOfStock}
+                  className={`w-full flex items-center justify-center gap-2 rounded-2xl py-3.5 text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+                    isOutOfStock
+                      ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-stone-950 shadow-lg shadow-amber-500/20 active:scale-98 border border-amber-600/30'
+                  }`}
+                >
+                  <Zap className="h-4 w-4 fill-stone-950 text-stone-950" />
+                  <span>{isOutOfStock ? 'Unavailable' : `Buy Now · ₹${(product.price * quantity).toLocaleString('en-IN')}`}</span>
+                </button>
+              </div>
 
               {/* Assurance Trust Badges */}
               <div className="mt-5 grid grid-cols-3 gap-2 text-center">
@@ -969,37 +1031,62 @@ export default function ProductPage() {
         )}
       </div>
 
-      {/* Sticky Bottom "Add to Cart" Bar for Mobile */}
-      <div className="fixed bottom-0 inset-x-0 z-50 sm:hidden border-t border-[#E7E2D9] bg-white/95 backdrop-blur-xl px-4 py-3 shadow-2xl">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <div className="flex items-baseline gap-1.5 flex-nowrap">
-              <span className="font-heading text-xl font-extrabold text-[#991B33]">
-                ₹{product.price}
+      {/* Sticky Bottom "Add to Bag" & "Buy Now" Bar for Mobile */}
+      <div className="fixed bottom-0 inset-x-0 z-50 sm:hidden border-t border-[#E7E2D9] bg-white/95 backdrop-blur-xl px-3 py-2.5 shadow-[0_-4px_24px_rgba(0,0,0,0.12)]">
+        <div className="flex items-center gap-2">
+          {/* Quantity controller on mobile */}
+          {!isOutOfStock && (
+            <div className="flex items-center gap-1 rounded-xl border border-[#E7E2D9] bg-[#FAF8F5] px-2 py-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
+                disabled={quantity <= 1}
+                className="text-[#78716C] hover:text-[#991B33] disabled:opacity-30 p-0.5"
+                aria-label="Decrease quantity"
+              >
+                <Minus className="h-3 w-3" />
+              </button>
+              <span className="min-w-[1rem] text-center text-xs font-bold text-[#1C1917]">
+                {quantity}
               </span>
-              <span className="text-xs text-[#78716C]/60 line-through">
-                ₹{product.originalPrice}
-              </span>
-              <span className="text-xs font-bold text-emerald-700">
-                {product.discountBadge}
-              </span>
+              <button
+                type="button"
+                onClick={() => setQuantity((prev) => Math.min(10, prev + 1))}
+                disabled={quantity >= 10}
+                className="text-[#78716C] hover:text-[#991B33] disabled:opacity-30 p-0.5"
+                aria-label="Increase quantity"
+              >
+                <Plus className="h-3 w-3" />
+              </button>
             </div>
-            <span className={`text-[10px] font-semibold block ${isOutOfStock ? 'text-rose-600' : 'text-emerald-700'}`}>
-              {isOutOfStock ? 'Currently In Backorder' : 'In Stock · Ready to Dispatch'}
-            </span>
-          </div>
+          )}
 
+          {/* Add to Bag */}
           <button
             onClick={handleAddToCart}
             disabled={isOutOfStock}
-            className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3 text-xs font-bold uppercase tracking-wider cursor-pointer ${
+            className={`flex-1 flex items-center justify-center gap-1 rounded-xl py-2.5 text-[11px] font-bold uppercase tracking-wider cursor-pointer active:scale-95 transition-transform ${
               isOutOfStock
                 ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
-                : 'bg-[#991B33] text-white shadow-md'
+                : 'bg-white text-[#991B33] border-2 border-[#991B33]'
             }`}
           >
-            <ShoppingBag className="h-4 w-4" />
-            <span>{isOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
+            <ShoppingBag className="h-3.5 w-3.5" />
+            <span>Bag</span>
+          </button>
+
+          {/* ⚡ Buy Now */}
+          <button
+            onClick={handleBuyNow}
+            disabled={isOutOfStock}
+            className={`flex-[1.5] flex items-center justify-center gap-1.5 rounded-xl py-2.5 text-[11px] font-black uppercase tracking-wider cursor-pointer active:scale-95 transition-transform ${
+              isOutOfStock
+                ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
+                : 'bg-gradient-to-r from-amber-400 to-amber-500 text-stone-950 shadow-md border border-amber-600/30'
+            }`}
+          >
+            <Zap className="h-3.5 w-3.5 fill-stone-950 text-stone-950" />
+            <span>Buy Now · ₹{(product.price * quantity).toLocaleString('en-IN')}</span>
           </button>
         </div>
       </div>
