@@ -232,6 +232,59 @@ const RAW_PRODUCTS = [
       'Warranty': '2-Year Official Fitgear® Manufacturer Warranty',
     },
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // 5. SAFE-VIEW ELITE 360° CAR REARVIEW MIRROR PHONE BRACKET
+  // ══════════════════════════════════════════════════════════════════
+  {
+    id: 'safe-view-mirror-bracket',
+    name: 'Safe-View Elite 360° Car Rearview Mirror Phone Bracket & Hands-Free GPS Mount',
+    shortName: 'Safe-View 360° Rearview Mirror Mount',
+    genre: 'CAR_ACCESSORIES',
+    price: 349,
+    originalPrice: 999,
+    reviewCount: 38,
+    rating: 4.8,
+    badCount: 0,
+    image: '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-1.jpg',
+    gallery: [
+      '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-1.jpg',
+      '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-2.jpg',
+      '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-3.jpg',
+      '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-4.jpg',
+    ],
+    purity: 'High-Tension Locking Knobs & Silicone Cushions',
+    compliance: 'Safe-View™ Official Quality Guarantee',
+    pack: 'Safe-View 360° Rearview Mirror Bracket + Tightening Hardware + Retail Box',
+    dimensions: 'Rearview Clamp: 5.5cm - 8.5cm | Phone Clamp: 6cm - 10cm',
+    weight: '175g Ultra-Stable No-Shake Design',
+    material: 'High-Strength Thermal-Resistant ABS & Precision Metal Pivot Springs',
+    chipset: '360° Ball Joint • 0.05mm Tolerance • Unobstructed Windshield View • Quick Lock',
+    description: 'The Safe-View Elite 360° Car Rearview Mirror Phone Bracket clamps securely onto your vehicle\'s existing rearview mirror stem, positioning your smartphone at eye level for safer navigation without blocking the windshield or dashboard vents. Built with precision 0.05mm tolerance pivot joints and heavy-duty spring-loaded dual arms with anti-slip silicone cushions, it prevents shaking, vibration, and wobble even on bumpy off-road trails. Features 360° horizontal swivel and vertical multi-angle tilt so you can easily switch between GPS navigation, dash cam recording, hands-free video calls, and passenger entertainment.',
+    features: [
+      'Zero Blind Spot Eye-Level Navigation — Mounts directly behind the rearview mirror, keeping your eyes on the road with zero windshield or vent obstruction',
+      '360° Omnidirectional Field Swivel — Infinite angle pivot allows seamless rotation between landscape GPS maps and portrait call modes',
+      'Precision Tolerance & Anti-Shake Stability — Engineered with 0.05mm tolerance joints and reinforced lock screws for vibration-free driving on rough roads',
+      'Dual Spring-Loaded Silicone Clamps — Four-claw grip securely anchors onto standard rearview mirrors with anti-scratch rubber pads',
+      'Quick One-Handed Phone Insertion — Elastic clamp fits smartphones from 4.0 to 7.0 inches, even with thick protective shockproof cases',
+      'Multi-Purpose Dashboard Utility — Ideal for GPS turn-by-turn navigation, forward road trip dash cam recording, and passenger entertainment',
+      'Tool-Free Rapid Installation — Easily attaches and tightens onto almost any car, SUV, or truck rearview mirror in seconds',
+    ],
+    specs: {
+      'Brand': 'Safe-View™ (Elite Driver Series)',
+      'Model': 'RB-360',
+      'Mount Placement': 'Interior Car Rearview Mirror Stem',
+      'Swivel & Rotation': '360° Total Field Swivel & Multi-Axis Tilt',
+      'Joint Precision': '0.05mm Engineering Tolerance with Tension Screw',
+      'Mirror Clamp Width': 'Fits Mirrors from 5.5 cm to 8.5 cm Height',
+      'Phone Clamp Range': 'Fits 4.0 to 7.0 inch Smartphones (Width 6cm to 10cm)',
+      'Case Compatibility': 'Supports Thick Armor Cases & Ring Stands',
+      'Material': 'High-Density Reinforced ABS & Metal Spring Screws',
+      'Product Weight': 'Approx. 175g',
+      'Ideal For': 'Turn-by-turn GPS, Dash Cam Recording, Hands-Free Calling',
+      'Warranty': '1-Year Official Safe-View™ Manufacturer Warranty',
+    },
+  },
 ]
 
 function buildProductReviews(product) {

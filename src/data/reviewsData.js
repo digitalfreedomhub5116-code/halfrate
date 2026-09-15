@@ -53,6 +53,8 @@ export const REVIEWS_POOL = {
       { name: "Vikram Malhotra", text: "sticky suction on dashboard is rock solid zero wobble on highway bumps" },
       { name: "Amitabh Sen", text: "360 rotation is butter smooth holds my phone with thick case easily" },
       { name: "Rohit Agarwal", text: "survived 40 degree heat in car without falling off best car mount hands down" },
+      { name: "Manish Tiwari", text: "clamps behind rearview mirror perfectly zero blind spots on windshield, rock solid GPS mount" },
+      { name: "Deepak Chawla", text: "360 swivel lets me adjust between portrait map and recording forward dashcam easily" },
     ],
     AUDIO_SPEAKERS: [
       { name: "Aditya Roy", text: "sound quality is surprisingly loud and punchy for this compact size, deep bass!" },
