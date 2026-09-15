@@ -1,53 +1,69 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import { ChevronLeft, ChevronRight, Zap, Star, Sparkles, Truck, ShieldCheck, ShoppingBag } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Zap, Star, Truck, ShieldCheck, ShoppingBag } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCartStore, GENRES, MOCK_PRODUCTS } from '../store/cartStore'
 
-// ── Hero Banner Slides ──
+// ── Hero Banner Slides (Curated Flagship Deals) ──
 const HERO_SLIDES = [
   {
     id: 1,
-    badge: 'NEW ARRIVAL · FITGEAR FG-M4',
-    badgeColor: 'bg-[#991B33]',
-    image: '/images/products/fitgear-fg-m4/fitgear-fg-m4-2.jpg',
-    discount: 'FLAT 50% OFF',
-    heading: 'FITGEAR FG-M4 1.8M STICK',
-    brands: '1.8M Ultra Reach • 7-Section Aluminum • Detachable Bluetooth Remote • Anti-Slip Tripod',
-    bankOffer: 'Instant Free Delivery on Prepaid UPI Orders',
-    bankLogos: ['FITGEAR', '1.8M'],
+    productId: 'fitgear-fg-15',
+    slug: 'fitgear-fg-15-secure-grip-pro-in-car-phone-bracket-windshield-dashboard-mount',
+    brand: 'FITGEAR® DIRECT',
+    title: 'Fitgear FG-15 Secure-Grip In-Car Mount',
+    subtitle: '360° Ball Joint • Sticky Gel Suction • Telescopic Arm • 2-Yr Warranty',
+    price: 339,
+    originalPrice: 999,
+    discount: '66% OFF',
+    rating: 4.8,
+    reviews: 36,
+    image: '/images/products/fitgear-fg-15/fitgear-fg-15-2.jpg',
+    features: ['360° Omnidirectional Pivot', 'Reusable Sticky Gel Suction', 'Case-Friendly Dual Clamps'],
   },
   {
     id: 2,
-    badge: 'NEW ARRIVAL · FITGEAR FG-15',
-    badgeColor: 'bg-[#991B33]',
-    image: '/images/products/fitgear-fg-15/fitgear-fg-15-2.jpg',
-    discount: 'FLAT 66% OFF',
-    heading: 'FITGEAR FG-15 CAR MOUNT',
-    brands: '360° Ball Joint • Sticky Gel Suction • Telescopic Arm • Case Friendly • 2-Year Warranty',
-    bankOffer: 'Special Launch Price: ₹339 only (MRP ₹999)',
-    bankLogos: ['FITGEAR', '2-YR'],
+    productId: 'fitgear-fg-m4',
+    slug: 'fitgear-fg-m4-ultra-long-1-8m-extended-selfie-stick-tripod-with-bluetooth-remote',
+    brand: 'FITGEAR® DIRECT',
+    title: 'Fitgear FG-M4 1.8M Ultra-Long Selfie Stick',
+    subtitle: '1.8M Ultra Reach • Aviation Aluminum • Detachable Remote • Anti-Slip Base',
+    price: 999,
+    originalPrice: 1999,
+    discount: '50% OFF',
+    rating: 4.9,
+    reviews: 48,
+    image: '/images/products/fitgear-fg-m4/fitgear-fg-m4-2.jpg',
+    features: ['1.8M Extended Reach', '7-Section Aviation Aluminum', 'Detachable Bluetooth Shutter'],
   },
   {
     id: 3,
-    badge: 'NEW ARRIVAL · MZ M412SP',
-    badgeColor: 'bg-[#1D4ED8]',
+    productId: 'mz-m412sp',
+    slug: 'mz-m412sp-portable-wireless-bluetooth-speaker-with-dynamic-rgb-ambient-light-crystal-sound',
+    brand: 'MZ™ AUDIO LAB',
+    title: 'MZ M412SP Dynamic RGB Bluetooth Speaker',
+    subtitle: 'Crystal Sound Acoustics • Dynamic RGB Halo Light • Pocket Sized • Bluetooth & AUX',
+    price: 499,
+    originalPrice: 999,
+    discount: '50% OFF',
+    rating: 4.9,
+    reviews: 42,
     image: '/images/products/mz-m412sp/mz-m412sp-2.jpg',
-    discount: 'FLAT 50% OFF',
-    heading: 'MZ M412SP WIRELESS SPEAKER',
-    brands: 'Crystal Sound Acoustics • Dynamic RGB Ambient Light Ring • Pocket Size • Bluetooth & AUX',
-    bankOffer: 'Direct Factory Half Rate: ₹499 only (MRP ₹999)',
-    bankLogos: ['MZ™', 'RGB'],
+    features: ['Crystal Sound Dynamic Audio', 'Pulsating RGB Ambient Halo', 'Ultra-Compact Pocket Design'],
   },
   {
     id: 4,
-    badge: 'DIRECT FACTORY · HALFRATE',
-    badgeColor: 'bg-[#059669]',
-    image: '/images/products/mz-m412sp/mz-m412sp-1.jpg',
-    discount: 'SABSE SASTA',
-    heading: 'HALF RATE GUARANTEE',
-    brands: '100% Genuine Certified Quality • Free Express India Delivery • Cash on Delivery Eligible',
-    bankOffer: 'Shop Direct From Factory with Half Rate Pricing Guarantee',
-    bankLogos: ['ORIGINAL', 'HALFRATE'],
+    productId: 'pro-shield-m3c1-mount',
+    slug: 'pro-shield-m3-c1-ipx6-waterproof-motorcycle-bicycle-phone-mount-stand',
+    brand: 'PRO-SHIELD™ ALL-WEATHER',
+    title: 'Pro-Shield M3-C1 IPX6 Waterproof Mount',
+    subtitle: 'IPX6 Monsoon Certified • Sensitive TPU Touch • 360° Dual-Ball Swivel',
+    price: 399,
+    originalPrice: 999,
+    discount: '60% OFF',
+    rating: 4.9,
+    reviews: 41,
+    image: '/images/products/pro-shield-m3c1-mount/pro-shield-m3c1-1.jpg',
+    features: ['IPX6 Monsoon Waterproofing', 'Touch-Sensitive Clear Membrane', 'Universal 22-32mm Clamp'],
   },
 ]
 
@@ -229,98 +245,168 @@ export default function Hero() {
       {/* ═══════════════════════════════════════════════════
           3. HERO BANNER CAROUSEL (Myntra-style)
           ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════════════
+          3. HERO SHOWCASE CAROUSEL (Clean Split Showcase)
+          ═══════════════════════════════════════════════════ */}
       <div className="relative mx-auto max-w-7xl px-3 sm:px-4 lg:px-6 pt-3 sm:pt-4">
         <div
-          className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg shadow-stone-900/10 aspect-[4/5] sm:aspect-[16/9] lg:aspect-[21/9] cursor-pointer"
+          className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E7E2D9] bg-white shadow-lg shadow-stone-900/5 cursor-pointer transition-shadow hover:shadow-xl"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          onClick={handleScrollToProducts}
+          onClick={() => navigate(`/product/${slide.slug || slide.productId}`)}
         >
-          {HERO_SLIDES.map((s, idx) => (
-            <div
-              key={s.id}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                idx === currentSlide ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <img
-                src={s.image}
-                alt={s.heading}
-                className="h-full w-full object-cover"
-                loading={idx === 0 ? 'eager' : 'lazy'}
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-            </div>
-          ))}
+          {/* Main Card Grid: Desktop 2-Column Split, Mobile Vertical Split */}
+          <div className="grid grid-cols-1 md:grid-cols-12 min-h-[380px] sm:min-h-[420px] md:min-h-[450px]">
+            
+            {/* MOBILE ONLY: Pristine Product Image (Top section on mobile, uncropped) */}
+            <div className="md:hidden relative aspect-[4/3] bg-gradient-to-b from-stone-900 via-stone-950 to-[#12080a] flex items-center justify-center overflow-hidden">
+              {HERO_SLIDES.map((s, idx) => (
+                <div
+                  key={`mob-img-${s.id}`}
+                  className={`absolute inset-0 flex items-center justify-center p-3 transition-all duration-700 ease-in-out ${
+                    idx === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                  }`}
+                >
+                  <img
+                    src={s.image}
+                    alt={s.title}
+                    className="max-h-full max-w-full object-contain drop-shadow-2xl"
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              ))}
 
-          {/* Content overlay */}
-          <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 sm:p-6 lg:p-8">
-            <div className="flex items-start">
-              <span
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-xs font-extrabold uppercase tracking-wider text-white ${slide.badgeColor} shadow-lg backdrop-blur-sm`}
-              >
-                <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                {slide.badge}
-              </span>
+              {/* Minimal Clean Discount Badge (No sparkle, no giant pill) */}
+              <div className="absolute top-3 right-3 z-10">
+                <span className="px-2.5 py-1 rounded-lg bg-[#991B33] text-white text-[11px] font-black tracking-wide shadow-md">
+                  {slide.discount}
+                </span>
+              </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-6">
-              <div className="flex flex-col gap-2 sm:gap-3">
-                <div className="inline-flex w-fit">
-                  <span className="px-4 py-2 sm:px-6 sm:py-3 rounded-xl sm:rounded-2xl bg-[#991B33] text-white text-xl sm:text-3xl lg:text-4xl font-black tracking-tight shadow-lg shadow-[#991B33]/30">
-                    {slide.discount}
+            {/* DEAL INFO & DETAILS COLUMN (Desktop: 7 cols, Mobile: bottom section) */}
+            <div className="md:col-span-7 p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-between bg-white">
+              <div>
+                {/* Brand Kicker & Verified Rating */}
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#991B33]">
+                    {slide.brand}
                   </span>
+                  <div className="flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                    <span>{slide.rating}</span>
+                    <span className="text-[10px] text-stone-500 font-normal">({slide.reviews})</span>
+                  </div>
+                </div>
+
+                {/* Product Title */}
+                <h2 className="font-heading text-lg sm:text-2xl md:text-3xl font-extrabold text-[#1C1917] leading-tight tracking-tight">
+                  {slide.title}
+                </h2>
+
+                {/* Subtitle / Key Highlights */}
+                <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-[#78716C] leading-relaxed line-clamp-2">
+                  {slide.subtitle}
+                </p>
+
+                {/* Feature Chips */}
+                <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
+                  {slide.features?.map((feat, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#FAF8F5] text-[#44403C] border border-[#E7E2D9]"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#991B33]" />
+                      {feat}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              <div className="bg-white/95 backdrop-blur-md rounded-xl sm:rounded-2xl p-3 sm:p-4 max-w-[280px] sm:max-w-sm shadow-lg border border-white/50">
-                <p className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-[#991B33] mb-1">
-                  {slide.heading}
-                </p>
-                <p className="text-[11px] sm:text-xs text-[#44403C] font-medium leading-relaxed line-clamp-2">
-                  {slide.brands}
-                </p>
+              {/* Price & Action Bar */}
+              <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#E7E2D9] flex items-center justify-between gap-3">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#991B33]">
+                    ₹{slide.price}
+                  </span>
+                  <span className="text-xs sm:text-sm text-[#78716C]/60 line-through">
+                    ₹{slide.originalPrice}
+                  </span>
+                  <span className="hidden xs:inline text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                    {slide.discount}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    navigate(`/product/${slide.slug || slide.productId}`)
+                  }}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#991B33] hover:bg-[#7F1D1D] text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md shadow-[#991B33]/20 active:scale-95 cursor-pointer"
+                >
+                  <span>View Deal</span>
+                  <ChevronRight className="h-4 w-4" />
+                </button>
               </div>
             </div>
+
+            {/* DESKTOP ONLY: Pristine Product Image Stage (5 cols) */}
+            <div className="hidden md:flex md:col-span-5 relative bg-gradient-to-b from-stone-900 via-stone-950 to-[#12080a] items-center justify-center overflow-hidden p-6 lg:p-8">
+              {HERO_SLIDES.map((s, idx) => (
+                <div
+                  key={`desk-img-${s.id}`}
+                  className={`absolute inset-0 flex items-center justify-center p-6 lg:p-8 transition-all duration-700 ease-in-out ${
+                    idx === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                  }`}
+                >
+                  <img
+                    src={s.image}
+                    alt={s.title}
+                    className="max-h-full max-w-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105"
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                  />
+                </div>
+              ))}
+
+              {/* Desktop Discount Badge */}
+              <div className="absolute top-4 right-4 z-10">
+                <span className="px-3 py-1 rounded-lg bg-[#991B33] text-white text-xs font-black tracking-wide shadow-lg">
+                  {slide.discount}
+                </span>
+              </div>
+            </div>
+
           </div>
 
-          {/* Desktop arrows */}
+          {/* Desktop Arrow Controls */}
           <button
-            onClick={(e) => { e.stopPropagation(); prevSlide(); setIsAutoPlaying(false); setTimeout(() => setIsAutoPlaying(true), 8000) }}
-            className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-[#1C1917] shadow-md hover:bg-white transition-all hover:scale-110 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation()
+              prevSlide()
+              setIsAutoPlaying(false)
+              setTimeout(() => setIsAutoPlaying(true), 8000)
+            }}
+            className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-[#1C1917] shadow-md hover:bg-white hover:scale-110 transition-all cursor-pointer border border-[#E7E2D9]"
             aria-label="Previous Slide"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
           <button
-            onClick={(e) => { e.stopPropagation(); nextSlide(); setIsAutoPlaying(false); setTimeout(() => setIsAutoPlaying(true), 8000) }}
-            className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-[#1C1917] shadow-md hover:bg-white transition-all hover:scale-110 cursor-pointer"
+            onClick={(e) => {
+              e.stopPropagation()
+              nextSlide()
+              setIsAutoPlaying(false)
+              setTimeout(() => setIsAutoPlaying(true), 8000)
+            }}
+            className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-[#1C1917] shadow-md hover:bg-white hover:scale-110 transition-all cursor-pointer border border-[#E7E2D9]"
             aria-label="Next Slide"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Bank offer bar */}
-        <div className="mt-1.5 flex items-center justify-between rounded-xl sm:rounded-2xl bg-white border border-[#E7E2D9] px-3 sm:px-5 py-2 sm:py-2.5 shadow-xs overflow-hidden">
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0 overflow-hidden">
-            {slide.bankLogos.map((logo, i) => (
-              <span key={i} className="text-[11px] sm:text-xs font-extrabold text-[#1C1917] tracking-wide flex-shrink-0">
-                {logo}
-              </span>
-            ))}
-            <span className="text-[#D6D3D1] flex-shrink-0">|</span>
-            <span className="text-[11px] sm:text-xs font-bold text-[#991B33] truncate">
-              {slide.bankOffer}
-            </span>
-          </div>
-          <span className="text-[9px] sm:text-[10px] text-[#A8A29E] font-semibold flex-shrink-0 ml-2">
-            T&C Apply*
-          </span>
-        </div>
-
-        {/* Dot indicators */}
+        {/* Dot Indicators */}
         <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4 pb-1">
           {HERO_SLIDES.map((_, idx) => (
             <button
