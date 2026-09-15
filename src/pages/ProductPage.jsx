@@ -17,7 +17,8 @@ import {
   Minus,
   Plus
 } from 'lucide-react'
-import { MOCK_PRODUCTS, useCartStore, GENRES } from '../store/cartStore'
+import { useCartStore } from '../store/cartStore'
+import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CartDrawer from '../components/CartDrawer'
 import WishlistDrawer from '../components/WishlistDrawer'
@@ -56,6 +57,7 @@ export default function ProductPage() {
   const [reviewerName, setReviewerName] = useState('')
   const [reviewerRating, setReviewerRating] = useState(5)
   const [reviewerText, setReviewerText] = useState('')
+  const [quantity, setQuantity] = useState(1)
   const [reviewSubmitted, setReviewSubmitted] = useState(false)
 
   const imageSectionRef = useRef(null)
@@ -205,7 +207,6 @@ export default function ProductPage() {
   }
 
   const isOutOfStock = product.inStock === false
-  const [quantity, setQuantity] = useState(1)
 
   const handleAddToCart = () => {
     if (isOutOfStock) return
