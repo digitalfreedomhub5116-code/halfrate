@@ -7,14 +7,14 @@ import { useCartStore, GENRES, MOCK_PRODUCTS } from '../store/cartStore'
 const HERO_SLIDES = [
   {
     id: 1,
-    badge: 'HALF RATE SALE · LIVE NOW',
+    badge: 'NEW ARRIVAL · FITGEAR FG-M4',
     badgeColor: 'bg-[#991B33]',
-    image: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80',
-    discount: '50-80% OFF',
-    heading: 'FEATURED BRANDS',
-    brands: 'Kundan Jewellery • Teakwood Art • Leather Craft • Premium Audio • Mobile Essentials',
-    bankOffer: 'Get 10% Instant Discount*',
-    bankLogos: ['HDFC', 'ICICI'],
+    image: '/images/products/fitgear-fg-m4/fitgear-fg-m4-2.jpg',
+    discount: 'FLAT 50% OFF',
+    heading: 'FITGEAR FG-M4 1.8M STICK',
+    brands: '1.8M Ultra Reach • 7-Section Aluminum • Detachable Bluetooth Remote • Anti-Slip Tripod',
+    bankOffer: 'Instant Free Delivery on Prepaid UPI Orders',
+    bankLogos: ['FITGEAR', '1.8M'],
   },
   {
     id: 2,

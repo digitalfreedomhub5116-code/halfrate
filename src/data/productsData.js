@@ -33,8 +33,8 @@ export const GENRES = [
     id: 'MOBILE_ACCESSORIES',
     label: 'Mobile Accessories',
     slug: 'mobile-accessories',
-    image: 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=900&q=80',
-    description: 'MagSafe vegan leather cases, braided ultra-fast cables, aerospace aluminum phone stands, and magnetic accessories.',
+    image: '/images/products/fitgear-fg-m4/fitgear-fg-m4-1.jpg',
+    description: 'Ultra-long selfie sticks, heavy-duty phone tripods, wireless camera remotes, and essential mobile gear.',
   },
   {
     id: 'SPEAKERS',
@@ -53,6 +53,58 @@ export const GENRES = [
 ]
 
 const RAW_PRODUCTS = [
+  // ══════════════════════════════════════════════════════════════════
+  // 0. MOBILE ACCESSORIES (FEATURED REAL PRODUCT #1)
+  // ══════════════════════════════════════════════════════════════════
+  {
+    id: 'fitgear-fg-m4',
+    name: 'Fitgear FG-M4 Ultra-Long 1.8M Extended Selfie Stick & Tripod with Bluetooth Remote',
+    shortName: 'Fitgear FG-M4 Selfie Stick & Tripod',
+    genre: 'MOBILE_ACCESSORIES',
+    price: 999,
+    originalPrice: 1999,
+    reviewCount: 48,
+    rating: 4.9,
+    badCount: 0,
+    image: '/images/products/fitgear-fg-m4/fitgear-fg-m4-1.jpg',
+    gallery: [
+      '/images/products/fitgear-fg-m4/fitgear-fg-m4-1.jpg',
+      '/images/products/fitgear-fg-m4/fitgear-fg-m4-2.jpg',
+      '/images/products/fitgear-fg-m4/fitgear-fg-m4-3.jpg',
+      '/images/products/fitgear-fg-m4/fitgear-fg-m4-4.jpg',
+    ],
+    purity: 'Aviation-Grade Aluminum Build',
+    compliance: 'Fitgear® Official Certification',
+    pack: 'Fitgear FG-M4 Stick + Bluetooth Remote + User Guide',
+    dimensions: 'Folded: 29.5 cm | Full Extension: 180 cm (1.8m)',
+    weight: '340g Ultra-Portable Design',
+    material: '7-Section Aviation Aluminum Pole & Reinforced Tripod',
+    chipset: '1.8M Reach • Bluetooth Remote • 360° Rotation',
+    description: 'The Fitgear FG-M4 Ultra-Long Extended Selfie Stick & Tripod delivers an unmatched 1.8-meter (180 cm) reach for capturing expansive group shots, dramatic travel panoramas, and dynamic vlog perspectives. Built with a smooth and durable 7-section aviation-grade aluminum alloy telescoping pole, reinforced non-slip tripod base for hands-free stability, 360° rotating phone mount, and a detachable quick-connect Bluetooth remote for effortless wireless control.',
+    features: [
+      'Unmatched 1.8 Meter (180 cm) reach — double the extension of standard selfie sticks for wider, epic group photos and dynamic landscapes',
+      'Smooth & durable 7-section aviation-grade aluminum alloy telescoping pole engineered for zero flex and maximum stability',
+      'Reinforced stable tripod base with anti-slip silicone feet for shake-free hands-free shooting, vlogging, and video calls',
+      'Detachable wireless Bluetooth shutter remote with up to 10m quick, reliable connection',
+      '360° rotation and multi-angle tilt phone clamp to effortlessly switch between portrait and landscape modes',
+      'Ultra-compact folded length of only 29.5 cm — perfectly portable, fits easily into standard backpacks and travel bags',
+      'Universal phone mount compatible with all iPhone, Samsung, OnePlus, Xiaomi, and other smartphones (4.7" to 7.0")',
+    ],
+    specs: {
+      'Brand': 'Fitgear®',
+      'Model': 'FG-M4',
+      'Max Extension Reach': '1.8 Meters (180 cm)',
+      'Folded Length': '29.5 cm (approx. 30 cm)',
+      'Pole Build': '7-Section Aviation Aluminum Alloy',
+      'Base': 'Reinforced Anti-Slip Tripod Stand',
+      'Wireless Shutter': 'Detachable Bluetooth Remote (10m range)',
+      'Phone Mount': '360° Horizontal / 270° Vertical Tilt',
+      'Phone Compatibility': 'Universal (4.7" to 7.0" smartphones)',
+      'Product Weight': 'Approx. 340g',
+      'Ideal Usage': 'Group Photos, Vlogs, Travel, Panoramic Selfies',
+    },
+  },
+
   // ══════════════════════════════════════════════════════════════════
   // 1. JEWELLERY & SILVER
   // ══════════════════════════════════════════════════════════════════
