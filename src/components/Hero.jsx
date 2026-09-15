@@ -17,6 +17,17 @@ const HERO_SLIDES = [
     bankLogos: ['FITGEAR', '1.8M'],
   },
   {
+    id: 5,
+    badge: 'NEW ARRIVAL · FITGEAR FG-15',
+    badgeColor: 'bg-[#991B33]',
+    image: '/images/products/fitgear-fg-15/fitgear-fg-15-2.jpg',
+    discount: 'FLAT 66% OFF',
+    heading: 'FITGEAR FG-15 CAR MOUNT',
+    brands: '360° Ball Joint • Sticky Gel Suction • Telescopic Arm • Case Friendly • 2-Year Warranty',
+    bankOffer: 'Special Launch Price: ₹339 only (MRP ₹999)',
+    bankLogos: ['FITGEAR', '2-YR'],
+  },
+  {
     id: 2,
     badge: 'ELECTRONICS FEST · LIMITED',
     badgeColor: 'bg-[#059669]',
