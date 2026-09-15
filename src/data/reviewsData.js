@@ -61,9 +61,13 @@ export const REVIEWS_POOL = {
       { name: "Karan Singhal", text: "dual ball arm locks tight on 28mm handlebar, zero vibration even at high speeds" },
     ],
     AUDIO_SPEAKERS: [
-      { name: "Aditya Roy", text: "sound quality is surprisingly loud and punchy for this compact size, deep bass!" },
-      { name: "Neha Sharma", text: "the RGB light ring looks so aesthetic in the dark, party vibe everywhere" },
-      { name: "Rahul Verma", text: "bluetooth connected in 2 seconds flat, fits easily in my pocket, solid battery life" },
+      { name: "Aditya Roy", text: "sound quality is surprisingly loud and punchy for this compact size deep bass" },
+      { name: "Neha Sharma", text: "the RGB light ring looks so aesthetic in the dark party vibe everywhere" },
+      { name: "Rahul Verma", text: "bluetooth connected in 2 seconds flat fits easily in my pocket solid battery life" },
+      { name: "Pranav Joshi", text: "took this camping on rainy weekend IPX6 waterproofing is legit and sound is loud" },
+      { name: "Harshil Patel", text: "fits directly into my bicycle bottle holder bass radiators give great thump" },
+      { name: "Manish Solanki", text: "paired two of these in tws stereo mode volume doubled instantly crazy performance" },
+      { name: "Deepak Rawat", text: "rugged fabric finish with loop makes it easy to clip on backpack during treks" },
     ],
     SPEAKERS: [
       { name: "Kabir Roy", text: "120w dolby atmos soundbar fills living room with theater quality spatial audio" },

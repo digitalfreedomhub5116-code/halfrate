@@ -389,6 +389,58 @@ const RAW_PRODUCTS = [
       'Warranty': '1-Year Official Pro-Shield™ Manufacturer Warranty',
     },
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // 8. MZ TG113 RUGGED OUTDOOR PORTABLE BLUETOOTH SPEAKER
+  // ══════════════════════════════════════════════════════════════════
+  {
+    id: 'mz-tg113-speaker',
+    name: 'MZ TG113 Rugged Outdoor Portable Bluetooth Speaker with IPX6 Waterproofing & TWS Pairing',
+    shortName: 'MZ TG113 Rugged Bluetooth Speaker',
+    genre: 'AUDIO_SPEAKERS',
+    price: 499,
+    originalPrice: 1299,
+    reviewCount: 47,
+    rating: 4.8,
+    badCount: 0,
+    image: '/images/products/mz-tg113-speaker/mz-tg113-speaker-1.jpg',
+    gallery: [
+      '/images/products/mz-tg113-speaker/mz-tg113-speaker-1.jpg',
+      '/images/products/mz-tg113-speaker/mz-tg113-speaker-2.jpg',
+      '/images/products/mz-tg113-speaker/mz-tg113-speaker-3.jpg',
+      '/images/products/mz-tg113-speaker/mz-tg113-speaker-4.jpg',
+    ],
+    purity: 'IPX6 Waterproof Fabric Mesh & Carabiner Loop',
+    compliance: 'MZ™ Official Quality Certified',
+    pack: 'MZ TG113 Speaker + Micro-USB Charging Cable + 3.5mm AUX Cable + Quick Guide',
+    dimensions: 'Height: 180mm (7.1 in) × Diameter: 75mm (2.9 in) | 500ml Bottle Form Factor',
+    weight: '512g Heavy-Bass Cylinder Chassis',
+    material: 'Rugged Camouflage Woven Acoustic Fabric & Rubberized Shockproof Base',
+    chipset: 'Bluetooth 5.0 • TWS Stereo Pairing • Dual Passive Radiators • IPX6 Waterproof',
+    description: 'The MZ TG113 Rugged Outdoor Bluetooth Speaker is engineered for room-filling substantial audio in an all-terrain, splash-proof cylinder design. Sized like a standard 500ml water bottle (180mm × 75mm) and finished in a durable camouflage acoustic fabric mesh, it slips easily into backpack bottle pockets or clips onto gear with its integrated carry loop. Features IPX6 all-weather waterproofing, dual passive bass radiators for deep punchy lows, TWS stereo pairing to link two speakers wirelessly for left/right spatial separation, and up to 12 hours of uninterrupted battery playtime.',
+    features: [
+      'Substantial Audio Power & Deep Bass — Precision-engineered dual acoustic drivers with passive bass radiators pump out loud, room-filling sound',
+      'IPX6 All-Weather Waterproofing — Heavy-duty woven fabric mesh and sealed silicone ports protect against heavy rain, poolside splashes, and dust',
+      'TWS True Wireless Stereo Pairing — Wirelessly connect two TG113 speakers for doubled volume and true left/right channel stereo separation',
+      '500ml Bottle Form Factor — Measuring 180mm × 75mm, it fits perfectly into bike water bottle cages, backpack side sleeves, and cup holders',
+      'Extended 12-Hour Battery Playtime — High-capacity rechargeable lithium-ion battery fuels all-day hiking treks, camping, and outdoor workouts',
+      'Rugged Camouflage Finish — Shock-absorbing rubberized top/bottom end caps and anti-tear exterior fabric withstand outdoor wear and drops',
+      'Universal Multi-Mode Playback — Bluetooth 5.0, 3.5mm AUX input, TF MicroSD card slot, and USB flash drive support for versatile offline audio',
+    ],
+    specs: {
+      'Brand': 'MZ™ (We Believe In Quality)',
+      'Model': 'TG113',
+      'Speaker Type': 'Rugged Outdoor Cylinder Wireless Speaker',
+      'Dimensions': '180mm Height × 75mm Diameter (Bottle Sized)',
+      'Waterproof Rating': 'IPX6 Water-Resistant & Dustproof',
+      'Wireless Connectivity': 'Bluetooth 5.0 (10m transmission range)',
+      'Special Features': 'TWS Dual Speaker Pairing • Hands-Free Calling',
+      'Inputs': 'Bluetooth, 3.5mm AUX, Micro-USB, TF Card, USB',
+      'Battery Life': 'Up to 12 Hours (Varies by volume & content)',
+      'Product Weight': 'Approx. 512g',
+      'Warranty': '1-Year Official MZ™ Manufacturer Warranty',
+    },
+  },
 ]
 
 function buildProductReviews(product) {
