@@ -14,9 +14,13 @@ function CategoryCard({ genre, index }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Responsive sizes: balanced grid when 2 categories exist
+  // Responsive sizes: balanced grid when 3 or fewer categories exist
   const sizeClasses =
-    GENRES.length <= 2
+    GENRES.length === 3
+      ? index === 0
+        ? 'col-span-2 row-span-1 sm:col-span-1 sm:row-span-1'
+        : 'col-span-1 row-span-1 sm:col-span-1 sm:row-span-1'
+      : GENRES.length <= 2
       ? 'col-span-1 row-span-1'
       : index === 0
       ? 'col-span-2 row-span-2 sm:col-span-2 sm:row-span-2'
@@ -84,7 +88,9 @@ export default function GenreShowcase() {
         {/* Categories Bento Grid */}
         <div
           className={
-            GENRES.length <= 2
+            GENRES.length === 3
+              ? 'grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-5 auto-rows-[200px] sm:auto-rows-[260px]'
+              : GENRES.length <= 2
               ? 'grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 auto-rows-[220px] sm:auto-rows-[280px]'
               : 'grid auto-rows-[200px] grid-cols-2 gap-3 sm:auto-rows-[240px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[260px] lg:gap-5'
           }

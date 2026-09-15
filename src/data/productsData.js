@@ -15,6 +15,13 @@ export const GENRES = [
     image: '/images/products/fitgear-fg-15/fitgear-fg-15-1.jpg',
     description: 'Heavy-duty 360° dashboard mounts, windshield phone brackets, and in-car driving accessories.',
   },
+  {
+    id: 'AUDIO_SPEAKERS',
+    label: 'Bluetooth Speakers',
+    slug: 'bluetooth-speakers',
+    image: '/images/products/mz-m412sp/mz-m412sp-1.jpg',
+    description: 'Portable wireless Bluetooth speakers, crystal-clear dynamic audio, RGB ambient halo lights, and punchy bass.',
+  },
 ]
 
 const RAW_PRODUCTS = [
@@ -119,6 +126,58 @@ const RAW_PRODUCTS = [
       'Device Compatibility': 'Universal (4.0 to 7.2 smartphones)',
       'Product Weight': 'Approx. 210g',
       'Warranty': '2-Year Official Fitgear® Manufacturer Warranty',
+    },
+  },
+
+  // ══════════════════════════════════════════════════════════════════
+  // 3. MZ M412SP PORTABLE WIRELESS BLUETOOTH SPEAKER
+  // ══════════════════════════════════════════════════════════════════
+  {
+    id: 'mz-m412sp',
+    name: 'MZ M412SP Portable Wireless Bluetooth Speaker with Dynamic RGB Ambient Light & Crystal Sound',
+    shortName: 'MZ M412SP Wireless Bluetooth Speaker',
+    genre: 'AUDIO_SPEAKERS',
+    price: 499,
+    originalPrice: 999,
+    reviewCount: 42,
+    rating: 4.9,
+    badCount: 0,
+    image: '/images/products/mz-m412sp/mz-m412sp-1.jpg',
+    gallery: [
+      '/images/products/mz-m412sp/mz-m412sp-1.jpg',
+      '/images/products/mz-m412sp/mz-m412sp-2.jpg',
+      '/images/products/mz-m412sp/mz-m412sp-3.jpg',
+    ],
+    purity: 'Woven Acoustic Mesh & Silicone Lanyard',
+    compliance: 'MZ™ Official Quality Certification',
+    pack: 'MZ M412SP Wireless Speaker + USB Charging Cable + 3.5mm AUX Cable + Quick Start Guide',
+    dimensions: '100mm (W) × 70mm (H) × 40mm (D) | Pocket-Sized Form Factor',
+    weight: '195g Ultra-Lightweight Portability',
+    material: 'Impact-Resistant Polymer Chassis & Protective Fabric Acoustic Grille',
+    chipset: 'Bluetooth 5.3 • Dynamic RGB Light Ring • Deep Bass Acoustic Driver • AUX Input',
+    description: 'The MZ M412SP Portable Wireless Speaker delivers punchy dynamic sound, crystal-clear acoustics, and rich resonant bass in an ultra-compact body smaller than a standard smartphone (100mm × 70mm × 40mm). Designed for music lovers on the move, it features a vibrant pulsating multi-color RGB ambient LED halo light ring around the center logo that lights up your vibe, a durable woven acoustic mesh front, responsive top-mounted tactile playback controls, a rugged integrated silicone carry loop, and versatile dual connectivity with both high-speed Bluetooth 5.3 and 3.5mm AUX input.',
+    features: [
+      'Crystal Clear Sound & Punchy Bass — Precision-engineered acoustic driver produces room-filling, distortion-free audio with deep resonant bass',
+      'Vibrant RGB Ambient Halo Light — Multi-color pulsating LED light ring syncs to the music to light up your vibe and elevate any setting',
+      'Ultra-Compact Smartphone-Sized Body — Measuring just 100mm × 70mm × 40mm, smaller than a phone for effortless palm, pocket, or backpack carrying',
+      'High-Speed Bluetooth 5.3 & AUX Input — Seamless low-latency wireless connection up to 10m plus standard 3.5mm AUX port for universal device playback',
+      'Extended Battery Playtime — High-efficiency rechargeable lithium-ion battery powers hours of continuous music on a single charge',
+      'Integrated Silicone Carry Loop — Heavy-duty flexible strap allows you to hang the speaker from bike handlebars, bags, or tents',
+      'Available in 5 Finishes — Vibrant Red, Bold Green, Royal Blue, Warm Beige, and Classic Matte Black color options',
+    ],
+    specs: {
+      'Brand': 'MZ™ (We Believe In Quality)',
+      'Model': 'M412SP',
+      'Audio Output': 'Crystal Sound Dynamic Acoustic Driver with Passive Bass Radiator',
+      'Lighting': 'Dynamic Multi-Color RGB Ambient LED Halo Ring',
+      'Form Factor': 'Ultra-Compact Pocket Speaker (Smaller than Smartphone)',
+      'Dimensions': '100mm × 70mm × 40mm',
+      'Connectivity': 'Bluetooth 5.3 Wireless (10m Range) + 3.5mm AUX Input',
+      'Controls': 'Top-Mounted Tactile Buttons (Power, Mode, Volume +, Volume -, Play/Pause)',
+      'Portability': 'Integrated Silicone Lanyard / Carry Strap',
+      'Color Finishes': 'Red, Green, Blue, Beige, Black',
+      'Product Weight': 'Approx. 195g',
+      'Warranty': '1-Year Official MZ™ Manufacturer Warranty',
     },
   },
 ]

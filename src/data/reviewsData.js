@@ -52,6 +52,11 @@ export const REVIEWS_POOL = {
       { name: "Amitabh Sen", text: "360 rotation is butter smooth holds my phone with thick case easily" },
       { name: "Rohit Agarwal", text: "survived 40 degree heat in car without falling off best car mount hands down" },
     ],
+    AUDIO_SPEAKERS: [
+      { name: "Aditya Roy", text: "sound quality is surprisingly loud and punchy for this compact size, deep bass!" },
+      { name: "Neha Sharma", text: "the RGB light ring looks so aesthetic in the dark, party vibe everywhere" },
+      { name: "Rahul Verma", text: "bluetooth connected in 2 seconds flat, fits easily in my pocket, solid battery life" },
+    ],
     SPEAKERS: [
       { name: "Kabir Roy", text: "120w dolby atmos soundbar fills living room with theater quality spatial audio" },
       { name: "Tushar Bansal", text: "walnut wooden reference monitors deliver deep warm bass and pristine treble" },
