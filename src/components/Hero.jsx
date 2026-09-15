@@ -9,61 +9,49 @@ const HERO_SLIDES = [
     id: 1,
     productId: 'fitgear-fg-15',
     slug: 'fitgear-fg-15-secure-grip-pro-in-car-phone-bracket-windshield-dashboard-mount',
+    shortTitle: 'Fitgear FG-15',
     brand: 'FITGEAR® DIRECT',
     title: 'Fitgear FG-15 Secure-Grip In-Car Mount',
-    subtitle: '360° Ball Joint • Sticky Gel Suction • Telescopic Arm • 2-Yr Warranty',
     price: 339,
     originalPrice: 999,
     discount: '66% OFF',
-    rating: 4.8,
-    reviews: 36,
     image: '/images/products/fitgear-fg-15/fitgear-fg-15-2.jpg',
-    features: ['360° Omnidirectional Pivot', 'Reusable Sticky Gel Suction', 'Case-Friendly Dual Clamps'],
   },
   {
     id: 2,
     productId: 'fitgear-fg-m4',
     slug: 'fitgear-fg-m4-ultra-long-1-8m-extended-selfie-stick-tripod-with-bluetooth-remote',
+    shortTitle: 'Fitgear FG-M4',
     brand: 'FITGEAR® DIRECT',
     title: 'Fitgear FG-M4 1.8M Ultra-Long Selfie Stick',
-    subtitle: '1.8M Ultra Reach • Aviation Aluminum • Detachable Remote • Anti-Slip Base',
     price: 999,
     originalPrice: 1999,
     discount: '50% OFF',
-    rating: 4.9,
-    reviews: 48,
     image: '/images/products/fitgear-fg-m4/fitgear-fg-m4-2.jpg',
-    features: ['1.8M Extended Reach', '7-Section Aviation Aluminum', 'Detachable Bluetooth Shutter'],
   },
   {
     id: 3,
     productId: 'mz-m412sp',
     slug: 'mz-m412sp-portable-wireless-bluetooth-speaker-with-dynamic-rgb-ambient-light-crystal-sound',
+    shortTitle: 'MZ M412SP',
     brand: 'MZ™ AUDIO LAB',
     title: 'MZ M412SP Dynamic RGB Bluetooth Speaker',
-    subtitle: 'Crystal Sound Acoustics • Dynamic RGB Halo Light • Pocket Sized • Bluetooth & AUX',
     price: 499,
     originalPrice: 999,
     discount: '50% OFF',
-    rating: 4.9,
-    reviews: 42,
     image: '/images/products/mz-m412sp/mz-m412sp-2.jpg',
-    features: ['Crystal Sound Dynamic Audio', 'Pulsating RGB Ambient Halo', 'Ultra-Compact Pocket Design'],
   },
   {
     id: 4,
     productId: 'pro-shield-m3c1-mount',
     slug: 'pro-shield-m3-c1-ipx6-waterproof-motorcycle-bicycle-phone-mount-stand',
+    shortTitle: 'Pro-Shield M3-C1',
     brand: 'PRO-SHIELD™ ALL-WEATHER',
     title: 'Pro-Shield M3-C1 IPX6 Waterproof Mount',
-    subtitle: 'IPX6 Monsoon Certified • Sensitive TPU Touch • 360° Dual-Ball Swivel',
     price: 399,
     originalPrice: 999,
     discount: '60% OFF',
-    rating: 4.9,
-    reviews: 41,
     image: '/images/products/pro-shield-m3c1-mount/pro-shield-m3c1-1.jpg',
-    features: ['IPX6 Monsoon Waterproofing', 'Touch-Sensitive Clear Membrane', 'Universal 22-32mm Clamp'],
   },
 ]
 
@@ -243,140 +231,76 @@ export default function Hero() {
       </div>
 
       {/* ═══════════════════════════════════════════════════
-          3. HERO BANNER CAROUSEL (Myntra-style)
-          ═══════════════════════════════════════════════════ */}
-      {/* ═══════════════════════════════════════════════════
-          3. HERO SHOWCASE CAROUSEL (Clean Split Showcase)
+          3. FULL-BLEED RETAIL HERO BANNER (Myntra / Flipkart Style)
           ═══════════════════════════════════════════════════ */}
       <div className="relative mx-auto max-w-7xl px-3 sm:px-4 lg:px-6 pt-3 sm:pt-4">
         <div
-          className="relative rounded-2xl sm:rounded-3xl overflow-hidden border border-[#E7E2D9] bg-white shadow-lg shadow-stone-900/5 cursor-pointer transition-shadow hover:shadow-xl"
+          className="group relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg shadow-stone-900/10 cursor-pointer bg-stone-950"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onClick={() => navigate(`/product/${slide.slug || slide.productId}`)}
         >
-          {/* Main Card Grid: Desktop 2-Column Split, Mobile Vertical Split */}
-          <div className="grid grid-cols-1 md:grid-cols-12 min-h-[380px] sm:min-h-[420px] md:min-h-[450px]">
-            
-            {/* MOBILE ONLY: Pristine Product Image (Top section on mobile, uncropped) */}
-            <div className="md:hidden relative aspect-[4/3] bg-gradient-to-b from-stone-900 via-stone-950 to-[#12080a] flex items-center justify-center overflow-hidden">
-              {HERO_SLIDES.map((s, idx) => (
-                <div
-                  key={`mob-img-${s.id}`}
-                  className={`absolute inset-0 flex items-center justify-center p-3 transition-all duration-700 ease-in-out ${
-                    idx === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                  }`}
-                >
-                  <img
-                    src={s.image}
-                    alt={s.title}
-                    className="max-h-full max-w-full object-contain drop-shadow-2xl"
-                    loading={idx === 0 ? 'eager' : 'lazy'}
-                  />
-                </div>
-              ))}
+          {/* Full-Bleed Promotional Slide Visuals */}
+          {HERO_SLIDES.map((s, idx) => (
+            <div
+              key={s.id}
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                idx === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              <img
+                src={s.image}
+                alt={s.title}
+                className="h-full w-full object-cover object-center select-none"
+                loading={idx === 0 ? 'eager' : 'lazy'}
+                draggable={false}
+              />
+            </div>
+          ))}
 
-              {/* Minimal Clean Discount Badge (No sparkle, no giant pill) */}
-              <div className="absolute top-3 right-3 z-10">
-                <span className="px-2.5 py-1 rounded-lg bg-[#991B33] text-white text-[11px] font-black tracking-wide shadow-md">
-                  {slide.discount}
-                </span>
-              </div>
+          {/* Subtle Bottom Scrim for Pill & Dot Readability */}
+          <div className="absolute inset-x-0 bottom-0 h-24 sm:h-32 bg-gradient-to-t from-black/80 via-black/35 to-transparent pointer-events-none" />
+
+          {/* Minimal Floating Bottom Deal Pill & Smooth Dots */}
+          <div className="absolute bottom-3 sm:bottom-4 inset-x-0 z-20 flex flex-col items-center gap-2 px-4 pointer-events-none">
+            {/* Sleek Floating Deal Pill */}
+            <div
+              onClick={(e) => {
+                e.stopPropagation()
+                navigate(`/product/${slide.slug || slide.productId}`)
+              }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-black/85 hover:bg-black/95 text-white backdrop-blur-md border border-white/20 shadow-xl pointer-events-auto transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <span className="text-xs sm:text-sm font-bold text-white tracking-tight">
+                {slide.shortTitle || slide.title}
+              </span>
+              <span className="text-white/40 text-xs">·</span>
+              <span className="font-heading text-xs sm:text-sm font-extrabold text-amber-300">
+                ₹{slide.price}
+              </span>
+              <span className="text-[10px] sm:text-xs font-black uppercase text-emerald-400 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                {slide.discount}
+              </span>
             </div>
 
-            {/* DEAL INFO & DETAILS COLUMN (Desktop: 7 cols, Mobile: bottom section) */}
-            <div className="md:col-span-7 p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col justify-between bg-white">
-              <div>
-                {/* Brand Kicker & Verified Rating */}
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#991B33]">
-                    {slide.brand}
-                  </span>
-                  <div className="flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
-                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                    <span>{slide.rating}</span>
-                    <span className="text-[10px] text-stone-500 font-normal">({slide.reviews})</span>
-                  </div>
-                </div>
-
-                {/* Product Title */}
-                <h2 className="font-heading text-lg sm:text-2xl md:text-3xl font-extrabold text-[#1C1917] leading-tight tracking-tight">
-                  {slide.title}
-                </h2>
-
-                {/* Subtitle / Key Highlights */}
-                <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-[#78716C] leading-relaxed line-clamp-2">
-                  {slide.subtitle}
-                </p>
-
-                {/* Feature Chips */}
-                <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-3 sm:mt-4">
-                  {slide.features?.map((feat, i) => (
-                    <span
-                      key={i}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-[#FAF8F5] text-[#44403C] border border-[#E7E2D9]"
-                    >
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#991B33]" />
-                      {feat}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price & Action Bar */}
-              <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#E7E2D9] flex items-center justify-between gap-3">
-                <div className="flex items-baseline gap-2">
-                  <span className="font-heading text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#991B33]">
-                    ₹{slide.price}
-                  </span>
-                  <span className="text-xs sm:text-sm text-[#78716C]/60 line-through">
-                    ₹{slide.originalPrice}
-                  </span>
-                  <span className="hidden xs:inline text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                    {slide.discount}
-                  </span>
-                </div>
-
+            {/* Smooth Dots Indicator */}
+            <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
+              {HERO_SLIDES.map((_, idx) => (
                 <button
-                  type="button"
+                  key={idx}
                   onClick={(e) => {
                     e.stopPropagation()
-                    navigate(`/product/${slide.slug || slide.productId}`)
+                    goToSlide(idx)
                   }}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-[#991B33] hover:bg-[#7F1D1D] text-white text-xs sm:text-sm font-bold uppercase tracking-wider transition-all shadow-md shadow-[#991B33]/20 active:scale-95 cursor-pointer"
-                >
-                  <span>View Deal</span>
-                  <ChevronRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* DESKTOP ONLY: Pristine Product Image Stage (5 cols) */}
-            <div className="hidden md:flex md:col-span-5 relative bg-gradient-to-b from-stone-900 via-stone-950 to-[#12080a] items-center justify-center overflow-hidden p-6 lg:p-8">
-              {HERO_SLIDES.map((s, idx) => (
-                <div
-                  key={`desk-img-${s.id}`}
-                  className={`absolute inset-0 flex items-center justify-center p-6 lg:p-8 transition-all duration-700 ease-in-out ${
-                    idx === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                  className={`rounded-full transition-all duration-300 cursor-pointer ${
+                    idx === currentSlide
+                      ? 'w-6 sm:w-7 h-1.5 sm:h-2 bg-white shadow-sm'
+                      : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/40 hover:bg-white/70'
                   }`}
-                >
-                  <img
-                    src={s.image}
-                    alt={s.title}
-                    className="max-h-full max-w-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-105"
-                    loading={idx === 0 ? 'eager' : 'lazy'}
-                  />
-                </div>
+                  aria-label={`Go to slide ${idx + 1}`}
+                />
               ))}
-
-              {/* Desktop Discount Badge */}
-              <div className="absolute top-4 right-4 z-10">
-                <span className="px-3 py-1 rounded-lg bg-[#991B33] text-white text-xs font-black tracking-wide shadow-lg">
-                  {slide.discount}
-                </span>
-              </div>
             </div>
-
           </div>
 
           {/* Desktop Arrow Controls */}
@@ -387,7 +311,7 @@ export default function Hero() {
               setIsAutoPlaying(false)
               setTimeout(() => setIsAutoPlaying(true), 8000)
             }}
-            className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-[#1C1917] shadow-md hover:bg-white hover:scale-110 transition-all cursor-pointer border border-[#E7E2D9]"
+            className="hidden sm:flex absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm shadow-md transition-all hover:scale-110 active:scale-95 cursor-pointer border border-white/20"
             aria-label="Previous Slide"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -399,27 +323,11 @@ export default function Hero() {
               setIsAutoPlaying(false)
               setTimeout(() => setIsAutoPlaying(true), 8000)
             }}
-            className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 h-10 w-10 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-[#1C1917] shadow-md hover:bg-white hover:scale-110 transition-all cursor-pointer border border-[#E7E2D9]"
+            className="hidden sm:flex absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 lg:h-10 lg:w-10 items-center justify-center rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm shadow-md transition-all hover:scale-110 active:scale-95 cursor-pointer border border-white/20"
             aria-label="Next Slide"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
-        </div>
-
-        {/* Dot Indicators */}
-        <div className="flex items-center justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4 pb-1">
-          {HERO_SLIDES.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => goToSlide(idx)}
-              className={`rounded-full transition-all duration-300 cursor-pointer ${
-                idx === currentSlide
-                  ? 'w-6 sm:w-8 h-2 sm:h-2.5 bg-[#991B33]'
-                  : 'w-2 sm:w-2.5 h-2 sm:h-2.5 bg-[#D6D3D1] hover:bg-[#A8A29E]'
-              }`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
         </div>
       </div>
 
