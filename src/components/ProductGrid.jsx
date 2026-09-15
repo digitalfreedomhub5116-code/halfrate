@@ -16,7 +16,6 @@ function ProductCard({ product }) {
   const [ref, isVisible] = useScrollReveal(0.05)
   const isOutOfStock = product.inStock === false
 
-  const savings = (product.originalPrice || Math.round(product.price * 2)) - product.price
   const discountPercent = Math.round(
     ((product.originalPrice - product.price) / (product.originalPrice || 1)) * 100
   )
@@ -56,16 +55,7 @@ function ProductCard({ product }) {
           }`}
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40" />
 
-        {/* Top-Left: Savings Badge */}
-        {savings > 0 && (
-          <div className="absolute top-2.5 left-2.5 z-10">
-            <span className="inline-block px-2 py-0.5 rounded-full text-[9.5px] font-extrabold bg-emerald-700 text-white shadow-xs">
-              Save ₹{savings.toLocaleString('en-IN')}
-            </span>
-          </div>
-        )}
 
         {/* Out of Stock badge */}
         {isOutOfStock && (

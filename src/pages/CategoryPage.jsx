@@ -18,7 +18,6 @@ function ProductCard({ product }) {
   const isWishlisted = useCartStore((s) => s.isWishlisted(product.id))
   const isOutOfStock = product.inStock === false
   const originalPrice = product.originalPrice || Math.round(product.price * 2)
-  const savings = originalPrice - product.price
 
   const handleCardClick = () => {
     navigate(`/product/${product.slug}`)
@@ -52,15 +51,6 @@ function ProductCard({ product }) {
           }`}
           loading="lazy"
         />
-
-        {/* Top-Left: Savings Badge */}
-        {savings > 0 && (
-          <div className="absolute top-2.5 left-2.5 z-10">
-            <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-700 text-white shadow-xs">
-              Save ₹{savings.toLocaleString('en-IN')}
-            </span>
-          </div>
-        )}
 
         {/* Out of Stock badge on image */}
         {isOutOfStock && (
