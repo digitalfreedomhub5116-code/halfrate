@@ -57,6 +57,8 @@ export const REVIEWS_POOL = {
       { name: "Rohit Agarwal", text: "survived 40 degree heat in car without falling off best car mount hands down" },
       { name: "Manish Tiwari", text: "clamps behind rearview mirror perfectly zero blind spots on windshield, rock solid GPS mount" },
       { name: "Deepak Chawla", text: "360 swivel lets me adjust between portrait map and recording forward dashcam easily" },
+      { name: "Sameer Kulkarni", text: "rode through heavy monsoon downpour on my Royal Enfield, phone was 100% dry inside, touch screen works through rain" },
+      { name: "Karan Singhal", text: "dual ball arm locks tight on 28mm handlebar, zero vibration even at high speeds" },
     ],
     AUDIO_SPEAKERS: [
       { name: "Aditya Roy", text: "sound quality is surprisingly loud and punchy for this compact size, deep bass!" },

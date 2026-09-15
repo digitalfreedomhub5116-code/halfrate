@@ -2,13 +2,14 @@ import { create } from 'zustand'
 import { MOCK_PRODUCTS, GENRES } from '../data/productsData'
 import { getLocalCart, saveCartToAccount, saveProduct } from '../lib/db'
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v8'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v9'
 
 // Helper to load products from localStorage with fallback to default catalog
 const loadInitialProducts = () => {
   try {
     // Clear out deprecated legacy catalog caches if present
     try {
+      localStorage.removeItem('halfrate_catalog_v8')
       localStorage.removeItem('halfrate_catalog_v7')
       localStorage.removeItem('halfrate_catalog_v6')
       localStorage.removeItem('halfrate_catalog_v5')
