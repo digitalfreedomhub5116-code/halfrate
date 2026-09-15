@@ -1102,48 +1102,65 @@ const RAW_PRODUCTS = [
 function buildProductReviews(product) {
   const reviews = []
   const count = product.reviewCount || 15
-  const badTarget = product.badCount || 1
+  const badTarget = product.badCount || 0
+
+  // Derive a deterministic numeric seed regardless of whether id is a number or string
+  const seed = typeof product.id === 'number'
+    ? Math.abs(product.id)
+    : (String(product.id).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) || 7)
 
   // Add critical reviews
-  for (let i = 0; i < badTarget && i < REVIEWS_POOL.critical.length; i++) {
-    const pick = REVIEWS_POOL.critical[(product.id + i) % REVIEWS_POOL.critical.length]
-    reviews.push({
-      id: `bad-${product.id}-${i}`,
-      name: pick.name,
-      rating: pick.rating,
-      date: `${(i + 2)} days ago`,
-      text: pick.text,
-      verified: true,
-    })
+  const critPool = REVIEWS_POOL.critical || []
+  if (critPool.length > 0) {
+    for (let i = 0; i < badTarget && i < critPool.length; i++) {
+      const pick = critPool[(seed + i) % critPool.length]
+      if (pick) {
+        reviews.push({
+          id: `bad-${product.id}-${i}`,
+          name: pick.name,
+          rating: pick.rating,
+          date: `${(i + 2)} days ago`,
+          text: pick.text,
+          verified: true,
+        })
+      }
+    }
   }
 
   // Category specific positive reviews
-  const genreList = REVIEWS_POOL.genreSpecific[product.genre] || []
+  const genreList = (REVIEWS_POOL.genreSpecific && REVIEWS_POOL.genreSpecific[product.genre]) || []
   if (genreList.length > 0 && reviews.length < count) {
-    const genreReview = genreList[product.id % genreList.length]
-    reviews.push({
-      id: `genre-${product.id}`,
-      name: genreReview.name,
-      rating: 5,
-      date: "Just now",
-      text: genreReview.text,
-      verified: true,
-    })
+    const genreReview = genreList[seed % genreList.length]
+    if (genreReview) {
+      reviews.push({
+        id: `genre-${product.id}`,
+        name: genreReview.name,
+        rating: 5,
+        date: "Just now",
+        text: genreReview.text,
+        verified: true,
+      })
+    }
   }
 
   // Fill remaining with positive general reviews
-  let posIndex = (product.id * 3) % REVIEWS_POOL.positive.length
-  while (reviews.length < count) {
-    const item = REVIEWS_POOL.positive[posIndex % REVIEWS_POOL.positive.length]
-    reviews.push({
-      id: `pos-${product.id}-${reviews.length}`,
-      name: item.name,
-      rating: (reviews.length % 4 === 0) ? 4 : 5,
-      date: `${(reviews.length + 1) * 2} days ago`,
-      text: item.text,
-      verified: true,
-    })
-    posIndex++
+  const posPool = REVIEWS_POOL.positive || []
+  if (posPool.length > 0) {
+    let posIndex = (seed * 3) % posPool.length
+    while (reviews.length < count) {
+      const item = posPool[posIndex % posPool.length]
+      if (item) {
+        reviews.push({
+          id: `pos-${product.id}-${reviews.length}`,
+          name: item.name,
+          rating: (reviews.length % 4 === 0) ? 4 : 5,
+          date: `${(reviews.length + 1) * 2} days ago`,
+          text: item.text,
+          verified: true,
+        })
+      }
+      posIndex++
+    }
   }
 
   return reviews
