@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { ChevronLeft, ChevronRight, Zap, Star, Truck, ShieldCheck, ShoppingBag } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCartStore, GENRES, MOCK_PRODUCTS } from '../store/cartStore'
+import OptimizedImage from './OptimizedImage'
 
 // ── Hero Banner Slides (Curated Flagship Deals) ──
 const HERO_SLIDES = [
@@ -188,12 +189,14 @@ export default function Hero() {
                 className="group flex flex-col items-center gap-1.5 px-2.5 sm:px-3.5 lg:px-4 flex-shrink-0 cursor-pointer transition-transform active:scale-95"
               >
                 {/* Circle thumbnail */}
-                <div className="relative h-14 w-14 sm:h-16 sm:w-16 lg:h-[70px] lg:w-[70px] rounded-full overflow-hidden border-2 border-[#E7E2D9] group-hover:border-[#991B33] transition-all duration-300 shadow-xs ring-2 ring-transparent group-hover:ring-[#991B33]/20">
-                  <img
+                <div className="relative h-14 w-14 sm:h-16 sm:w-16 lg:h-[70px] lg:w-[70px] rounded-full overflow-hidden border-2 border-[#E7E2D9] group-hover:border-[#991B33] transition-all duration-300 shadow-xs ring-2 ring-transparent group-hover:ring-[#991B33]/20 bg-stone-100">
+                  <OptimizedImage
                     src={genre.image}
                     alt={genre.label}
+                    fallbackText={genre.label}
+                    priority={i < 4}
+                    containerClassName="w-full h-full"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading={i < 4 ? 'eager' : 'lazy'}
                   />
                 </div>
                 {/* Label */}
@@ -248,11 +251,13 @@ export default function Hero() {
                 idx === currentSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'
               }`}
             >
-              <img
+              <OptimizedImage
                 src={s.image}
                 alt={s.title}
+                fallbackText={s.shortTitle || s.title}
+                priority={idx === 0}
+                containerClassName="w-full h-full"
                 className="h-full w-full object-cover object-center select-none"
-                loading={idx === 0 ? 'eager' : 'lazy'}
                 draggable={false}
               />
             </div>
@@ -401,11 +406,12 @@ export default function Hero() {
                       onClick={() => handleQuickAdd(mod.product)}
                       className="relative h-full w-full rounded-3xl overflow-hidden border border-[#E7E2D9] shadow-md bg-stone-100 cursor-pointer active:scale-98 transition-all duration-300 group"
                     >
-                      <img
+                      <OptimizedImage
                         src={mod.product.image}
                         alt={mod.product.name}
-                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
-                        loading={idx < 4 ? 'eager' : 'lazy'}
+                        fallbackText={mod.product.shortName || mod.product.name}
+                        containerClassName="h-full w-full pointer-events-none"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-black/10 pointer-events-none" />
                       <div className="absolute bottom-3.5 left-3.5 right-3.5 z-10">
@@ -455,11 +461,12 @@ export default function Hero() {
                     onClick={() => handleQuickAdd(mod.topProduct)}
                     className={`relative ${topHeight} w-full rounded-2xl overflow-hidden border border-[#E7E2D9] shadow-xs bg-stone-100 cursor-pointer active:scale-98 transition-all group`}
                   >
-                    <img
+                    <OptimizedImage
                       src={mod.topProduct.image}
                       alt={mod.topProduct.name}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
-                      loading={idx < 4 ? 'eager' : 'lazy'}
+                      fallbackText={mod.topProduct.shortName || mod.topProduct.name}
+                      containerClassName="h-full w-full pointer-events-none"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 pointer-events-none" />
                     <div className="absolute bottom-2.5 left-2.5 right-2.5 z-10 flex items-end justify-between">
@@ -486,11 +493,12 @@ export default function Hero() {
                     onClick={() => handleQuickAdd(mod.bottomProduct)}
                     className={`relative ${bottomHeight} w-full rounded-2xl overflow-hidden border border-[#E7E2D9] shadow-xs bg-stone-100 cursor-pointer active:scale-98 transition-all group`}
                   >
-                    <img
+                    <OptimizedImage
                       src={mod.bottomProduct.image}
                       alt={mod.bottomProduct.name}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
-                      loading={idx < 4 ? 'eager' : 'lazy'}
+                      fallbackText={mod.bottomProduct.shortName || mod.bottomProduct.name}
+                      containerClassName="h-full w-full pointer-events-none"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-black/10 pointer-events-none" />
                     <div className="absolute bottom-2 left-2 right-2 z-10 flex items-end justify-between">

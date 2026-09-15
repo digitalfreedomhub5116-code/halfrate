@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 import CartDrawer from '../components/CartDrawer'
 import ReviewsModal from '../components/ReviewsModal'
 import WishlistDrawer from '../components/WishlistDrawer'
+import OptimizedImage from '../components/OptimizedImage'
 
 
 function ProductCard({ product }) {
@@ -41,14 +42,15 @@ function ProductCard({ product }) {
       className="product-card group relative cursor-pointer overflow-hidden rounded-2xl border border-[#E7E2D9] bg-white transition-all duration-300 hover:border-[#991B33]/40 hover:shadow-lg hover:shadow-stone-900/5 flex flex-col"
     >
       {/* Product Image & Wishlist Button */}
-      <div className="relative aspect-square w-full overflow-hidden bg-white">
-        <img
+      <div className="relative aspect-square w-full overflow-hidden bg-stone-50">
+        <OptimizedImage
           src={product.image}
           alt={product.name}
+          fallbackText={product.name}
+          containerClassName="w-full h-full"
           className={`h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 ${
             isOutOfStock ? 'opacity-70 grayscale-[25%]' : ''
           }`}
-          loading="lazy"
         />
 
         {/* Out of Stock badge on image */}
@@ -195,9 +197,11 @@ export default function CategoryPage() {
       <section className="relative min-h-[340px] sm:min-h-[400px] flex items-end overflow-hidden pt-24 pb-12 sm:pb-16 border-b border-[#E7E2D9]">
         {/* Background Image */}
         <div className="absolute inset-0">
-          <img
+          <OptimizedImage
             src={genre.image}
             alt={genre.label}
+            priority={true}
+            containerClassName="w-full h-full"
             className="h-full w-full object-cover filter brightness-90 contrast-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#FAF8F5] via-[#FAF8F5]/85 to-[#FAF8F5]/40" />

@@ -2,6 +2,7 @@ import { X, Minus, Plus, ShoppingBag, Tag, Truck, Sparkles, CheckCircle2 } from 
 import { useCartStore, GENRES, AVAILABLE_COUPONS, FREE_SHIPPING_THRESHOLD } from '../store/cartStore'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import OptimizedImage from './OptimizedImage'
 
 function CartItem({ item }) {
   const updateQuantity = useCartStore((s) => s.updateQuantity)
@@ -12,7 +13,13 @@ function CartItem({ item }) {
     <div className="flex gap-3.5 rounded-xl border border-[#E7E2D9] bg-[#FAF8F5] p-3 transition-colors hover:border-[#991B33]/30">
       {/* Thumbnail */}
       <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border border-[#E7E2D9] bg-white">
-        <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+        <OptimizedImage
+          src={item.image}
+          alt={item.name}
+          fallbackText={item.shortName || item.name}
+          containerClassName="w-full h-full"
+          className="h-full w-full object-cover"
+        />
       </div>
 
       {/* Details */}

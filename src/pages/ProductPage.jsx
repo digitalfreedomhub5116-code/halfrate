@@ -22,6 +22,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CartDrawer from '../components/CartDrawer'
 import WishlistDrawer from '../components/WishlistDrawer'
+import OptimizedImage from '../components/OptimizedImage'
 import { GENRES } from '../data/productsData'
 
 export default function ProductPage() {
@@ -348,15 +349,18 @@ export default function ProductPage() {
                   <button
                     key={index}
                     onClick={() => scrollToImage(index)}
-                    className={`h-16 w-16 sm:h-20 sm:w-20 aspect-square flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white cursor-pointer ${
+                    className={`h-16 w-16 sm:h-20 sm:w-20 aspect-square flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-stone-50 cursor-pointer ${
                       isSelected
                         ? 'border-[#991B33] shadow-md shadow-[#991B33]/20 scale-105'
                         : 'border-[#E7E2D9] hover:border-[#991B33]/50 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img
+                    <OptimizedImage
                       src={imgUrl}
                       alt={`${product.name} view ${index + 1}`}
+                      fallbackText={product.name}
+                      priority={index === 0}
+                      containerClassName="w-full h-full"
                       className="h-full w-full object-cover"
                     />
                   </button>
@@ -366,7 +370,7 @@ export default function ProductPage() {
 
             {/* Main Image Display Carousel */}
             <div
-              className="relative flex-1 aspect-square w-full rounded-2xl overflow-hidden border border-[#E7E2D9] bg-white shadow-xl shadow-stone-900/5 group"
+              className="relative flex-1 aspect-square w-full rounded-2xl overflow-hidden border border-[#E7E2D9] bg-stone-50 shadow-xl shadow-stone-900/5 group"
             >
               {/* Native Smooth Scroll-Snap Image Track */}
               <div
@@ -378,11 +382,14 @@ export default function ProductPage() {
                 {product.gallery.map((imgUrl, index) => (
                   <div
                     key={index}
-                    className="w-full h-full min-w-full flex-shrink-0 snap-center snap-always flex items-center justify-center bg-white"
+                    className="w-full h-full min-w-full flex-shrink-0 snap-center snap-always flex items-center justify-center bg-stone-50"
                   >
-                    <img
+                    <OptimizedImage
                       src={imgUrl}
                       alt={`${product.fullName} view ${index + 1}`}
+                      fallbackText={product.fullName}
+                      priority={index === 0}
+                      containerClassName="h-full w-full select-none"
                       className="h-full w-full object-cover select-none"
                       draggable={false}
                     />
@@ -969,10 +976,12 @@ export default function ProductPage() {
                   onClick={() => navigate(`/product/${rel.slug}`)}
                   className="product-card group relative cursor-pointer overflow-hidden rounded-2xl border border-[#E7E2D9] bg-white p-3 shadow-xs transition-all hover:border-[#991B33]/50 hover:shadow-md"
                 >
-                  <div className="aspect-square rounded-xl overflow-hidden bg-white border border-[#E7E2D9] mb-3">
-                    <img
+                  <div className="aspect-square rounded-xl overflow-hidden bg-stone-50 border border-[#E7E2D9] mb-3">
+                    <OptimizedImage
                       src={rel.image}
                       alt={rel.name}
+                      fallbackText={rel.name}
+                      containerClassName="w-full h-full"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>

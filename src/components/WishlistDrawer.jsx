@@ -2,6 +2,7 @@ import { X, Heart, ShoppingBag, Trash2 } from 'lucide-react'
 import { useCartStore } from '../store/cartStore'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import OptimizedImage from './OptimizedImage'
 
 export default function WishlistDrawer() {
   const isWishlistOpen = useCartStore((s) => s.isWishlistOpen)
@@ -112,11 +113,13 @@ export default function WishlistDrawer() {
                   {/* Thumbnail */}
                   <div
                     onClick={() => handleProductClick(item.slug)}
-                    className="h-20 w-20 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-[#E7E2D9] bg-white"
+                    className="h-20 w-20 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-[#E7E2D9] bg-stone-50"
                   >
-                    <img
+                    <OptimizedImage
                       src={item.image}
                       alt={item.name}
+                      fallbackText={item.shortName || item.name}
+                      containerClassName="w-full h-full"
                       className="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
                     />
                   </div>

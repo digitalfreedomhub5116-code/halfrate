@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { X, ArrowRight, Sparkles, ChevronRight, Tag } from 'lucide-react'
 import { GENRES, useCartStore } from '../store/cartStore'
+import OptimizedImage from './OptimizedImage'
 
 export default function CategoriesDrawer() {
   const isOpen = useCartStore((s) => s.isCategoriesOpen)
@@ -75,15 +76,17 @@ export default function CategoriesDrawer() {
                 >
                   {/* Category Thumbnail */}
                   <div
-                    className={`h-11 w-11 rounded-full overflow-hidden border-2 p-0.5 transition-all ${
+                    className={`h-11 w-11 rounded-full p-0.5 border transition-all overflow-hidden ${
                       isSelected
                         ? 'border-[#991B33] ring-2 ring-[#991B33]/20 scale-105'
                         : 'border-transparent'
                     }`}
                   >
-                    <img
+                    <OptimizedImage
                       src={genre.image}
                       alt={genre.label}
+                      fallbackText={genre.label}
+                      containerClassName="h-full w-full rounded-full"
                       className="h-full w-full rounded-full object-cover"
                     />
                   </div>
@@ -106,9 +109,11 @@ export default function CategoriesDrawer() {
             <div>
               {/* Category Feature Hero Card */}
               <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden border border-[#E7E2D9] shadow-xs group">
-                <img
+                <OptimizedImage
                   src={selectedGenre.image}
                   alt={selectedGenre.label}
+                  fallbackText={selectedGenre.label}
+                  containerClassName="w-full h-full"
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
@@ -146,9 +151,11 @@ export default function CategoriesDrawer() {
                       className="rounded-xl border border-[#E7E2D9] bg-white p-2 shadow-xs cursor-pointer active:scale-95 transition-transform"
                     >
                       <div className="aspect-square w-full rounded-lg overflow-hidden bg-stone-100">
-                        <img
+                        <OptimizedImage
                           src={p.image}
                           alt={p.name}
+                          fallbackText={p.shortName || p.name}
+                          containerClassName="w-full h-full"
                           className="h-full w-full object-cover"
                         />
                       </div>

@@ -91,20 +91,6 @@ export default function Footer() {
                   </button>
                 </li>
               ))}
-              <li>
-                <button
-                  onClick={() => {
-                    navigate('/admin-panel-access')
-                    window.scrollTo({ top: 0, behavior: 'smooth' })
-                  }}
-                  className="text-xs sm:text-sm text-[#78716C] transition-colors hover:text-[#991B33] text-left flex items-center gap-1.5 cursor-pointer"
-                >
-                  <span>Admin Terminal</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#991B33]/10 text-[#991B33] border border-[#991B33]/20 font-mono font-bold">
-                    HQ
-                  </span>
-                </button>
-              </li>
             </ul>
           </div>
 
@@ -140,15 +126,6 @@ export default function Footer() {
                 {link}
               </a>
             ))}
-            <button
-              onClick={() => {
-                navigate('/admin-panel-access')
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-              }}
-              className="text-xs text-[#78716C] transition-colors hover:text-[#991B33] cursor-pointer"
-            >
-              Admin Access
-            </button>
           </div>
         </div>
       </div>

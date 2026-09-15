@@ -38,7 +38,9 @@ import {
   RotateCcw,
   Globe,
   Ban,
-  XCircle
+  XCircle,
+  Lock,
+  KeyRound
 } from 'lucide-react'
 import { GENRES, MOCK_PRODUCTS } from '../data/productsData.js'
 import { useCartStore } from '../store/cartStore'
@@ -366,7 +368,148 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
   )
 }
 
+// ── SECURE ADMIN LOGIN GATE COMPONENT ──
+function AdminLoginGate({ onLogin }) {
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setError('')
+
+    setTimeout(() => {
+      if (password === 'halfrate@5116') {
+        try {
+          sessionStorage.setItem('halfrate_admin_auth', 'true')
+        } catch {}
+        onLogin()
+      } else {
+        setError('Incorrect security key. Access denied.')
+        setIsSubmitting(false)
+      }
+    }, 150)
+  }
+
+  return (
+    <div
+      className="min-h-screen bg-[#0B0F17] flex items-center justify-center p-4 sm:p-6 selection:bg-rose-600 selection:text-white relative overflow-hidden"
+      style={{
+        '--color-obsidian': '#0B0F17',
+        '--color-charcoal': '#111827',
+        '--color-charcoal-light': '#1F2937',
+        '--color-cream': '#F8FAFC',
+        '--color-cream-muted': '#94A3B8',
+        '--color-gold': '#E11D48',
+      }}
+    >
+      {/* Background Ambient Glow */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-rose-600/10 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-md">
+        {/* Main Security Card */}
+        <div className="rounded-3xl border border-[#1E293B] bg-[#111827]/95 backdrop-blur-xl p-6 sm:p-8 shadow-2xl shadow-black/80">
+          {/* Brand Header */}
+          <div className="text-center mb-7">
+            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-500 mb-4 shadow-lg shadow-rose-950/40">
+              <Lock className="w-7 h-7" />
+            </div>
+
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <span className="font-heading text-2xl font-black tracking-tight text-white">
+                halfrate<span className="text-rose-500">.co</span>
+              </span>
+              <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-400 text-stone-900 font-black tracking-wider">
+                SABSE SASTA
+              </span>
+            </div>
+            <p className="text-xs font-medium text-slate-400">
+              Central Operations HQ & Management Gateway
+            </p>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                Administrator Security Key
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    if (error) setError('')
+                  }}
+                  placeholder="Enter admin password"
+                  autoFocus
+                  required
+                  className="w-full rounded-xl border border-[#2A374A] bg-[#0B0F17] px-4 py-3.5 pr-11 text-sm text-white placeholder-slate-500 outline-none transition-all focus:border-rose-500 focus:ring-1 focus:ring-rose-500 font-mono"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="flex items-center gap-2 rounded-xl border border-rose-500/40 bg-rose-500/10 px-3.5 py-2.5 text-xs text-rose-300">
+                <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting || !password.trim()}
+              className="w-full rounded-xl bg-gradient-to-r from-rose-600 to-rose-700 hover:from-rose-500 hover:to-rose-600 text-white font-bold py-3.5 text-xs tracking-wider uppercase shadow-lg shadow-rose-950/50 transition-all hover:scale-[1.01] active:scale-98 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              <Lock className="w-4 h-4" />
+              <span>{isSubmitting ? 'Authenticating...' : 'Unlock Terminal'}</span>
+            </button>
+          </form>
+
+          {/* Back link */}
+          <div className="mt-6 pt-5 border-t border-[#1F2937] text-center">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-rose-400 transition-colors"
+            >
+              <span>← Return to halfrate.co public store</span>
+            </Link>
+          </div>
+        </div>
+
+        {/* Security watermark footer */}
+        <p className="text-center text-[11px] text-slate-500 mt-4">
+          Authorized personnel only • 256-Bit Encrypted Session
+        </p>
+      </div>
+    </div>
+  )
+}
+
 export default function AdminPanelPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    try {
+      return sessionStorage.getItem('halfrate_admin_auth') === 'true'
+    } catch {
+      return false
+    }
+  })
   const [activeTab, setActiveTab] = useState('overview')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -1145,8 +1288,23 @@ export default function AdminPanelPage() {
     }
   }
 
+  if (!isAuthenticated) {
+    return <AdminLoginGate onLogin={() => setIsAuthenticated(true)} />
+  }
+
   return (
-    <div className="min-h-screen bg-obsidian text-cream flex">
+    <div
+      className="min-h-screen bg-[#0B0F17] text-slate-100 flex selection:bg-rose-600 selection:text-white font-sans"
+      style={{
+        '--color-obsidian': '#0B0F17',
+        '--color-charcoal': '#111827',
+        '--color-charcoal-light': '#1F2937',
+        '--color-cream': '#F8FAFC',
+        '--color-cream-muted': '#94A3B8',
+        '--color-gold': '#E11D48',
+        '--color-gold-dark': '#BE123C',
+      }}
+    >
       {/* Toast Notification */}
       {toast && (
         <div
@@ -1278,6 +1436,20 @@ export default function AdminPanelPage() {
             <ExternalLink className="w-3.5 h-3.5" />
             <span>View Public Store</span>
           </Link>
+
+          <button
+            type="button"
+            onClick={() => {
+              try {
+                sessionStorage.removeItem('halfrate_admin_auth')
+              } catch {}
+              setIsAuthenticated(false)
+            }}
+            className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg border border-rose-500/30 text-xs font-semibold text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 transition-colors cursor-pointer"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>Lock Terminal</span>
+          </button>
         </div>
       </aside>
 
@@ -1332,6 +1504,20 @@ export default function AdminPanelPage() {
                 <span>Add Product</span>
               </button>
             )}
+
+            <button
+              onClick={() => {
+                try {
+                  sessionStorage.removeItem('halfrate_admin_auth')
+                } catch {}
+                setIsAuthenticated(false)
+              }}
+              title="Lock Terminal"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-rose-500/30 text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 text-xs font-semibold transition-colors cursor-pointer"
+            >
+              <Lock className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Lock</span>
+            </button>
           </div>
         </header>
 

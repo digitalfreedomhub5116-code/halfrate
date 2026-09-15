@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import OptimizedImage from './OptimizedImage'
 
 const PRODUCTS_PER_BATCH = 8
 
@@ -45,14 +46,15 @@ function ProductCard({ product }) {
       }`}
     >
       {/* Product Image & Badges */}
-      <div className="relative aspect-square w-full overflow-hidden bg-white">
-        <img
+      <div className="relative aspect-square w-full overflow-hidden bg-stone-50">
+        <OptimizedImage
           src={product.image}
           alt={product.name}
+          fallbackText={product.shortName || product.name}
+          containerClassName="w-full h-full"
           className={`h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108 ${
             isOutOfStock ? 'opacity-60 grayscale-[25%]' : ''
           }`}
-          loading="lazy"
         />
 
 

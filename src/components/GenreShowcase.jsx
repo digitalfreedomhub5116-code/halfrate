@@ -2,6 +2,7 @@ import { useScrollReveal } from '../hooks/useScrollReveal'
 import { GENRES, useCartStore } from '../store/cartStore'
 import { useNavigate } from 'react-router-dom'
 import { ArrowUpRight } from 'lucide-react'
+import OptimizedImage from './OptimizedImage'
 
 function CategoryCard({ genre, index }) {
   const navigate = useNavigate()
@@ -42,11 +43,12 @@ function CategoryCard({ genre, index }) {
       style={{ transitionDelay: `${index * 100}ms` }}
     >
       {/* Background Image */}
-      <img
+      <OptimizedImage
         src={genre.image}
         alt={genre.label}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-        loading="lazy"
+        fallbackText={genre.label}
+        containerClassName="absolute inset-0 h-full w-full"
+        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
       />
 
       {/* Atmospheric Vignette Gradient */}
