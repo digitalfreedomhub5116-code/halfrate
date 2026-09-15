@@ -112,8 +112,8 @@ export default function Hero() {
   const handleQuickAdd = (product, e) => {
     if (e) e.stopPropagation()
     const fullProduct = productList.find((p) => p.id === product.id) || product
-    addItem(fullProduct)
-    openCart()
+    addItem(fullProduct, 1)
+    navigate('/checkout')
   }
 
   // Banner touch swipe for mobile
@@ -474,7 +474,7 @@ export default function Hero() {
                       <button
                         onClick={(e) => handleQuickAdd(mod.topProduct, e)}
                         className="p-1.5 rounded-full bg-white text-[#1C1917] hover:bg-stone-100 shadow-xs cursor-pointer active:scale-95"
-                        title="Add to Bag"
+                        title="Buy Now"
                       >
                         <ShoppingBag className="h-3 w-3 text-[#991B33]" />
                       </button>
@@ -505,7 +505,7 @@ export default function Hero() {
                       <button
                         onClick={(e) => handleQuickAdd(mod.bottomProduct, e)}
                         className="p-1.5 rounded-full bg-white text-[#1C1917] hover:bg-stone-100 shadow-xs cursor-pointer active:scale-95"
-                        title="Add to Bag"
+                        title="Buy Now"
                       >
                         <ShoppingBag className="h-3 w-3 text-[#991B33]" />
                       </button>

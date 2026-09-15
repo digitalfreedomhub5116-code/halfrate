@@ -1,4 +1,4 @@
-import { ShoppingBag, Star, Heart, X, Tag } from 'lucide-react'
+import { Star, Heart, X, Tag } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
 import { useScrollReveal } from '../hooks/useScrollReveal'
@@ -9,7 +9,6 @@ const PRODUCTS_PER_BATCH = 8
 function ProductCard({ product }) {
   const navigate = useNavigate()
   const addItem = useCartStore((s) => s.addItem)
-  const openCart = useCartStore((s) => s.openCart)
   const openReviews = useCartStore((s) => s.openReviews)
   const toggleWishlist = useCartStore((s) => s.toggleWishlist)
   const isWishlisted = useCartStore((s) => s.isWishlisted(product.id))
@@ -25,11 +24,11 @@ function ProductCard({ product }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleAdd = (e) => {
+  const handleBuyNow = (e) => {
     e.stopPropagation()
     if (isOutOfStock) return
-    addItem(product)
-    openCart()
+    addItem(product, 1)
+    navigate('/checkout')
   }
 
   const handleWishlistClick = (e) => {
@@ -141,20 +140,19 @@ function ProductCard({ product }) {
           </div>
         </div>
 
-        {/* Add to Bag Button */}
+        {/* Buy Now Button */}
         <div className="mt-2 pt-2 border-t border-[#F0EBE3]">
           <button
-            onClick={handleAdd}
+            onClick={handleBuyNow}
             disabled={isOutOfStock}
-            className={`flex w-full items-center justify-center gap-1.5 rounded-xl py-1.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider transition-all duration-300 ${
+            className={`flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-[10px] sm:text-[11px] font-black uppercase tracking-wider transition-all duration-300 ${
               isOutOfStock
                 ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
                 : 'bg-[#991B33] hover:bg-[#7E1227] text-white shadow-xs hover:shadow-md hover:shadow-[#991B33]/20 active:scale-98 cursor-pointer'
             }`}
-            aria-label={isOutOfStock ? `${product.name} is out of stock` : `Add ${product.name} to bag`}
+            aria-label={isOutOfStock ? `${product.name} is out of stock` : `Buy ${product.name} now`}
           >
-            <ShoppingBag className="h-3 w-3" />
-            <span>{isOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
+            <span>{isOutOfStock ? 'Out of Stock' : 'Buy Now'}</span>
           </button>
         </div>
       </div>

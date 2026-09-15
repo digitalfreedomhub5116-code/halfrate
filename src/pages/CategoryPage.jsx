@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, ShoppingBag, Star, Heart } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Star, Heart } from 'lucide-react'
 import { GENRES, useCartStore } from '../store/cartStore'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -12,7 +12,6 @@ import WishlistDrawer from '../components/WishlistDrawer'
 function ProductCard({ product }) {
   const navigate = useNavigate()
   const addItem = useCartStore((s) => s.addItem)
-  const openCart = useCartStore((s) => s.openCart)
   const openReviews = useCartStore((s) => s.openReviews)
   const toggleWishlist = useCartStore((s) => s.toggleWishlist)
   const isWishlisted = useCartStore((s) => s.isWishlisted(product.id))
@@ -24,11 +23,11 @@ function ProductCard({ product }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  const handleAdd = (e) => {
+  const handleBuyNow = (e) => {
     e.stopPropagation()
     if (isOutOfStock) return
-    addItem(product)
-    openCart()
+    addItem(product, 1)
+    navigate('/checkout')
   }
 
   const handleWishlistClick = (e) => {
@@ -134,20 +133,19 @@ function ProductCard({ product }) {
           </div>
         </div>
 
-        {/* 4. Add to Bag Button */}
+        {/* 4. Buy Now Button */}
         <div className="mt-3 pt-3 border-t border-[#E7E2D9]">
           <button
-            onClick={handleAdd}
+            onClick={handleBuyNow}
             disabled={isOutOfStock}
-            className={`flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-bold uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+            className={`flex w-full items-center justify-center gap-1.5 rounded-xl py-2 text-xs font-black uppercase tracking-wider transition-all duration-200 cursor-pointer ${
               isOutOfStock
                 ? 'bg-stone-100 text-stone-400 border border-stone-200 cursor-not-allowed'
                 : 'bg-[#991B33] text-white hover:bg-[#7E1227] shadow-xs active:scale-98'
             }`}
-            aria-label={isOutOfStock ? `${product.name} is out of stock` : `Add ${product.name} to bag`}
+            aria-label={isOutOfStock ? `${product.name} is out of stock` : `Buy ${product.name} now`}
           >
-            <ShoppingBag className="h-3.5 w-3.5" />
-            <span>{isOutOfStock ? 'Out of Stock' : 'Add to Bag'}</span>
+            <span>{isOutOfStock ? 'Out of Stock' : 'Buy Now'}</span>
           </button>
         </div>
       </div>
