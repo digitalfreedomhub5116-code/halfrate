@@ -22,6 +22,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CartDrawer from '../components/CartDrawer'
 import WishlistDrawer from '../components/WishlistDrawer'
+import { GENRES } from '../data/productsData'
 
 export default function ProductPage() {
   const { productIdOrSlug } = useParams()
@@ -207,6 +208,7 @@ export default function ProductPage() {
   }
 
   const isOutOfStock = product.inStock === false
+  const genreData = GENRES.find((g) => g.id === product.genre)
 
   const handleAddToCart = () => {
     if (isOutOfStock) return
