@@ -1,6 +1,6 @@
-import { ShoppingBag, Star, Heart, CheckCircle2, Sparkles, Filter, ArrowUpDown, X, Tag } from 'lucide-react'
+import { ShoppingBag, Star, Heart, X, Tag } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { useCartStore, GENRES } from '../store/cartStore'
+import { useCartStore } from '../store/cartStore'
 import { useScrollReveal } from '../hooks/useScrollReveal'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 
@@ -58,18 +58,14 @@ function ProductCard({ product }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-40" />
 
-        {/* Top-Left: Sabse Sasta Deal Badge */}
-        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9.5px] font-black uppercase tracking-wider bg-[#991B33] text-white shadow-sm border border-white/30">
-            <Sparkles className="h-2.5 w-2.5 text-amber-300" />
-            <span>Sabse Sasta</span>
-          </span>
-          {savings > 0 && (
-            <span className="inline-block px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-emerald-700 text-white shadow-xs">
+        {/* Top-Left: Savings Badge */}
+        {savings > 0 && (
+          <div className="absolute top-2.5 left-2.5 z-10">
+            <span className="inline-block px-2 py-0.5 rounded-full text-[9.5px] font-extrabold bg-emerald-700 text-white shadow-xs">
               Save ₹{savings.toLocaleString('en-IN')}
             </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Out of Stock badge */}
         {isOutOfStock && (
@@ -181,10 +177,8 @@ export default function ProductGrid() {
   const searchQuery = useCartStore((s) => s.searchQuery)
   const setSearchQuery = useCartStore((s) => s.setSearchQuery)
   const priceFilter = useCartStore((s) => s.priceFilter)
-  const setPriceFilter = useCartStore((s) => s.setPriceFilter)
-
-  const [selectedGenre, setSelectedGenre] = useState('ALL')
-  const [sortBy, setSortBy] = useState('sabse_sasta') // 'sabse_sasta' | 'price_high' | 'discount' | 'rating'
+  const selectedGenre = 'ALL'
+  const sortBy = 'sabse_sasta'
   const [visibleCount, setVisibleCount] = useState(PRODUCTS_PER_BATCH)
   const loadMoreRef = useRef(null)
 
@@ -294,84 +288,6 @@ export default function ProductGrid() {
             </button>
           </div>
         )}
-
-        {/* ── Filter & Sort Control Bar ── */}
-        <div className="mb-6 flex flex-col gap-3">
-          {/* Row 1: Sabse Sasta Deal Tiers */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-            {[
-              { id: 'ALL', label: 'All Deals' },
-              { id: 'UNDER_999', label: '⚡ Under ₹999' },
-              { id: 'UNDER_1999', label: '🔥 Under ₹1,999' },
-              { id: 'HALF_RATE', label: '🏷️ Flat 50% Off' },
-              { id: 'RATED_48', label: '★ Top Rated (4.8+)' },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setPriceFilter(tab.id)}
-                className={`whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wide transition-all cursor-pointer ${
-                  priceFilter === tab.id
-                    ? 'bg-[#991B33] text-white shadow-sm shadow-[#991B33]/20'
-                    : 'bg-white text-stone-700 hover:bg-stone-50 border border-[#E7E2D9]'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Row 2: Category Chips & Sort Selector */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-[#E7E2D9]/70">
-            {/* Category Chips */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-              <button
-                onClick={() => setSelectedGenre('ALL')}
-                className={`text-xs px-3 py-1 rounded-lg font-bold transition-all shrink-0 ${
-                  selectedGenre === 'ALL'
-                    ? 'bg-[#1C1917] text-white'
-                    : 'bg-white text-stone-600 hover:bg-stone-100 border border-[#E7E2D9]'
-                }`}
-              >
-                All Categories
-              </button>
-              {GENRES.map((g) => (
-                <button
-                  key={g.id}
-                  onClick={() => setSelectedGenre(g.id)}
-                  className={`text-xs px-3 py-1 rounded-lg font-bold transition-all shrink-0 ${
-                    selectedGenre === g.id
-                      ? 'bg-[#1C1917] text-white'
-                      : 'bg-white text-stone-600 hover:bg-stone-100 border border-[#E7E2D9]'
-                  }`}
-                >
-                  {g.label.split(' ')[0]}
-                </button>
-              ))}
-            </div>
-
-            {/* Sort Dropdown */}
-            <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
-              <span className="text-xs text-[#78716C] font-semibold flex items-center gap-1">
-                <ArrowUpDown className="h-3 w-3 text-[#991B33]" /> Sort:
-              </span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="text-xs font-bold text-[#1C1917] bg-white border border-[#E7E2D9] rounded-xl px-2.5 py-1.5 outline-none focus:border-[#991B33]"
-              >
-                <option value="sabse_sasta">Price: Lowest First (Sabse Sasta)</option>
-                <option value="price_high">Price: High to Low</option>
-                <option value="discount">Biggest Discount %</option>
-                <option value="rating">Highest Customer Rating</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        {/* Results count */}
-        <div className="mb-4 text-xs font-semibold text-[#78716C]">
-          Showing {visibleProducts.length} of {filteredCatalog.length} Sabse Sasta deals
-        </div>
 
         {/* Product Grid */}
         {visibleProducts.length > 0 ? (

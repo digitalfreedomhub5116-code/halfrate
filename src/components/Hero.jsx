@@ -68,15 +68,6 @@ export default function Hero() {
   const [touchStart, setTouchStart] = useState(null)
   const timerRef = useRef(null)
 
-  // Bento carousel ref & drag scroll state
-  const carouselRef = useRef(null)
-  const [isMouseDown, setIsMouseDown] = useState(false)
-  const [startX, setStartX] = useState(0)
-  const [scrollLeftPos, setScrollLeftPos] = useState(0)
-
-  // Bento auto-scroll ref
-  const autoScrollFrameRef = useRef(null)
-
   const rawProducts = useCartStore((s) => s.products) || MOCK_PRODUCTS
   const allProducts = rawProducts.filter((p) => !p.isHidden)
   const productList = allProducts.length > 0 ? allProducts : MOCK_PRODUCTS
@@ -135,35 +126,6 @@ export default function Hero() {
     setTouchStart(null)
   }
 
-  // ── Bento Grid Mouse Drag Handlers (Desktop click & drag) ──
-  const handleMouseDown = (e) => {
-    if (!carouselRef.current) return
-    setIsMouseDown(true)
-    setStartX(e.pageX - carouselRef.current.offsetLeft)
-    setScrollLeftPos(carouselRef.current.scrollLeft)
-  }
-
-  const handleMouseLeave = () => {
-    setIsMouseDown(false)
-  }
-
-  const handleMouseUp = () => {
-    setIsMouseDown(false)
-  }
-
-  const handleMouseMove = (e) => {
-    if (!isMouseDown || !carouselRef.current) return
-    e.preventDefault()
-    const x = e.pageX - carouselRef.current.offsetLeft
-    const walk = (x - startX) * 1.5
-    carouselRef.current.scrollLeft = scrollLeftPos - walk
-  }
-
-  const scrollBento = (direction) => {
-    if (!carouselRef.current) return
-    const amount = direction === 'left' ? -340 : 340
-    carouselRef.current.scrollBy({ left: amount, behavior: 'smooth' })
-  }
 
   // ── Bento Carousel Modules (Curated, responsive, lag-free) ──
   const bentoModules = useMemo(() => {
@@ -199,37 +161,6 @@ export default function Hero() {
     return [...bentoModules, ...bentoModules]
   }, [bentoModules])
 
-  // ── 60FPS Ambient Auto-Scroll Reel with Instant Interaction Stop ──
-  useEffect(() => {
-    const el = carouselRef.current
-    if (!el) return
-
-    let lastTime = performance.now()
-    const speed = 0.55 // Gentle ambient drift speed (~33px/sec)
-
-    const step = (timestamp) => {
-      const delta = Math.min(timestamp - lastTime, 50)
-      lastTime = timestamp
-
-      if (el) {
-        el.scrollLeft += speed * (delta / 16.67)
-
-        // Seamless wrap-around when past the halfway point
-        const halfWidth = el.scrollWidth / 2
-        if (halfWidth > 200 && el.scrollLeft >= halfWidth) {
-          el.scrollLeft -= halfWidth
-        }
-      }
-
-      autoScrollFrameRef.current = requestAnimationFrame(step)
-    }
-
-    autoScrollFrameRef.current = requestAnimationFrame(step)
-
-    return () => {
-      if (autoScrollFrameRef.current) cancelAnimationFrame(autoScrollFrameRef.current)
-    }
-  }, [bentoModules])
 
   const slide = HERO_SLIDES[currentSlide]
 
@@ -444,45 +375,22 @@ export default function Hero() {
       {/* ═══════════════════════════════════════════════════
           5. BENTO PRODUCT CAROUSEL (Ambient Auto-scroll + Instant Touch Stop)
           ═══════════════════════════════════════════════════ */}
-      <div className="py-2 sm:py-4">
-        <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6">
-          {/* Header with title and manual scroll controls */}
-          <div className="flex items-center justify-between mb-3 px-1">
-            <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1C1917] tracking-tight">
-              Curated Bento Deals
-            </h3>
+      <div className="py-2 sm:py-4 overflow-hidden">
+        <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6 mb-3">
+          <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1C1917] tracking-tight">
+            Curated Bento Deals
+          </h3>
+        </div>
 
-            {/* Scroll navigation controls */}
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => scrollBento('left')}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-[#E7E2D9] text-[#1C1917] shadow-xs hover:bg-[#F4EFEA] hover:border-[#D6D0C5] active:scale-95 transition-all cursor-pointer"
-                aria-label="Scroll bento left"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-              <button
-                onClick={() => scrollBento('right')}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-[#E7E2D9] text-[#1C1917] shadow-xs hover:bg-[#F4EFEA] hover:border-[#D6D0C5] active:scale-95 transition-all cursor-pointer"
-                aria-label="Scroll bento right"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Smooth, Continuous Auto-Scroll Container */}
+        {/* Continuous GPU-accelerated auto-scroll track - touchAction: pan-y allows full vertical page scroll */}
           <div
-            ref={carouselRef}
-            onMouseDown={handleMouseDown}
-            onMouseLeave={handleMouseLeave}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            className="flex gap-3 overflow-x-auto scrollbar-none overscroll-x-contain touch-pan-x pb-3 pt-1 h-[340px] items-stretch px-1 cursor-grab active:cursor-grabbing select-none"
-            style={{
-              WebkitOverflowScrolling: 'touch',
-            }}
+            className="relative overflow-hidden w-full select-none"
+            style={{ touchAction: 'pan-y' }}
           >
+            <div
+              className="flex gap-3 w-max animate-[bentoTicker_42s_linear_infinite] will-change-transform pb-3 pt-1 h-[340px] items-stretch px-1 hover:[animation-play-state:paused]"
+              style={{ touchAction: 'pan-y' }}
+            >
             {displayModules.map((mod, idx) => {
               // 1. Single Tall / Wide Card
               if (mod.type === 'single-tall' || mod.type === 'single-wide') {
@@ -609,6 +517,13 @@ export default function Hero() {
               )
             })}
           </div>
+
+          <style>{`
+            @keyframes bentoTicker {
+              0% { transform: translateX(0%); }
+              100% { transform: translateX(-50%); }
+            }
+          `}</style>
         </div>
       </div>
 

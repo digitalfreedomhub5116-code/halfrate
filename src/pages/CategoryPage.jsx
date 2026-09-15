@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, ArrowRight, ShoppingBag, Star, Heart, Sparkles } from 'lucide-react'
-import { GENRES, MOCK_PRODUCTS, useCartStore } from '../store/cartStore'
+import { ArrowLeft, ArrowRight, ShoppingBag, Star, Heart } from 'lucide-react'
+import { GENRES, useCartStore } from '../store/cartStore'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import CartDrawer from '../components/CartDrawer'
@@ -53,18 +53,14 @@ function ProductCard({ product }) {
           loading="lazy"
         />
 
-        {/* Top-Left: Sabse Sasta Deal Badge */}
-        <div className="absolute top-2.5 left-2.5 z-10 flex flex-col gap-1">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-[#991B33] text-white shadow-sm border border-white/30">
-            <Sparkles className="h-2.5 w-2.5 text-amber-300" />
-            <span>Sabse Sasta</span>
-          </span>
-          {savings > 0 && (
-            <span className="inline-block px-1.5 py-0.5 rounded text-[8.5px] font-extrabold bg-emerald-700 text-white shadow-xs">
+        {/* Top-Left: Savings Badge */}
+        {savings > 0 && (
+          <div className="absolute top-2.5 left-2.5 z-10">
+            <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-700 text-white shadow-xs">
               Save ₹{savings.toLocaleString('en-IN')}
             </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Out of Stock badge on image */}
         {isOutOfStock && (
