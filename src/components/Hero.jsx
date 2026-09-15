@@ -74,6 +74,11 @@ export default function Hero() {
   const [startX, setStartX] = useState(0)
   const [scrollLeftPos, setScrollLeftPos] = useState(0)
 
+  // Bento auto-scroll & instant user touch-pause controls
+  const isInteractingRef = useRef(false)
+  const resumeTimerRef = useRef(null)
+  const autoScrollFrameRef = useRef(null)
+
   const rawProducts = useCartStore((s) => s.products) || MOCK_PRODUCTS
   const allProducts = rawProducts.filter((p) => !p.isHidden)
   const productList = allProducts.length > 0 ? allProducts : MOCK_PRODUCTS
@@ -132,19 +137,46 @@ export default function Hero() {
     setTouchStart(null)
   }
 
-  // ── Bento Grid Mouse Drag Handlers (Smooth Desktop Scrolling) ──
+  // ── Bento Grid Interactive Touch Pause & Resume Controls ──
+  const pauseBentoAutoScroll = useCallback(() => {
+    isInteractingRef.current = true
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current)
+      resumeTimerRef.current = null
+    }
+  }, [])
+
+  const scheduleBentoResume = useCallback((delay = 2800) => {
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current)
+    }
+    resumeTimerRef.current = setTimeout(() => {
+      isInteractingRef.current = false
+    }, delay)
+  }, [])
+
+  // ── Bento Grid Mouse Drag Handlers (Desktop click & drag) ──
   const handleMouseDown = (e) => {
     if (!carouselRef.current) return
+    pauseBentoAutoScroll()
     setIsMouseDown(true)
     setStartX(e.pageX - carouselRef.current.offsetLeft)
     setScrollLeftPos(carouselRef.current.scrollLeft)
   }
 
-  const handleMouseLeave = () => setIsMouseDown(false)
-  const handleMouseUp = () => setIsMouseDown(false)
+  const handleMouseLeave = () => {
+    setIsMouseDown(false)
+    scheduleBentoResume(1500)
+  }
+
+  const handleMouseUp = () => {
+    setIsMouseDown(false)
+    scheduleBentoResume(2500)
+  }
 
   const handleMouseMove = (e) => {
     if (!isMouseDown || !carouselRef.current) return
+    pauseBentoAutoScroll()
     e.preventDefault()
     const x = e.pageX - carouselRef.current.offsetLeft
     const walk = (x - startX) * 1.5
@@ -153,8 +185,10 @@ export default function Hero() {
 
   const scrollBento = (direction) => {
     if (!carouselRef.current) return
+    pauseBentoAutoScroll()
     const amount = direction === 'left' ? -340 : 340
     carouselRef.current.scrollBy({ left: amount, behavior: 'smooth' })
+    scheduleBentoResume(3500)
   }
 
   // ── Bento Carousel Modules (Curated, responsive, lag-free) ──
@@ -184,6 +218,46 @@ export default function Hero() {
     }
     return mods
   }, [productList])
+
+  // Duplicated set for seamless infinite wrap-around
+  const displayModules = useMemo(() => {
+    if (bentoModules.length === 0) return []
+    return [...bentoModules, ...bentoModules]
+  }, [bentoModules])
+
+  // ── 60FPS Ambient Auto-Scroll Reel with Instant Interaction Stop ──
+  useEffect(() => {
+    const el = carouselRef.current
+    if (!el) return
+
+    let lastTime = performance.now()
+    const speed = 0.55 // Gentle ambient drift speed (~33px/sec)
+
+    const step = (timestamp) => {
+      const delta = Math.min(timestamp - lastTime, 50)
+      lastTime = timestamp
+
+      // Only auto-scroll when user is NOT touching, scrolling, or dragging
+      if (!isInteractingRef.current && el) {
+        el.scrollLeft += speed * (delta / 16.67)
+
+        // Seamless wrap-around when past the halfway point
+        const halfWidth = el.scrollWidth / 2
+        if (halfWidth > 200 && el.scrollLeft >= halfWidth) {
+          el.scrollLeft -= halfWidth
+        }
+      }
+
+      autoScrollFrameRef.current = requestAnimationFrame(step)
+    }
+
+    autoScrollFrameRef.current = requestAnimationFrame(step)
+
+    return () => {
+      if (autoScrollFrameRef.current) cancelAnimationFrame(autoScrollFrameRef.current)
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
+    }
+  }, [bentoModules])
 
   const slide = HERO_SLIDES[currentSlide]
 
@@ -396,7 +470,7 @@ export default function Hero() {
       </div>
 
       {/* ═══════════════════════════════════════════════════
-          5. BENTO PRODUCT CAROUSEL (Smooth, Lag-free, User-controlled)
+          5. BENTO PRODUCT CAROUSEL (Ambient Auto-scroll + Instant Touch Stop)
           ═══════════════════════════════════════════════════ */}
       <div className="py-2 sm:py-4">
         <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6">
@@ -414,7 +488,7 @@ export default function Hero() {
             {/* Scroll navigation controls */}
             <div className="flex items-center gap-1.5">
               <span className="text-[11px] text-[#A8A29E] font-medium hidden sm:inline-block mr-1">
-                Swipe or Drag to explore
+                Touch to pause & scroll freely
               </span>
               <button
                 onClick={() => scrollBento('left')}
@@ -433,24 +507,39 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Smooth, Hardware-Accelerated Scrollable Container */}
+          {/* Smooth, Hardware-Accelerated Auto & Manual Container */}
           <div
             ref={carouselRef}
+            onTouchStart={pauseBentoAutoScroll}
+            onTouchMove={pauseBentoAutoScroll}
+            onTouchEnd={() => scheduleBentoResume(2800)}
+            onPointerDown={pauseBentoAutoScroll}
+            onPointerUp={() => scheduleBentoResume(2800)}
             onMouseDown={handleMouseDown}
+            onMouseEnter={pauseBentoAutoScroll}
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            className="flex gap-3 overflow-x-auto scrollbar-none overscroll-x-contain touch-pan-x pb-3 pt-1 h-[340px] items-stretch px-1 cursor-grab active:cursor-grabbing scroll-smooth"
+            onWheel={() => {
+              pauseBentoAutoScroll()
+              scheduleBentoResume(2800)
+            }}
+            onScroll={() => {
+              if (isInteractingRef.current) {
+                scheduleBentoResume(2800)
+              }
+            }}
+            className="flex gap-3 overflow-x-auto scrollbar-none overscroll-x-contain touch-pan-x pb-3 pt-1 h-[340px] items-stretch px-1 cursor-grab active:cursor-grabbing select-none"
             style={{
               WebkitOverflowScrolling: 'touch',
             }}
           >
-            {bentoModules.map((mod, idx) => {
+            {displayModules.map((mod, idx) => {
               // 1. Single Tall / Wide Card
               if (mod.type === 'single-tall' || mod.type === 'single-wide') {
                 return (
                   <div
-                    key={`bento-${idx}`}
+                    key={`bento-${mod.id}-${idx}`}
                     className={`${mod.width} flex-shrink-0 h-full select-none`}
                   >
                     <div
@@ -503,7 +592,7 @@ export default function Hero() {
 
               return (
                 <div
-                  key={`bento-${idx}`}
+                  key={`bento-${mod.id}-${idx}`}
                   className={`${mod.width} flex-shrink-0 h-full flex flex-col justify-between gap-2.5 select-none`}
                 >
                   {/* Top Card */}
