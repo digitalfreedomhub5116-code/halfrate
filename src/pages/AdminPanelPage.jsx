@@ -421,7 +421,7 @@ export default function AdminPanelPage() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [newProduct, setNewProduct] = useState({
     name: '',
-    genre: 'MARVEL',
+    genre: GENRES[0]?.id || 'MOBILE_ACCESSORIES',
     price: 249,
     originalPrice: 459,
     description: '',
@@ -910,7 +910,7 @@ export default function AdminPanelPage() {
     setIsAddModalOpen(false)
     setNewProduct({
       name: '',
-      genre: 'AUDIO',
+      genre: GENRES[0]?.id || 'MOBILE_ACCESSORIES',
       price: 249,
       originalPrice: 459,
       description: '',
@@ -2087,8 +2087,9 @@ export default function AdminPanelPage() {
                   {/* Genre Filter Pills & Factory Reset */}
                   <div className="flex items-center justify-between gap-2 overflow-x-auto pb-1 md:pb-0">
                     <div className="flex items-center gap-1.5">
-                      {['ALL', 'MARVEL', 'DC', 'ANIME', 'CARS', 'VALORANT'].map((genre) => {
+                      {['ALL', ...GENRES.map((g) => g.id)].map((genre) => {
                         const isActive = genreFilter === genre
+                        const label = genre === 'ALL' ? 'All' : (GENRES.find((g) => g.id === genre)?.label || genre)
                         return (
                           <button
                             key={genre}
@@ -2099,7 +2100,7 @@ export default function AdminPanelPage() {
                                 : 'bg-charcoal border border-charcoal-light text-cream-muted hover:text-cream hover:border-gold/30'
                             }`}
                           >
-                            {genre}
+                            {label}
                           </button>
                         )
                       })}
@@ -2351,7 +2352,7 @@ export default function AdminPanelPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <label className="block text-xs font-semibold text-cream-muted mb-1.5">
-                            Universe / Genre
+                            Category / Genre
                           </label>
                           <select
                             value={editingProduct.genre}
@@ -2363,11 +2364,11 @@ export default function AdminPanelPage() {
                             }
                             className="w-full px-3.5 py-2.5 rounded-lg bg-obsidian border border-charcoal-light text-sm text-cream focus:outline-none focus:border-gold/50 cursor-pointer"
                           >
-                            <option value="MARVEL">Marvel</option>
-                            <option value="DC">DC</option>
-                            <option value="ANIME">Anime</option>
-                            <option value="CARS">Cars</option>
-                            <option value="VALORANT">Valorant</option>
+                            {GENRES.map((g) => (
+                              <option key={g.id} value={g.id}>
+                                {g.label}
+                              </option>
+                            ))}
                           </select>
                         </div>
 
@@ -2669,7 +2670,7 @@ export default function AdminPanelPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                           <label className="block text-xs font-semibold text-cream-muted mb-1.5">
-                            Universe / Genre
+                            Category / Genre
                           </label>
                           <select
                             value={newProduct.genre}
@@ -2678,11 +2679,11 @@ export default function AdminPanelPage() {
                             }
                             className="w-full px-3.5 py-2.5 rounded-lg bg-obsidian border border-charcoal-light text-sm text-cream focus:outline-none focus:border-gold/50 cursor-pointer"
                           >
-                            <option value="MARVEL">Marvel</option>
-                            <option value="DC">DC</option>
-                            <option value="ANIME">Anime</option>
-                            <option value="CARS">Cars</option>
-                            <option value="VALORANT">Valorant</option>
+                            {GENRES.map((g) => (
+                              <option key={g.id} value={g.id}>
+                                {g.label}
+                              </option>
+                            ))}
                           </select>
                         </div>
 

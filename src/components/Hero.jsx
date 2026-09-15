@@ -17,7 +17,7 @@ const HERO_SLIDES = [
     bankLogos: ['FITGEAR', '1.8M'],
   },
   {
-    id: 5,
+    id: 2,
     badge: 'NEW ARRIVAL · FITGEAR FG-15',
     badgeColor: 'bg-[#991B33]',
     image: '/images/products/fitgear-fg-15/fitgear-fg-15-2.jpg',
@@ -28,37 +28,15 @@ const HERO_SLIDES = [
     bankLogos: ['FITGEAR', '2-YR'],
   },
   {
-    id: 2,
-    badge: 'ELECTRONICS FEST · LIMITED',
-    badgeColor: 'bg-[#059669]',
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&q=80',
-    discount: 'FLAT 50% OFF',
-    heading: 'AUDIO & TECH',
-    brands: 'Studio Headphones • ANC Earbuds • Dolby Soundbars • GaN Chargers • Smartwatches',
-    bankOffer: 'Extra ₹100 off on Prepaid UPI',
-    bankLogos: ['UPI', 'GPay'],
-  },
-  {
     id: 3,
-    badge: 'ARTISAN WEEK · HANDPICKED',
-    badgeColor: 'bg-[#B45309]',
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=1200&q=80',
-    discount: 'UNDER ₹999',
-    heading: 'JEWELLERY & CRAFTS',
-    brands: 'Royal Kundan Sets • Silver Bracelets • Dhokra Art • Ceramic Pottery • Vintage Frames',
-    bankOffer: 'Free Express Delivery on ₹999+',
-    bankLogos: ['FREE', 'SHIP'],
-  },
-  {
-    id: 4,
-    badge: 'MEGA DEAL DAYS · 48HRS',
-    badgeColor: 'bg-[#7C3AED]',
-    image: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=1200&q=80',
-    discount: '40-70% OFF',
-    heading: 'HOME & LIFESTYLE',
-    brands: 'Teakwood Sculptures • Photo Frames • Leather Keychains • Phone Cases • Wall Art',
-    bankOffer: 'Use code SABSE100 for ₹100 OFF',
-    bankLogos: ['CODE', 'SAVE'],
+    badge: 'DIRECT FACTORY · FITGEAR',
+    badgeColor: 'bg-[#059669]',
+    image: '/images/products/fitgear-fg-15/fitgear-fg-15-4.jpg',
+    discount: 'SABSE SASTA',
+    heading: 'HALF RATE GUARANTEE',
+    brands: 'Official 2-Year Manufacturer Warranty • 100% Genuine Certified • Cash on Delivery Eligible',
+    bankOffer: 'Free Express Shipping Across India on All Orders',
+    bankLogos: ['ORIGINAL', 'HALFRATE'],
   },
 ]
 
@@ -141,24 +119,28 @@ export default function Hero() {
   // ── Bento Carousel Modules (Curated, responsive, lag-free) ──
   const bentoModules = useMemo(() => {
     if (!productList || productList.length === 0) return []
+    let expandedList = [...productList]
+    while (expandedList.length < 8) {
+      expandedList = [...expandedList, ...productList]
+    }
     const mods = []
     let i = 0
-    while (i < productList.length) {
+    while (i < expandedList.length) {
       const patternIdx = mods.length % 4
       if (patternIdx === 0) {
-        mods.push({ id: `mod-${mods.length}`, type: 'single-tall', width: 'w-[72vw] max-w-[270px]', product: productList[i] })
+        mods.push({ id: `mod-${mods.length}`, type: 'single-tall', width: 'w-[72vw] max-w-[270px]', product: expandedList[i] })
         i += 1
       } else if (patternIdx === 1) {
-        const p1 = productList[i]
-        const p2 = productList[i + 1] || productList[0]
+        const p1 = expandedList[i]
+        const p2 = expandedList[i + 1] || expandedList[0]
         mods.push({ id: `mod-${mods.length}`, type: 'stacked-pair-1', width: 'w-[64vw] max-w-[245px]', topProduct: p1, bottomProduct: p2 })
         i += 2
       } else if (patternIdx === 2) {
-        mods.push({ id: `mod-${mods.length}`, type: 'single-wide', width: 'w-[78vw] max-w-[310px]', product: productList[i] })
+        mods.push({ id: `mod-${mods.length}`, type: 'single-wide', width: 'w-[78vw] max-w-[310px]', product: expandedList[i] })
         i += 1
       } else {
-        const p1 = productList[i]
-        const p2 = productList[i + 1] || productList[0]
+        const p1 = expandedList[i]
+        const p2 = expandedList[i + 1] || expandedList[0]
         mods.push({ id: `mod-${mods.length}`, type: 'stacked-pair-2', width: 'w-[64vw] max-w-[245px]', topProduct: p1, bottomProduct: p2 })
         i += 2
       }

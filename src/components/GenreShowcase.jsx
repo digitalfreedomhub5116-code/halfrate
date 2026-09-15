@@ -14,9 +14,11 @@ function CategoryCard({ genre, index }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Asymmetric sizes for visual interest
+  // Responsive sizes: balanced grid when 2 categories exist
   const sizeClasses =
-    index === 0
+    GENRES.length <= 2
+      ? 'col-span-1 row-span-1'
+      : index === 0
       ? 'col-span-2 row-span-2 sm:col-span-2 sm:row-span-2'
       : index === 1
       ? 'col-span-1 row-span-1'
@@ -80,7 +82,13 @@ export default function GenreShowcase() {
         </div>
 
         {/* Categories Bento Grid */}
-        <div className="grid auto-rows-[200px] grid-cols-2 gap-3 sm:auto-rows-[240px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[260px] lg:gap-5">
+        <div
+          className={
+            GENRES.length <= 2
+              ? 'grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 auto-rows-[220px] sm:auto-rows-[280px]'
+              : 'grid auto-rows-[200px] grid-cols-2 gap-3 sm:auto-rows-[240px] sm:grid-cols-3 sm:gap-4 lg:auto-rows-[260px] lg:gap-5'
+          }
+        >
           {GENRES.map((genre, index) => (
             <CategoryCard key={genre.id} genre={genre} index={index} />
           ))}

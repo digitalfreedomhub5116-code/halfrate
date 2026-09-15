@@ -9,7 +9,7 @@ export default function CategoriesDrawer() {
   const allProducts = useCartStore((s) => s.products)
   const navigate = useNavigate()
 
-  const [selectedGenreId, setSelectedGenreId] = useState(GENRES[0]?.id || 'JEWELLERY')
+  const [selectedGenreId, setSelectedGenreId] = useState(GENRES[0]?.id || 'MOBILE_ACCESSORIES')
 
   if (!isOpen) return null
 

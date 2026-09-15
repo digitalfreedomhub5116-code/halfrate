@@ -43,9 +43,14 @@ export const REVIEWS_POOL = {
       { name: "Diya Sharma", text: "botanical resin charm with real flowers is so delicate and pretty" },
     ],
     MOBILE_ACCESSORIES: [
-      { name: "Naveen Reddy", text: "magsafe leather case has insane magnetic grip and tactile metal buttons" },
-      { name: "Prateek Jain", text: "aluminum 360 rotating stand is sturdy holds my phone and ipad with zero wobble" },
-      { name: "Suresh Pillai", text: "braided 100w fast charge cable is ultra durable heavy duty build" },
+      { name: "Naveen Reddy", text: "selfie stick 1.8m extension is incredible for wide angle group photos" },
+      { name: "Prateek Jain", text: "aluminum pole is rock solid zero bend even when fully extended" },
+      { name: "Suresh Pillai", text: "bluetooth remote pairs instantly with my iphone shutter button is super responsive" },
+    ],
+    CAR_ACCESSORIES: [
+      { name: "Vikram Malhotra", text: "sticky suction on dashboard is rock solid zero wobble on highway bumps" },
+      { name: "Amitabh Sen", text: "360 rotation is butter smooth holds my phone with thick case easily" },
+      { name: "Rohit Agarwal", text: "survived 40 degree heat in car without falling off best car mount hands down" },
     ],
     SPEAKERS: [
       { name: "Kabir Roy", text: "120w dolby atmos soundbar fills living room with theater quality spatial audio" },

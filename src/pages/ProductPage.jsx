@@ -224,7 +224,7 @@ export default function ProductPage() {
   }
 
   const relatedProducts = allProducts.filter(
-    (p) => p.genre === product.genre && p.id !== product.id && !p.isHidden
+    (p) => p.id !== product.id && !p.isHidden
   ).slice(0, 4)
 
   const handleCheckPincode = (e) => {
@@ -960,7 +960,7 @@ export default function ProductPage() {
         {relatedProducts.length > 0 && (
           <div className="mt-24 pt-10 border-t border-[#E7E2D9]">
             <h3 className="font-heading text-xl sm:text-2xl font-bold text-[#1C1917] mb-6">
-              More from {genreData ? genreData.label : 'Collection'}
+              {genreData?.label ? `More in ${genreData.label}` : 'You May Also Like'}
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {relatedProducts.map((rel) => (

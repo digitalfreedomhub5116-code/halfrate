@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
 import { useScrolled } from '../hooks/useScrollReveal'
 
-const TRENDING_SEARCHES = ['Earbuds', 'Choker Set', 'Fast Charger', 'Smartwatch', 'Leather Case', 'Under ₹999']
+const TRENDING_SEARCHES = ['Selfie Stick', 'Car Mount', 'Tripod', 'Fitgear FG-M4', 'Fitgear FG-15', 'Mobile Accessories']
 
 export default function Navbar({ visible = true }) {
   const scrolled = useScrolled(20)
@@ -201,7 +201,7 @@ export default function Navbar({ visible = true }) {
                 <Search className="h-4 w-4 text-[#991B33] shrink-0" strokeWidth={2.2} />
                 <input
                   type="text"
-                  placeholder="Search deals (Sabse Sasta audio, jewelry, tech)..."
+                  placeholder="Search selfie sticks, tripods, car mounts..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
@@ -401,7 +401,7 @@ export default function Navbar({ visible = true }) {
                   <Search className="h-4 w-4 text-[#991B33] shrink-0" strokeWidth={2.2} />
                   <input
                     type="text"
-                    placeholder="Search electronics, audio, jewellery at half rate..."
+                    placeholder="Search selfie sticks, tripods, car mounts at half rate..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setIsSearchFocused(true)}
