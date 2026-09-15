@@ -180,6 +180,58 @@ const RAW_PRODUCTS = [
       'Warranty': '1-Year Official MZ™ Manufacturer Warranty',
     },
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // 4. FITGEAR FG-C3 SMART DIGITAL LED 45W PD FAST CHARGING CABLE
+  // ══════════════════════════════════════════════════════════════════
+  {
+    id: 'fitgear-fg-c3',
+    name: 'Fitgear FG-C3 Smart Digital LED Display 45W PD Fast Charging Type-C Cable (2M)',
+    shortName: 'Fitgear FG-C3 Smart PD Cable',
+    genre: 'MOBILE_ACCESSORIES',
+    price: 299,
+    originalPrice: 799,
+    reviewCount: 54,
+    rating: 4.9,
+    badCount: 0,
+    image: '/images/products/fitgear-fg-c3/fitgear-fg-c3-1.jpg',
+    gallery: [
+      '/images/products/fitgear-fg-c3/fitgear-fg-c3-1.jpg',
+      '/images/products/fitgear-fg-c3/fitgear-fg-c3-2.jpg',
+      '/images/products/fitgear-fg-c3/fitgear-fg-c3-3.jpg',
+    ],
+    purity: 'High-Density Braided Nylon & Zinc Alloy Shell',
+    compliance: 'Fitgear® Official Certification & 2-Year Warranty',
+    pack: 'Fitgear FG-C3 PD Cable (2M) + Branded Cable Tie Wrap + Retail Box',
+    dimensions: 'Length: 2 Meters (6.6 ft) | Reinforced SR Strain-Relief Joint',
+    weight: '65g Heavy-Duty Build',
+    material: 'Anti-Tangle Double-Braided Nylon & Aerospace Zinc Alloy Housing',
+    chipset: 'Smart Power E-Marker Chip • Real-Time Digital Wattage Display • Auto Current Adjust',
+    description: 'The Fitgear FG-C3 Smart Fast Charging PD Cable features a transparent cyber-chassis connector with an integrated real-time digital LED power display that monitors charging wattage up to 45W PD live. Engineered with an intelligent microchip that automatically regulates current to safeguard device batteries from overcharging, excessive heat, and power surges. Encased in high-density anti-fray braided nylon with heavy-duty reinforced SR strain-relief joints rated for 10,000+ bends, its extended 2-meter (6.6 ft) reach offers ultimate flexibility for bedside, desk, and in-car charging.',
+    features: [
+      'Real-Time Digital LED Power Display — Visualizes live charging wattage up to 45W PD so you can verify maximum fast charging speed at a glance',
+      'Intelligent Battery Protection Chip — Automatically regulates voltage and current dynamically to protect device battery health and prevent overheating',
+      'Reinforced SR Strain-Relief Joint — Heavy-duty engineered neck built to withstand over 10,000+ severe bends without fraying or split seams',
+      'Extended 2-Meter (6.6 ft) Length — Long-range reach allows comfortable device use from wall sockets to desks, couches, and bedside stands',
+      'High-Density Double-Braided Nylon — Ultra-tough exterior resists tangles, pets, and friction for extended daily durability',
+      'High-Speed 480 Mbps Data Transfer — Sync files, high-res photos, and music seamlessly while charging',
+      'Universal Type-C Compatibility — Fast-charges iPhone 16/15 series, iPad, Samsung Galaxy, OnePlus, Pixel, and other USB-C powered devices',
+    ],
+    specs: {
+      'Brand': 'Fitgear®',
+      'Model': 'FG-C3',
+      'Charging Standard': 'Power Delivery (PD) Fast Charging up to 45W',
+      'Display': 'Real-Time Digital LED Wattage Readout',
+      'Cable Length': '2 Meters (6.6 ft)',
+      'Connector Type': 'USB Type-C to Type-C',
+      'Joint Durability': 'Reinforced SR Strain-Relief (10,000+ Bends Tested)',
+      'Exterior': 'High-Density Heavy-Duty Braided Nylon',
+      'Housing Material': 'Zinc Alloy with Transparent Chipset Window',
+      'Data Transfer Rate': 'Up to 480 Mbps (USB 2.0 Standard)',
+      'Device Compatibility': 'Smartphones, Tablets, Power Banks, Laptops (USB-C)',
+      'Warranty': '2-Year Official Fitgear® Manufacturer Warranty',
+    },
+  },
 ]
 
 function buildProductReviews(product) {

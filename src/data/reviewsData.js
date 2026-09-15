@@ -46,6 +46,8 @@ export const REVIEWS_POOL = {
       { name: "Naveen Reddy", text: "selfie stick 1.8m extension is incredible for wide angle group photos" },
       { name: "Prateek Jain", text: "aluminum pole is rock solid zero bend even when fully extended" },
       { name: "Suresh Pillai", text: "bluetooth remote pairs instantly with my iphone shutter button is super responsive" },
+      { name: "Gaurav Joshi", text: "digital wattage display shows exact 45W charging speed, nylon braid is super thick" },
+      { name: "Kavita Rao", text: "2 meter length reaches my bed easily, reinforced neck doesn't bend or break" },
     ],
     CAR_ACCESSORIES: [
       { name: "Vikram Malhotra", text: "sticky suction on dashboard is rock solid zero wobble on highway bumps" },
