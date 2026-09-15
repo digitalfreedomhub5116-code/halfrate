@@ -74,9 +74,7 @@ export default function Hero() {
   const [startX, setStartX] = useState(0)
   const [scrollLeftPos, setScrollLeftPos] = useState(0)
 
-  // Bento auto-scroll & instant user touch-pause controls
-  const isInteractingRef = useRef(false)
-  const resumeTimerRef = useRef(null)
+  // Bento auto-scroll ref
   const autoScrollFrameRef = useRef(null)
 
   const rawProducts = useCartStore((s) => s.products) || MOCK_PRODUCTS
@@ -137,28 +135,9 @@ export default function Hero() {
     setTouchStart(null)
   }
 
-  // ── Bento Grid Interactive Touch Pause & Resume Controls ──
-  const pauseBentoAutoScroll = useCallback(() => {
-    isInteractingRef.current = true
-    if (resumeTimerRef.current) {
-      clearTimeout(resumeTimerRef.current)
-      resumeTimerRef.current = null
-    }
-  }, [])
-
-  const scheduleBentoResume = useCallback((delay = 2800) => {
-    if (resumeTimerRef.current) {
-      clearTimeout(resumeTimerRef.current)
-    }
-    resumeTimerRef.current = setTimeout(() => {
-      isInteractingRef.current = false
-    }, delay)
-  }, [])
-
   // ── Bento Grid Mouse Drag Handlers (Desktop click & drag) ──
   const handleMouseDown = (e) => {
     if (!carouselRef.current) return
-    pauseBentoAutoScroll()
     setIsMouseDown(true)
     setStartX(e.pageX - carouselRef.current.offsetLeft)
     setScrollLeftPos(carouselRef.current.scrollLeft)
@@ -166,17 +145,14 @@ export default function Hero() {
 
   const handleMouseLeave = () => {
     setIsMouseDown(false)
-    scheduleBentoResume(1500)
   }
 
   const handleMouseUp = () => {
     setIsMouseDown(false)
-    scheduleBentoResume(2500)
   }
 
   const handleMouseMove = (e) => {
     if (!isMouseDown || !carouselRef.current) return
-    pauseBentoAutoScroll()
     e.preventDefault()
     const x = e.pageX - carouselRef.current.offsetLeft
     const walk = (x - startX) * 1.5
@@ -185,10 +161,8 @@ export default function Hero() {
 
   const scrollBento = (direction) => {
     if (!carouselRef.current) return
-    pauseBentoAutoScroll()
     const amount = direction === 'left' ? -340 : 340
     carouselRef.current.scrollBy({ left: amount, behavior: 'smooth' })
-    scheduleBentoResume(3500)
   }
 
   // ── Bento Carousel Modules (Curated, responsive, lag-free) ──
@@ -237,8 +211,7 @@ export default function Hero() {
       const delta = Math.min(timestamp - lastTime, 50)
       lastTime = timestamp
 
-      // Only auto-scroll when user is NOT touching, scrolling, or dragging
-      if (!isInteractingRef.current && el) {
+      if (el) {
         el.scrollLeft += speed * (delta / 16.67)
 
         // Seamless wrap-around when past the halfway point
@@ -255,7 +228,6 @@ export default function Hero() {
 
     return () => {
       if (autoScrollFrameRef.current) cancelAnimationFrame(autoScrollFrameRef.current)
-      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current)
     }
   }, [bentoModules])
 
@@ -476,20 +448,12 @@ export default function Hero() {
         <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-6">
           {/* Header with title and manual scroll controls */}
           <div className="flex items-center justify-between mb-3 px-1">
-            <div className="flex items-center gap-2">
-              <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1C1917] tracking-tight">
-                Curated Bento Deals
-              </h3>
-              <span className="text-[10px] font-black uppercase tracking-wider bg-[#FDF2F4] text-[#991B33] px-2 py-0.5 rounded-full border border-[#F7CCD5]">
-                ⚡ Sabse Sasta
-              </span>
-            </div>
+            <h3 className="font-serif text-lg sm:text-xl font-bold text-[#1C1917] tracking-tight">
+              Curated Bento Deals
+            </h3>
 
             {/* Scroll navigation controls */}
             <div className="flex items-center gap-1.5">
-              <span className="text-[11px] text-[#A8A29E] font-medium hidden sm:inline-block mr-1">
-                Touch to pause & scroll freely
-              </span>
               <button
                 onClick={() => scrollBento('left')}
                 className="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-[#E7E2D9] text-[#1C1917] shadow-xs hover:bg-[#F4EFEA] hover:border-[#D6D0C5] active:scale-95 transition-all cursor-pointer"
@@ -507,28 +471,13 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Smooth, Hardware-Accelerated Auto & Manual Container */}
+          {/* Smooth, Continuous Auto-Scroll Container */}
           <div
             ref={carouselRef}
-            onTouchStart={pauseBentoAutoScroll}
-            onTouchMove={pauseBentoAutoScroll}
-            onTouchEnd={() => scheduleBentoResume(2800)}
-            onPointerDown={pauseBentoAutoScroll}
-            onPointerUp={() => scheduleBentoResume(2800)}
             onMouseDown={handleMouseDown}
-            onMouseEnter={pauseBentoAutoScroll}
             onMouseLeave={handleMouseLeave}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            onWheel={() => {
-              pauseBentoAutoScroll()
-              scheduleBentoResume(2800)
-            }}
-            onScroll={() => {
-              if (isInteractingRef.current) {
-                scheduleBentoResume(2800)
-              }
-            }}
             className="flex gap-3 overflow-x-auto scrollbar-none overscroll-x-contain touch-pan-x pb-3 pt-1 h-[340px] items-stretch px-1 cursor-grab active:cursor-grabbing select-none"
             style={{
               WebkitOverflowScrolling: 'touch',

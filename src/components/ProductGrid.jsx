@@ -266,20 +266,13 @@ export default function ProductGrid() {
   }, [hasMore, loadMore])
 
   return (
-    <section id="products" className="relative pb-16 sm:pb-24 pt-8 sm:pt-12 bg-[#FAF8F5]">
+    <section id="products" className="relative pb-16 sm:pb-24 pt-4 sm:pt-6 bg-[#FAF8F5]">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-8 text-center max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FDF2F4] border border-[#F7CCD5] text-[#991B33] text-[11px] font-black uppercase tracking-widest mb-3">
-            <Sparkles className="h-3 w-3" />
-            <span>Sabse Sasta Deals Catalog</span>
-          </div>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1C1917] tracking-tight">
+        <div className="mb-6">
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1C1917] tracking-tight">
             Direct Factory Half Rate Deals
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-[#78716C]">
-            Verified authentic hardware and lifestyle pieces at guaranteed lowest prices across India.
-          </p>
         </div>
 
         {/* Active Search Notification Banner */}
