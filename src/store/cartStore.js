@@ -1,6 +1,16 @@
 import { create } from 'zustand'
-import { MOCK_PRODUCTS, GENRES } from '../data/productsData'
-import { getLocalCart, saveCartToAccount, saveProduct } from '../lib/db'
+import { MOCK_PRODUCTS, GENRES } from '../data/productsData.js'
+import {
+  getLocalCart,
+  saveCartToAccount,
+  saveProduct,
+  deleteProductFromDb,
+  toggleProductStockInDb,
+  toggleProductVisibilityInDb,
+  getProducts,
+  mapDbRowToProduct,
+} from '../lib/db.js'
+import { isSupabaseConfigured, supabase } from '../lib/supabase.js'
 
 const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v10'
 
@@ -53,11 +63,94 @@ const persistProducts = (products) => {
 export const useCartStore = create((set, get) => ({
   // ── Global Products State ──
   products: loadInitialProducts(),
+  isProductsLoaded: false,
+
+  // ── Initialize Supabase Realtime Listener ──
+  initProductsListener: () => {
+    // 1. Initial live fetch from Supabase
+    getProducts({ includeHidden: true })
+      .then((liveProducts) => {
+        if (liveProducts && liveProducts.length > 0) {
+          set({ products: liveProducts, isProductsLoaded: true })
+        }
+      })
+      .catch((err) => console.warn('Failed to load live products on startup:', err))
+
+    // 2. Setup Supabase Realtime channel
+    if (!isSupabaseConfigured || !supabase) return () => {}
+
+    try {
+      const channel = supabase
+        .channel('realtime:public:products')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'products' },
+          (payload) => {
+            const { eventType, new: newRow, old: oldRow } = payload
+            const currentProducts = get().products
+
+            if (eventType === 'INSERT') {
+              const mapped = mapDbRowToProduct(newRow)
+              if (!mapped) return
+              const exists = currentProducts.some((p) => String(p.id) === String(mapped.id))
+              const nextProducts = exists
+                ? currentProducts.map((p) => String(p.id) === String(mapped.id) ? { ...p, ...mapped } : p)
+                : [mapped, ...currentProducts]
+              set({ products: nextProducts })
+              persistProducts(nextProducts)
+            } else if (eventType === 'UPDATE') {
+              const mapped = mapDbRowToProduct(newRow)
+              if (!mapped) return
+              const nextProducts = currentProducts.map((p) => {
+                if (String(p.id) === String(mapped.id)) {
+                  return { ...p, ...mapped }
+                }
+                return p
+              })
+              set({
+                products: nextProducts,
+                items: get().items.map((it) =>
+                  String(it.id) === String(mapped.id)
+                    ? { ...it, name: mapped.name, fullName: mapped.fullName, price: mapped.price, image: mapped.image }
+                    : it
+                ),
+                wishlist: get().wishlist.map((it) =>
+                  String(it.id) === String(mapped.id)
+                    ? { ...it, name: mapped.name, fullName: mapped.fullName, price: mapped.price, image: mapped.image }
+                    : it
+                ),
+              })
+              persistProducts(nextProducts)
+            } else if (eventType === 'DELETE') {
+              const deletedId = String(oldRow?.id || '')
+              if (!deletedId) return
+              const nextProducts = currentProducts.filter((p) => String(p.id) !== deletedId)
+              set({
+                products: nextProducts,
+                items: get().items.filter((it) => String(it.id) !== deletedId),
+                wishlist: get().wishlist.filter((it) => String(it.id) !== deletedId),
+              })
+              persistProducts(nextProducts)
+            }
+          }
+        )
+        .subscribe()
+
+      return () => {
+        try {
+          supabase.removeChannel(channel)
+        } catch {}
+      }
+    } catch (e) {
+      console.warn('Failed to subscribe to products realtime:', e)
+      return () => {}
+    }
+  },
 
   updateProduct: (updatedProduct) => {
     const current = get().products
     const nextProducts = current.map((p) => {
-      if (p.id === updatedProduct.id) {
+      if (String(p.id) === String(updatedProduct.id)) {
         const slug =
           updatedProduct.slug ||
           `${(updatedProduct.name || p.name)
@@ -84,7 +177,7 @@ export const useCartStore = create((set, get) => ({
 
     // Also update matching items currently in the cart
     const updatedItems = get().items.map((it) => {
-      if (it.id === updatedProduct.id) {
+      if (String(it.id) === String(updatedProduct.id)) {
         return {
           ...it,
           name: updatedProduct.name || it.name,
@@ -99,7 +192,7 @@ export const useCartStore = create((set, get) => ({
 
     // Also update matching items in wishlist
     const updatedWishlist = get().wishlist.map((it) => {
-      if (it.id === updatedProduct.id) {
+      if (String(it.id) === String(updatedProduct.id)) {
         return {
           ...it,
           name: updatedProduct.name || it.name,
@@ -111,6 +204,12 @@ export const useCartStore = create((set, get) => ({
       return it
     })
     set({ wishlist: updatedWishlist })
+
+    // Sync to Supabase in background
+    const matched = nextProducts.find((p) => String(p.id) === String(updatedProduct.id))
+    if (matched) {
+      saveProduct(matched).catch((e) => console.warn('Supabase sync error on updateProduct:', e))
+    }
   },
 
   addProduct: (newProduct) => {
@@ -119,7 +218,7 @@ export const useCartStore = create((set, get) => ({
       `${newProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
     const fullName = newProduct.name
     const productWithDefaults = {
-      id: newProduct.id || Date.now(),
+      id: String(newProduct.id || Date.now()),
       slug,
       fullName,
       originalPrice: newProduct.originalPrice || Math.round(newProduct.price * 1.8),
@@ -147,49 +246,58 @@ export const useCartStore = create((set, get) => ({
     const nextProducts = [productWithDefaults, ...get().products]
     set({ products: nextProducts })
     persistProducts(nextProducts)
+
+    // Sync to Supabase in background
+    saveProduct(productWithDefaults).catch((e) => console.warn('Supabase sync error on addProduct:', e))
+
     return productWithDefaults
   },
 
-  deleteProduct: (productId) => {
-    const nextProducts = get().products.filter((p) => p.id !== productId)
+  deleteProduct: async (productId) => {
+    const strId = String(productId)
+    const nextProducts = get().products.filter((p) => String(p.id) !== strId)
     set({
       products: nextProducts,
-      items: get().items.filter((it) => it.id !== productId),
-      wishlist: get().wishlist.filter((it) => it.id !== productId),
+      items: get().items.filter((it) => String(it.id) !== strId),
+      wishlist: get().wishlist.filter((it) => String(it.id) !== strId),
     })
     persistProducts(nextProducts)
+
+    try {
+      await deleteProductFromDb(strId)
+    } catch (e) {
+      console.warn('Sync delete to db failed', e)
+    }
   },
 
   toggleProductStock: (productId) => {
-    let updated = null
+    const strId = String(productId)
+    let newInStock = true
     const nextProducts = get().products.map((p) => {
-      if (p.id === productId) {
-        updated = { ...p, inStock: !p.inStock }
-        return updated
+      if (String(p.id) === strId) {
+        newInStock = !p.inStock
+        return { ...p, inStock: newInStock }
       }
       return p
     })
     set({ products: nextProducts })
     persistProducts(nextProducts)
-    if (updated) {
-      saveProduct(updated).catch((e) => console.warn('Sync stock to db failed', e))
-    }
+    toggleProductStockInDb(strId, newInStock).catch((e) => console.warn('Sync stock to db failed', e))
   },
 
   toggleProductVisibility: (productId) => {
-    let updated = null
+    const strId = String(productId)
+    let newIsHidden = false
     const nextProducts = get().products.map((p) => {
-      if (p.id === productId) {
-        updated = { ...p, isHidden: !p.isHidden }
-        return updated
+      if (String(p.id) === strId) {
+        newIsHidden = !p.isHidden
+        return { ...p, isHidden: newIsHidden }
       }
       return p
     })
     set({ products: nextProducts })
     persistProducts(nextProducts)
-    if (updated) {
-      saveProduct(updated).catch((e) => console.warn('Sync visibility to db failed', e))
-    }
+    toggleProductVisibilityInDb(strId, newIsHidden).catch((e) => console.warn('Sync visibility to db failed', e))
   },
 
   resetProductsToDefault: () => {

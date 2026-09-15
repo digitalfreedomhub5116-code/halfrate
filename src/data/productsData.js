@@ -1,4 +1,4 @@
-import { REVIEWS_POOL } from './reviewsData'
+import { REVIEWS_POOL } from './reviewsData.js'
 
 export const GENRES = [
   {

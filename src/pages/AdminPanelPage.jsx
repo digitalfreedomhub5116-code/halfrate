@@ -40,49 +40,15 @@ import {
   Ban,
   XCircle
 } from 'lucide-react'
-import { GENRES } from '../data/productsData'
+import { GENRES, MOCK_PRODUCTS } from '../data/productsData.js'
 import { useCartStore } from '../store/cartStore'
-import { saveProduct, getAllOrders, updateOrderStatus, deleteOrder } from '../lib/db'
-
-
-
-
-
-// Helper function to read dropped image file and resize via Canvas to optimize storage and speed
-function readFileAsOptimizedDataUrl(file, maxWidth = 1200, quality = 0.85) {
-  return new Promise((resolve, reject) => {
-    if (!file || !file.type.startsWith('image/')) {
-      return reject(new Error('Please upload a valid image file (PNG, JPG, WEBP).'))
-    }
-
-    const reader = new FileReader()
-    reader.onerror = () => reject(new Error('Failed to read image file.'))
-    reader.onload = (event) => {
-      const img = new Image()
-      img.onerror = () => resolve(event.target.result)
-      img.onload = () => {
-        let width = img.width
-        let height = img.height
-
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width)
-          width = maxWidth
-        }
-
-        const canvas = document.createElement('canvas')
-        canvas.width = width
-        canvas.height = height
-        const ctx = canvas.getContext('2d')
-        ctx.drawImage(img, 0, 0, width, height)
-
-        const dataUrl = canvas.toDataURL('image/jpeg', quality)
-        resolve(dataUrl)
-      }
-      img.src = event.target.result
-    }
-    reader.readAsDataURL(file)
-  })
-}
+import {
+  saveProduct,
+  uploadProductImage,
+  getAllOrders,
+  updateOrderStatus,
+  deleteOrder,
+} from '../lib/db'
 
 // ── REUSABLE DRAG & DROP IMAGE COMPONENT ──
 function ImageDropzone({
@@ -90,7 +56,7 @@ function ImageDropzone({
   value,
   onChange,
   onRemove,
-  subtext = 'Drag and drop PNG, JPG or WEBP (auto-compressed for instant global display)',
+  subtext = 'Drag and drop PNG, JPG or WEBP (auto-uploaded to Supabase CDN for instant global display)',
 }) {
   const [isDragging, setIsDragging] = useState(false)
   const [urlInput, setUrlInput] = useState('')
@@ -101,8 +67,8 @@ function ImageDropzone({
     if (!file) return
     setIsProcessing(true)
     try {
-      const dataUrl = await readFileAsOptimizedDataUrl(file)
-      onChange(dataUrl)
+      const publicUrl = await uploadProductImage(file)
+      onChange(publicUrl)
     } catch (err) {
       alert(err.message || 'Error processing image')
     } finally {
@@ -243,19 +209,22 @@ function ImageDropzone({
 function GalleryDropzone({ gallery = [], onUpdateGallery }) {
   const [isDragging, setIsDragging] = useState(false)
   const [urlInput, setUrlInput] = useState('')
+  const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef(null)
 
   const handleFiles = async (files) => {
     if (!files || files.length === 0) return
+    setIsUploading(true)
     const newImages = []
     for (const file of Array.from(files)) {
       try {
-        const dataUrl = await readFileAsOptimizedDataUrl(file)
-        newImages.push(dataUrl)
+        const publicUrl = await uploadProductImage(file)
+        newImages.push(publicUrl)
       } catch (err) {
-        console.error('Error processing gallery image', err)
+        console.error('Error uploading gallery image', err)
       }
     }
+    setIsUploading(false)
     if (newImages.length > 0) {
       onUpdateGallery([...gallery, ...newImages])
     }
@@ -356,8 +325,17 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
           onChange={(e) => handleFiles(e.target.files)}
         />
         <div className="flex items-center justify-center gap-2 text-xs font-medium text-cream">
-          <Upload className="w-4 h-4 text-gold" />
-          <span>{isDragging ? 'Drop Multiple Photos to Add!' : 'Drag & Drop Multiple Images for Carousel, or Browse'}</span>
+          {isUploading ? (
+            <>
+              <RefreshCw className="w-4 h-4 text-gold animate-spin" />
+              <span className="text-gold font-semibold">Uploading photos to Supabase Storage CDN...</span>
+            </>
+          ) : (
+            <>
+              <Upload className="w-4 h-4 text-gold" />
+              <span>{isDragging ? 'Drop Multiple Photos to Add!' : 'Drag & Drop Multiple Images for Carousel, or Browse'}</span>
+            </>
+          )}
         </div>
       </div>
 
@@ -923,22 +901,25 @@ export default function AdminPanelPage() {
   }
 
   // ── DELETE PRODUCT ──
-  const handleDeleteProduct = (prod) => {
+  const handleDeleteProduct = async (prod) => {
     if (window.confirm(`Are you sure you want to permanently delete "${prod.name}" from the store?`)) {
-      deleteProduct(prod.id)
+      await deleteProduct(prod.id)
       showToast(`Product "${prod.name}" removed from global store.`)
     }
   }
 
   // ── RESET CATALOG ──
-  const handleResetCatalog = () => {
+  const handleResetCatalog = async () => {
     if (
       window.confirm(
-        'Reset all products back to original 20 electronics catalog items? Custom additions and edits will be restored.'
+        'Reset all products back to the official 8 HalfRate catalog items? Custom additions and edits will be restored to defaults.'
       )
     ) {
       resetProductsToDefault()
-      showToast('Catalog restored to default electronics products.')
+      for (const p of MOCK_PRODUCTS) {
+        await saveProduct(p)
+      }
+      showToast('Catalog restored to default HalfRate products across the website.')
     }
   }
 

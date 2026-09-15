@@ -19,6 +19,14 @@ export default function App() {
   const isAuthOpen = useCartStore((s) => s.isAuthOpen)
   const closeAuth = useCartStore((s) => s.closeAuth)
 
+  // Subscribe to live global products and real-time database updates across all tabs/visitors
+  useEffect(() => {
+    const unsubProducts = useCartStore.getState().initProductsListener()
+    return () => {
+      if (typeof unsubProducts === 'function') unsubProducts()
+    }
+  }, [])
+
   // Sync persistent account cart on auth change & listen to persistent user session
   useEffect(() => {
     const unsub = initAuthListener(async (user) => {

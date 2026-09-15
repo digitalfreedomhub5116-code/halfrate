@@ -1,5 +1,5 @@
-import { supabase, isSupabaseConfigured } from './supabase'
-import { MOCK_PRODUCTS, GENRES } from '../data/productsData'
+import { supabase, isSupabaseConfigured } from './supabase.js'
+import { MOCK_PRODUCTS, GENRES } from '../data/productsData.js'
 
 const LOCAL_STORAGE_ORDERS_KEY = 'halfrate_orders'
 const LOCAL_STORAGE_USER_KEY = 'halfrate_user'
@@ -8,6 +8,7 @@ const LOCAL_STORAGE_ADDRESSES_KEY = 'halfrate_addresses'
 // Helper for local storage
 const getLocalData = (key, fallback = []) => {
   try {
+    if (typeof localStorage === 'undefined') return fallback
     const data = localStorage.getItem(key)
     return data ? JSON.parse(data) : fallback
   } catch (e) {
@@ -17,6 +18,7 @@ const getLocalData = (key, fallback = []) => {
 
 const setLocalData = (key, value) => {
   try {
+    if (typeof localStorage === 'undefined') return
     localStorage.setItem(key, JSON.stringify(value))
   } catch (e) {
     console.error('Storage error', e)
@@ -25,17 +27,144 @@ const setLocalData = (key, value) => {
 
 const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v10'
 
-// ── 1. PRODUCTS & CATEGORIES ──
-export async function getProducts(options = {}) {
-  const { genre, includeHidden = false } = options
+// ── 1. PRODUCT MAPPERS & IMAGE STORAGE ──
+export function mapDbRowToProduct(row) {
+  if (!row) return null
+  return {
+    id: String(row.id),
+    name: row.name || '',
+    shortName: row.short_name || row.name || '',
+    fullName: row.full_name || row.name || '',
+    slug: row.slug || String(row.id),
+    genre: row.genre || 'MOBILE_ACCESSORIES',
+    price: Number(row.price || 0),
+    originalPrice: Number(row.original_price || Math.round(Number(row.price || 0) * 1.8)),
+    reviewCount: Number(row.review_count || 15),
+    rating: Number(row.rating || 4.8),
+    badCount: Number(row.bad_count || 0),
+    image: row.image || '',
+    gallery: Array.isArray(row.gallery) && row.gallery.length > 0 ? row.gallery : (row.image ? [row.image] : []),
+    purity: row.purity || '',
+    compliance: row.compliance || '',
+    pack: row.pack || '',
+    dimensions: row.dimensions || '',
+    weight: row.weight || '',
+    material: row.material || '',
+    chipset: row.chipset || '',
+    description: row.description || '',
+    features: Array.isArray(row.features) && row.features.length > 0
+      ? row.features
+      : (Array.isArray(row.key_features) ? row.key_features : []),
+    specs: typeof row.specs === 'object' && row.specs !== null ? row.specs : {},
+    inStock: row.is_active !== false,
+    isHidden: row.is_hidden === true,
+    reviews: Array.isArray(row.product_reviews) ? row.product_reviews : [],
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  }
+}
 
-  // 1. Check persistent local storage catalog
-  const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, null)
-  let catalog = stored && Array.isArray(stored) && stored.length > 0 ? stored : MOCK_PRODUCTS
+export function mapProductToDbRow(product) {
+  if (!product) return null
+  const slug = product.slug || String(product.id).toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  return {
+    id: String(product.id),
+    name: product.name,
+    short_name: product.shortName || product.name,
+    full_name: product.fullName || product.name,
+    slug: slug,
+    genre: product.genre || 'MOBILE_ACCESSORIES',
+    price: Number(product.price || 0),
+    original_price: Number(product.originalPrice || Math.round(Number(product.price || 0) * 1.8)),
+    review_count: Number(product.reviewCount || 0),
+    rating: Number(product.rating || 4.8),
+    bad_count: Number(product.badCount || 0),
+    image: product.image,
+    gallery: Array.isArray(product.gallery) && product.gallery.length > 0 ? product.gallery : [product.image],
+    purity: product.purity || null,
+    compliance: product.compliance || null,
+    pack: product.pack || null,
+    dimensions: product.dimensions || null,
+    weight: product.weight || null,
+    material: product.material || null,
+    chipset: product.chipset || null,
+    description: product.description || '',
+    features: Array.isArray(product.features) ? product.features : [],
+    specs: typeof product.specs === 'object' && product.specs !== null ? product.specs : {},
+    is_active: product.inStock !== false,
+    is_hidden: product.isHidden === true,
+    updated_at: new Date().toISOString(),
+  }
+}
+
+// Upload file directly to Supabase Storage bucket 'product-images' (or fallback to optimized data URL)
+export async function uploadProductImage(file) {
+  if (!file) throw new Error('No file provided')
 
   if (isSupabaseConfigured && supabase) {
     try {
-      let query = supabase.from('products').select('*')
+      const cleanFileName = file.name ? file.name.replace(/[^a-zA-Z0-9.-]/g, '_') : 'image.jpg'
+      const filePath = `uploads/${Date.now()}_${Math.random().toString(36).substring(2, 8)}_${cleanFileName}`
+
+      const { data, error } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true,
+          contentType: file.type || 'image/jpeg',
+        })
+
+      if (error) {
+        console.warn('Supabase storage upload error, falling back to data URL:', error)
+      } else if (data) {
+        const { data: publicData } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(data.path || filePath)
+
+        if (publicData?.publicUrl) {
+          return publicData.publicUrl
+        }
+      }
+    } catch (e) {
+      console.warn('Supabase storage exception, falling back to data URL:', e)
+    }
+  }
+
+  // Fallback to local canvas-optimized data URL
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = () => reject(new Error('Failed to read image file.'))
+    reader.onload = (event) => {
+      const img = new Image()
+      img.onerror = () => resolve(event.target.result)
+      img.onload = () => {
+        let width = img.width
+        let height = img.height
+        const maxWidth = 1200
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width)
+          width = maxWidth
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/jpeg', 0.85))
+      }
+      img.src = event.target.result
+    }
+    reader.readAsDataURL(file)
+  })
+}
+
+// ── 2. PRODUCTS & CATEGORIES ──
+export async function getProducts(options = {}) {
+  const { genre, includeHidden = false } = options
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      let query = supabase.from('products').select('*').order('created_at', { ascending: false })
       if (!includeHidden) {
         query = query.eq('is_hidden', false)
       }
@@ -44,18 +173,18 @@ export async function getProducts(options = {}) {
       }
       const { data, error } = await query
       if (!error && data && data.length > 0) {
-        return data.map((row) => ({
-          ...row,
-          inStock: row.is_active !== false,
-          isHidden: row.is_hidden === true,
-        }))
+        const mapped = data.map(mapDbRowToProduct).filter(Boolean)
+        setLocalData(LOCAL_STORAGE_PRODUCTS_KEY, mapped)
+        return mapped
       }
     } catch (err) {
       console.warn('Supabase products fetch failed, using cached catalog', err)
     }
   }
 
-  // Fallback to active catalog
+  // Fallback to cached local catalog
+  const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, null)
+  let catalog = stored && Array.isArray(stored) && stored.length > 0 ? stored : MOCK_PRODUCTS
   let result = catalog
   if (!includeHidden) {
     result = result.filter((p) => !p.isHidden)
@@ -67,28 +196,25 @@ export async function getProducts(options = {}) {
 }
 
 export async function getProductBySlugOrId(identifier) {
-  const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, null)
-  const catalog = stored && Array.isArray(stored) && stored.length > 0 ? stored : MOCK_PRODUCTS
-
   if (isSupabaseConfigured && supabase) {
     try {
-      const isNum = !isNaN(Number(identifier))
-      const query = isNum
-        ? supabase.from('products').select('*, product_reviews(*)').eq('id', Number(identifier)).single()
-        : supabase.from('products').select('*, product_reviews(*)').eq('slug', identifier).single()
+      const query = supabase
+        .from('products')
+        .select('*, product_reviews(*)')
+        .or(`id.eq.${identifier},slug.eq.${identifier}`)
+        .maybeSingle()
+
       const { data, error } = await query
       if (!error && data) {
-        return {
-          ...data,
-          inStock: data.is_active !== false,
-          isHidden: data.is_hidden === true,
-        }
+        return mapDbRowToProduct(data)
       }
     } catch (err) {
       console.warn('Supabase product query error', err)
     }
   }
 
+  const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, null)
+  const catalog = stored && Array.isArray(stored) && stored.length > 0 ? stored : MOCK_PRODUCTS
   return (
     catalog.find(
       (p) => String(p.id) === String(identifier) || p.slug === identifier
@@ -97,8 +223,9 @@ export async function getProductBySlugOrId(identifier) {
 }
 
 export async function saveProduct(product) {
+  // 1. Update local cache immediately for optimistic UI
   const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, MOCK_PRODUCTS)
-  const idx = stored.findIndex((p) => p.id === product.id)
+  const idx = stored.findIndex((p) => String(p.id) === String(product.id))
   let updated
   if (idx >= 0) {
     updated = [...stored]
@@ -108,28 +235,95 @@ export async function saveProduct(product) {
   }
   setLocalData(LOCAL_STORAGE_PRODUCTS_KEY, updated)
 
+  // 2. Persist to Supabase
   if (isSupabaseConfigured && supabase) {
     try {
-      await supabase.from('products').upsert({
-        id: product.id,
-        name: product.name,
-        slug: product.slug,
-        genre: product.genre,
-        price: product.price,
-        original_price: product.originalPrice,
-        description: product.description,
-        image: product.image,
-        gallery: product.gallery,
-        is_active: product.inStock !== false,
-        is_hidden: product.isHidden === true,
-        updated_at: new Date().toISOString(),
-      })
+      const dbRow = mapProductToDbRow(product)
+      const { data, error } = await supabase
+        .from('products')
+        .upsert(dbRow, { onConflict: 'id' })
+        .select()
+
+      if (error) {
+        console.error('Supabase product upsert error:', error)
+        throw error
+      }
+      if (data && data[0]) {
+        return mapDbRowToProduct(data[0])
+      }
     } catch (e) {
-      console.warn('Supabase product upsert error', e)
+      console.warn('Supabase product upsert exception', e)
+      throw e
     }
   }
 
   return product
+}
+
+export async function deleteProductFromDb(productId) {
+  // 1. Update local storage
+  const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, MOCK_PRODUCTS)
+  const updated = stored.filter((p) => String(p.id) !== String(productId))
+  setLocalData(LOCAL_STORAGE_PRODUCTS_KEY, updated)
+
+  // 2. Delete from Supabase
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', String(productId))
+      if (error) {
+        console.error('Supabase delete product failed:', error)
+        throw error
+      }
+    } catch (e) {
+      console.warn('Supabase delete product exception', e)
+      throw e
+    }
+  }
+}
+
+export async function toggleProductStockInDb(productId, inStock) {
+  const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, MOCK_PRODUCTS)
+  const idx = stored.findIndex((p) => String(p.id) === String(productId))
+  if (idx >= 0) {
+    stored[idx] = { ...stored[idx], inStock }
+    setLocalData(LOCAL_STORAGE_PRODUCTS_KEY, stored)
+  }
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update({ is_active: inStock, updated_at: new Date().toISOString() })
+        .eq('id', String(productId))
+      if (error) console.error('Supabase update stock error', error)
+    } catch (e) {
+      console.warn('Supabase stock toggle exception', e)
+    }
+  }
+}
+
+export async function toggleProductVisibilityInDb(productId, isHidden) {
+  const stored = getLocalData(LOCAL_STORAGE_PRODUCTS_KEY, MOCK_PRODUCTS)
+  const idx = stored.findIndex((p) => String(p.id) === String(productId))
+  if (idx >= 0) {
+    stored[idx] = { ...stored[idx], isHidden }
+    setLocalData(LOCAL_STORAGE_PRODUCTS_KEY, stored)
+  }
+
+  if (isSupabaseConfigured && supabase) {
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update({ is_hidden: isHidden, updated_at: new Date().toISOString() })
+        .eq('id', String(productId))
+      if (error) console.error('Supabase update visibility error', error)
+    } catch (e) {
+      console.warn('Supabase visibility toggle exception', e)
+    }
+  }
 }
 
 // ── 2. ORDERS & SHIPROCKET LIVE TRACKING ──
