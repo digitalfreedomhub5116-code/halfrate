@@ -47,7 +47,7 @@ function ProductCard({ product }) {
       }`}
     >
       {/* Product Image & Badges */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-stone-100">
+      <div className="relative aspect-square w-full overflow-hidden bg-white">
         <img
           src={product.image}
           alt={product.name}

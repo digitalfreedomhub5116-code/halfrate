@@ -66,76 +66,48 @@ export default function ProductPage() {
   const reviewsSectionRef = useRef(null)
   const lastScrollY = useRef(0)
 
-  // Touch and drag swipe state
-  const touchStartX = useRef(0)
-  const touchStartY = useRef(0)
-  const touchEndX = useRef(0)
-  const touchEndY = useRef(0)
-  const isSwiping = useRef(false)
+  // Carousel scroll ref and handlers
+  const carouselRef = useRef(null)
+  const isProgrammaticScroll = useRef(false)
+  const scrollTimeoutRef = useRef(null)
+
+  const scrollToImage = (index) => {
+    const total = product?.gallery?.length || 1
+    const nextIndex = Math.max(0, Math.min(index, total - 1))
+    setActiveImageIndex(nextIndex)
+    if (carouselRef.current) {
+      isProgrammaticScroll.current = true
+      clearTimeout(scrollTimeoutRef.current)
+      const width = carouselRef.current.clientWidth
+      carouselRef.current.scrollTo({
+        left: nextIndex * width,
+        behavior: 'smooth',
+      })
+      scrollTimeoutRef.current = setTimeout(() => {
+        isProgrammaticScroll.current = false
+      }, 400)
+    }
+  }
 
   const handleNextImage = () => {
     if (!product?.gallery?.length) return
-    setActiveImageIndex((prev) => (prev + 1) % product.gallery.length)
+    const nextIndex = (activeImageIndex + 1) % product.gallery.length
+    scrollToImage(nextIndex)
   }
 
   const handlePrevImage = () => {
     if (!product?.gallery?.length) return
-    setActiveImageIndex((prev) => (prev - 1 + product.gallery.length) % product.gallery.length)
+    const prevIndex = (activeImageIndex - 1 + product.gallery.length) % product.gallery.length
+    scrollToImage(prevIndex)
   }
 
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX
-    touchStartY.current = e.touches[0].clientY
-    touchEndX.current = e.touches[0].clientX
-    touchEndY.current = e.touches[0].clientY
-    isSwiping.current = true
-  }
-
-  const handleTouchMove = (e) => {
-    if (!isSwiping.current) return
-    touchEndX.current = e.touches[0].clientX
-    touchEndY.current = e.touches[0].clientY
-  }
-
-  const handleTouchEnd = () => {
-    if (!isSwiping.current) return
-    isSwiping.current = false
-    const diffX = touchStartX.current - touchEndX.current
-    const diffY = touchStartY.current - touchEndY.current
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX > 0) {
-        handleNextImage()
-      } else {
-        handlePrevImage()
-      }
-    }
-  }
-
-  const handleMouseDown = (e) => {
-    touchStartX.current = e.clientX
-    touchStartY.current = e.clientY
-    touchEndX.current = e.clientX
-    touchEndY.current = e.clientY
-    isSwiping.current = true
-  }
-
-  const handleMouseMove = (e) => {
-    if (!isSwiping.current) return
-    touchEndX.current = e.clientX
-    touchEndY.current = e.clientY
-  }
-
-  const handleMouseUp = () => {
-    if (!isSwiping.current) return
-    isSwiping.current = false
-    const diffX = touchStartX.current - touchEndX.current
-    const diffY = touchStartY.current - touchEndY.current
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX > 0) {
-        handleNextImage()
-      } else {
-        handlePrevImage()
-      }
+  const handleCarouselScroll = (e) => {
+    if (isProgrammaticScroll.current) return
+    const el = e.currentTarget
+    if (!el || !el.clientWidth) return
+    const newIndex = Math.round(el.scrollLeft / el.clientWidth)
+    if (newIndex !== activeImageIndex && newIndex >= 0 && newIndex < (product?.gallery?.length || 0)) {
+      setActiveImageIndex(newIndex)
     }
   }
 
@@ -145,6 +117,9 @@ export default function ProductPage() {
     setShowAllReviews(false)
     setShowNavbar(true)
     lastScrollY.current = 0
+    if (carouselRef.current) {
+      carouselRef.current.scrollTo({ left: 0, behavior: 'instant' })
+    }
   }, [productIdOrSlug])
 
   // Combined scroll handler: Scroll-spy + Smart auto-hide top Navbar
@@ -372,8 +347,8 @@ export default function ProductPage() {
                 return (
                   <button
                     key={index}
-                    onClick={() => setActiveImageIndex(index)}
-                    className={`h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white ${
+                    onClick={() => scrollToImage(index)}
+                    className={`h-16 w-16 sm:h-20 sm:w-20 aspect-square flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white cursor-pointer ${
                       isSelected
                         ? 'border-[#991B33] shadow-md shadow-[#991B33]/20 scale-105'
                         : 'border-[#E7E2D9] hover:border-[#991B33]/50 opacity-70 hover:opacity-100'
@@ -391,26 +366,24 @@ export default function ProductPage() {
 
             {/* Main Image Display Carousel */}
             <div
-              className="relative flex-1 aspect-[4/5] sm:aspect-square rounded-2xl overflow-hidden border border-[#E7E2D9] bg-white shadow-xl shadow-stone-900/5 group touch-pan-y select-none cursor-grab active:cursor-grabbing"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              className="relative flex-1 aspect-square w-full rounded-2xl overflow-hidden border border-[#E7E2D9] bg-white shadow-xl shadow-stone-900/5 group"
             >
-              {/* Sliding Image Track */}
+              {/* Native Smooth Scroll-Snap Image Track */}
               <div
-                className="flex h-full w-full transition-transform duration-300 ease-out"
-                style={{ transform: `translateX(-${activeImageIndex * 100}%)` }}
+                ref={carouselRef}
+                onScroll={handleCarouselScroll}
+                className="flex h-full w-full overflow-x-auto snap-x snap-mandatory scrollbar-none"
+                style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
               >
                 {product.gallery.map((imgUrl, index) => (
-                  <div key={index} className="min-w-full h-full flex-shrink-0 relative">
+                  <div
+                    key={index}
+                    className="w-full h-full min-w-full flex-shrink-0 snap-center snap-always flex items-center justify-center bg-white"
+                  >
                     <img
                       src={imgUrl}
                       alt={`${product.fullName} view ${index + 1}`}
-                      className="h-full w-full object-cover select-none pointer-events-none"
+                      className="h-full w-full object-cover select-none"
                       draggable={false}
                     />
                   </div>
@@ -426,9 +399,7 @@ export default function ProductPage() {
                       e.stopPropagation()
                       handlePrevImage()
                     }}
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onTouchStart={(e) => e.stopPropagation()}
-                    className="absolute left-2.5 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 border border-[#E7E2D9] text-[#1C1917] hover:text-[#991B33] hover:bg-white backdrop-blur-sm transition-all shadow-md active:scale-95"
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 border border-[#E7E2D9] text-[#1C1917] hover:text-[#991B33] hover:bg-white backdrop-blur-sm transition-all shadow-md active:scale-95 cursor-pointer"
                     aria-label="Previous image"
                   >
                     <ChevronLeft className="h-4 w-4" />
@@ -439,9 +410,7 @@ export default function ProductPage() {
                       e.stopPropagation()
                       handleNextImage()
                     }}
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onTouchStart={(e) => e.stopPropagation()}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 border border-[#E7E2D9] text-[#1C1917] hover:text-[#991B33] hover:bg-white backdrop-blur-sm transition-all shadow-md active:scale-95"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white/80 border border-[#E7E2D9] text-[#1C1917] hover:text-[#991B33] hover:bg-white backdrop-blur-sm transition-all shadow-md active:scale-95 cursor-pointer"
                     aria-label="Next image"
                   >
                     <ChevronRight className="h-4 w-4" />
@@ -452,8 +421,6 @@ export default function ProductPage() {
               {/* Floating Actions (Share & Wishlist) */}
               <div
                 className="absolute top-4 right-4 flex flex-col gap-2 z-10"
-                onMouseDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
               >
                 <button
                   type="button"
@@ -461,7 +428,7 @@ export default function ProductPage() {
                     e.stopPropagation()
                     handleShare()
                   }}
-                  className="p-2.5 rounded-full bg-white/80 border border-[#E7E2D9] text-[#78716C] hover:text-[#991B33] hover:bg-white backdrop-blur-sm transition-all shadow-xs"
+                  className="p-2.5 rounded-full bg-white/80 border border-[#E7E2D9] text-[#78716C] hover:text-[#991B33] hover:bg-white backdrop-blur-sm transition-all shadow-xs cursor-pointer"
                   title="Share product"
                 >
                   <Share2 className="h-4 w-4" />
@@ -472,7 +439,7 @@ export default function ProductPage() {
                     e.stopPropagation()
                     toggleWishlist(product)
                   }}
-                  className={`p-2.5 rounded-full backdrop-blur-sm transition-all duration-300 shadow-xs ${
+                  className={`p-2.5 rounded-full backdrop-blur-sm transition-all duration-300 shadow-xs cursor-pointer ${
                     isWishlisted
                       ? 'bg-rose-50 text-rose-600 border border-rose-200'
                       : 'bg-white/80 border border-[#E7E2D9] text-[#78716C] hover:text-rose-500 hover:bg-white'
@@ -496,9 +463,7 @@ export default function ProductPage() {
 
               {/* Gallery Image Indicator Dots */}
               <div
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-900/60 backdrop-blur-sm border border-white/20 z-10"
-                onMouseDown={(e) => e.stopPropagation()}
-                onTouchStart={(e) => e.stopPropagation()}
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-900/60 backdrop-blur-sm border border-white/20 z-10 pointer-events-auto"
               >
                 {product.gallery.map((_, i) => (
                   <button
@@ -506,9 +471,9 @@ export default function ProductPage() {
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation()
-                      setActiveImageIndex(i)
+                      scrollToImage(i)
                     }}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                       activeImageIndex === i ? 'w-5 bg-white' : 'w-1.5 bg-white/50 hover:bg-white'
                     }`}
                     aria-label={`View image ${i + 1}`}
@@ -1004,7 +969,7 @@ export default function ProductPage() {
                   onClick={() => navigate(`/product/${rel.slug}`)}
                   className="product-card group relative cursor-pointer overflow-hidden rounded-2xl border border-[#E7E2D9] bg-white p-3 shadow-xs transition-all hover:border-[#991B33]/50 hover:shadow-md"
                 >
-                  <div className="aspect-[4/5] rounded-xl overflow-hidden bg-[#FAF8F5] mb-3">
+                  <div className="aspect-square rounded-xl overflow-hidden bg-white border border-[#E7E2D9] mb-3">
                     <img
                       src={rel.image}
                       alt={rel.name}

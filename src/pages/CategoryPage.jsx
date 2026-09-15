@@ -43,7 +43,7 @@ function ProductCard({ product }) {
       className="product-card group relative cursor-pointer overflow-hidden rounded-2xl border border-[#E7E2D9] bg-white transition-all duration-300 hover:border-[#991B33]/40 hover:shadow-lg hover:shadow-stone-900/5 flex flex-col"
     >
       {/* Product Image & Wishlist Button */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#FAF8F5]">
+      <div className="relative aspect-square w-full overflow-hidden bg-white">
         <img
           src={product.image}
           alt={product.name}
