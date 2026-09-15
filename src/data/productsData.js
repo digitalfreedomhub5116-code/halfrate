@@ -285,6 +285,58 @@ const RAW_PRODUCTS = [
       'Warranty': '1-Year Official Safe-View™ Manufacturer Warranty',
     },
   },
+
+  // ══════════════════════════════════════════════════════════════════
+  // 6. FLY AJ-581 360° ROTATING METAL DESKTOP PHONE & TABLET STAND
+  // ══════════════════════════════════════════════════════════════════
+  {
+    id: 'fly-aj581-phone-stand',
+    name: 'FLY AJ-581 360° Rotating Metal Desktop Phone & Tablet Stand (Foldable Double-Pivot)',
+    shortName: 'FLY AJ-581 360° Metal Phone Stand',
+    genre: 'MOBILE_ACCESSORIES',
+    price: 299,
+    originalPrice: 899,
+    reviewCount: 46,
+    rating: 4.9,
+    badCount: 0,
+    image: '/images/products/fly-aj581-stand/fly-aj581-stand-1.jpg',
+    gallery: [
+      '/images/products/fly-aj581-stand/fly-aj581-stand-1.jpg',
+      '/images/products/fly-aj581-stand/fly-aj581-stand-2.jpg',
+      '/images/products/fly-aj581-stand/fly-aj581-stand-3.jpg',
+    ],
+    purity: 'Aerospace Aluminum Alloy & Anti-Slip Silicone Pads',
+    compliance: 'FLY™ Official Premium Quality Certification',
+    pack: 'FLY AJ-581 Metal Stand + Anti-Scratch Cushions + Official Retail Box',
+    dimensions: 'Folded: 12cm × 8cm × 3cm | Height Adjustable up to 16cm',
+    weight: '210g Weighted Base (Zero Tip-Over)',
+    material: 'Solid Aviation-Grade Aluminum Alloy & Precision Steel Damping Hinges',
+    chipset: '360° Rotating Turntable Base • Double-Pivot Articulation • Flat Folding • Anti-Slip',
+    description: 'The FLY AJ-581 360° Rotating Desktop Phone & Tablet Stand is precision-engineered from solid aviation-grade aluminum alloy to deliver uncompromising stability to your workspace. Featuring an ultra-smooth 360° clicking rotating base, dual-axis pivot articulation, and adjustable height/angle mechanisms, it positions your smartphone or iPad Mini at the ergonomically perfect eye-level for Zoom calls, FaceTime, video watching, and desktop multi-tasking. Folds completely flat in seconds for effortless portability in your laptop bag, backpack, or pocket.',
+    features: [
+      '360° Click-Rotating Swivel Base — Smooth, satisfying mechanical rotation allows effortless screen sharing across conference desks or workstations',
+      'Double-Pivot Articulation — Dual reinforced steel hinges allow infinite tilt angle and height customization for the ideal ergonomic posture',
+      'Heavy-Duty Weighted Base — Solid aviation-grade aluminum construction prevents tipping over even when tapping large phones or tablets',
+      'Foldable & Ultra-Portable — Collapses completely flat into a sleek compact profile, making it the ultimate travel and office EDC companion',
+      'Protective Silicone Padding — Thick anti-scratch silicone cushions line the cradle hooks, backplate, and base to safeguard desks and device finishes',
+      'Charging Cable Friendly — Thoughtful bottom cutout allows continuous fast charging while using the stand in both portrait and landscape',
+      'Universal Compatibility — Perfectly fits iPhone 16/15/14 series, Samsung Galaxy, OnePlus, iPad Mini, Nintendo Switch, and all 4.0 to 11 inch devices',
+    ],
+    specs: {
+      'Brand': 'FLY™ (Premium Quality)',
+      'Model': 'AJ-581',
+      'Stand Type': '360° Rotating Desktop Phone & Tablet Stand',
+      'Material': 'Aviation-Grade Aluminum Alloy + Precision Steel Dampers',
+      'Rotation': '360° Continuous Turntable Swivel with Mechanical Ratchet',
+      'Articulation': 'Dual-Pivot Height & Tilt Adjustability',
+      'Foldability': 'Full 180° Flat Fold for Travel & Commute',
+      'Device Size Compatibility': 'Universal (4.0" to 11.0" Smartphones & Tablets)',
+      'Protection': 'Full Silicone Grip Pads on Hooks, Back & Base',
+      'Product Weight': 'Approx. 210g (Weighted Anti-Tip Base)',
+      'Ideal For': 'Desk Work, Video Calls, Cooking Recipes, Hands-Free Entertainment',
+      'Warranty': '1-Year Official FLY™ Manufacturer Warranty',
+    },
+  },
 ]
 
 function buildProductReviews(product) {

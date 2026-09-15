@@ -48,6 +48,8 @@ export const REVIEWS_POOL = {
       { name: "Suresh Pillai", text: "bluetooth remote pairs instantly with my iphone shutter button is super responsive" },
       { name: "Gaurav Joshi", text: "digital wattage display shows exact 45W charging speed, nylon braid is super thick" },
       { name: "Kavita Rao", text: "2 meter length reaches my bed easily, reinforced neck doesn't bend or break" },
+      { name: "Siddharth Bose", text: "all-metal build with 360 clicking swivel is super satisfying, holds my iPad mini firmly with zero wobble" },
+      { name: "Ananya Deshmukh", text: "folds completely flat, perfect for video calls and carrying in my laptop bag" },
     ],
     CAR_ACCESSORIES: [
       { name: "Vikram Malhotra", text: "sticky suction on dashboard is rock solid zero wobble on highway bumps" },

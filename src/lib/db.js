@@ -23,7 +23,7 @@ const setLocalData = (key, value) => {
   }
 }
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v7'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v8'
 
 // ── 1. PRODUCTS & CATEGORIES ──
 export async function getProducts(options = {}) {
