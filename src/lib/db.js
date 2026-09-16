@@ -25,11 +25,19 @@ const setLocalData = (key, value) => {
   }
 }
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v10'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v13'
 
 // ── 1. PRODUCT MAPPERS & IMAGE STORAGE ──
 export function mapDbRowToProduct(row) {
   if (!row) return null
+  const coverImage = row.image || (Array.isArray(row.gallery) && row.gallery[0]) || ''
+  const rawGallery = Array.isArray(row.gallery) && row.gallery.length > 0
+    ? row.gallery
+    : (coverImage ? [coverImage] : [])
+  const cleanGallery = coverImage
+    ? [coverImage, ...rawGallery.filter((u) => u && u !== coverImage)]
+    : rawGallery
+
   return {
     id: String(row.id),
     name: row.name || '',
@@ -42,8 +50,8 @@ export function mapDbRowToProduct(row) {
     reviewCount: Number(row.review_count || 15),
     rating: Number(row.rating || 4.8),
     badCount: Number(row.bad_count || 0),
-    image: row.image || '',
-    gallery: Array.isArray(row.gallery) && row.gallery.length > 0 ? row.gallery : (row.image ? [row.image] : []),
+    image: coverImage,
+    gallery: cleanGallery,
     purity: row.purity || '',
     compliance: row.compliance || '',
     pack: row.pack || '',
@@ -67,6 +75,14 @@ export function mapDbRowToProduct(row) {
 export function mapProductToDbRow(product) {
   if (!product) return null
   const slug = product.slug || String(product.id).toLowerCase().replace(/[^a-z0-9]+/g, '-')
+  const coverImage = product.image || (Array.isArray(product.gallery) && product.gallery[0]) || ''
+  const rawGallery = Array.isArray(product.gallery) && product.gallery.length > 0
+    ? product.gallery
+    : (coverImage ? [coverImage] : [])
+  const cleanGallery = coverImage
+    ? [coverImage, ...rawGallery.filter((u) => u && u !== coverImage)]
+    : rawGallery
+
   return {
     id: String(product.id),
     name: product.name,
@@ -79,8 +95,8 @@ export function mapProductToDbRow(product) {
     review_count: Number(product.reviewCount || 0),
     rating: Number(product.rating || 4.8),
     bad_count: Number(product.badCount || 0),
-    image: product.image,
-    gallery: Array.isArray(product.gallery) && product.gallery.length > 0 ? product.gallery : [product.image],
+    image: coverImage,
+    gallery: cleanGallery,
     purity: product.purity || null,
     compliance: product.compliance || null,
     pack: product.pack || null,

@@ -58,7 +58,7 @@ function ImageDropzone({
   value,
   onChange,
   onRemove,
-  subtext = 'Drag and drop PNG, JPG or WEBP (auto-uploaded to Supabase CDN for instant global display)',
+  subtext = 'Drag & drop PNG, JPG or WEBP (auto-uploaded to Supabase CDN for instant global display)',
 }) {
   const [isDragging, setIsDragging] = useState(false)
   const [urlInput, setUrlInput] = useState('')
@@ -80,48 +80,113 @@ function ImageDropzone({
 
   const handleDrop = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragging(false)
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
       handleFile(e.dataTransfer.files[0])
     }
   }
 
   const handleDragOver = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragging(true)
   }
 
   const handleDragLeave = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragging(false)
+  }
+
+  const openFileBrowser = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+      fileInputRef.current.click()
+    }
   }
 
   return (
     <div className="space-y-2">
-      <label className="block text-xs font-semibold text-cream-muted">
-        {label}
-      </label>
+      <div className="flex items-center justify-between">
+        <label className="block text-xs font-semibold text-cream-muted">
+          {label}
+        </label>
+        {value && (
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-gold/20 text-gold border border-gold/30 uppercase tracking-wider">
+            Active Storefront Cover
+          </span>
+        )}
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => handleFile(e.target.files?.[0])}
+      />
 
       {value ? (
-        <div className="relative rounded-xl border border-charcoal-light bg-obsidian/70 p-3 flex items-center gap-4">
-          <div className="w-20 h-20 rounded-lg overflow-hidden bg-obsidian shrink-0 border border-gold/30">
+        <div
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          className={`relative rounded-xl border p-3 flex items-center gap-4 transition-all ${
+            isDragging
+              ? 'border-gold bg-gold/15 ring-2 ring-gold/40 scale-[1.01]'
+              : 'border-charcoal-light bg-obsidian/70 hover:border-gold/40'
+          }`}
+        >
+          {isDragging && (
+            <div className="absolute inset-0 bg-black/80 rounded-xl z-20 flex items-center justify-center gap-2 border-2 border-dashed border-gold backdrop-blur-sm animate-pulse">
+              <Upload className="w-6 h-6 text-gold animate-bounce" />
+              <span className="text-xs font-bold text-gold">Drop new image to replace cover!</span>
+            </div>
+          )}
+
+          <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-obsidian shrink-0 border border-gold/40 shadow-inner group">
             <img src={value} alt="Preview" className="w-full h-full object-cover" />
+            <div
+              onClick={openFileBrowser}
+              className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+              title="Click to replace image"
+            >
+              <Upload className="w-5 h-5 text-gold" />
+            </div>
           </div>
+
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-cream truncate">
               {value.startsWith('data:') ? 'Custom Dropped Image (Optimized Data URL)' : value}
             </p>
             <p className="text-[11px] text-emerald-400 mt-0.5 flex items-center gap-1">
-              <Check className="w-3 h-3" /> Ready for Global Storefront
+              <Check className="w-3.5 h-3.5" /> Deployed as Global Storefront Cover
             </p>
-            <div className="mt-2 flex items-center gap-3">
+            <p className="text-[10px] text-cream-muted/50 mt-0.5">
+              Drag & drop a new photo directly onto this card to replace
+            </p>
+
+            <div className="mt-2.5 flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => fileInputRef.current?.click()}
-                className="text-xs font-semibold text-gold hover:underline cursor-pointer"
+                onClick={openFileBrowser}
+                disabled={isProcessing}
+                className="flex items-center gap-1 text-xs font-semibold text-gold hover:underline cursor-pointer disabled:opacity-50"
               >
-                Replace Image
+                {isProcessing ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Replace Image</span>
+                  </>
+                )}
               </button>
+
               {onRemove && (
                 <button
                   type="button"
@@ -133,33 +198,19 @@ function ImageDropzone({
               )}
             </div>
           </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => handleFile(e.target.files?.[0])}
-          />
         </div>
       ) : (
         <div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
+          onClick={openFileBrowser}
           className={`relative rounded-xl border-2 border-dashed p-6 text-center cursor-pointer transition-all ${
             isDragging
-              ? 'border-gold bg-gold/10 scale-[1.01]'
+              ? 'border-gold bg-gold/15 scale-[1.01]'
               : 'border-charcoal-light/90 hover:border-gold/50 bg-obsidian/40'
           }`}
         >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => handleFile(e.target.files?.[0])}
-          />
           <div className="flex flex-col items-center justify-center">
             {isProcessing ? (
               <RefreshCw className="w-7 h-7 text-gold animate-spin mb-1.5" />
@@ -178,31 +229,38 @@ function ImageDropzone({
         </div>
       )}
 
-      {/* Or Paste URL option */}
-      {!value && (
-        <div className="flex gap-2 pt-1">
-          <input
-            type="url"
-            value={urlInput}
-            onChange={(e) => setUrlInput(e.target.value)}
-            placeholder="Or paste direct image link (https://...)"
-            className="flex-1 px-3 py-1.5 rounded-lg bg-obsidian border border-charcoal-light text-xs text-cream placeholder-cream-muted/40 focus:outline-none focus:border-gold/50"
-          />
-          <button
-            type="button"
-            onClick={() => {
+      {/* Direct URL paste - Always available */}
+      <div className="flex gap-2 pt-1">
+        <input
+          type="url"
+          value={urlInput}
+          onChange={(e) => setUrlInput(e.target.value)}
+          placeholder={value ? 'Or replace cover via direct image URL...' : 'Or paste direct image link (https://...)'}
+          className="flex-1 px-3 py-1.5 rounded-lg bg-obsidian border border-charcoal-light text-xs text-cream placeholder-cream-muted/40 focus:outline-none focus:border-gold/50"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
               if (urlInput.trim()) {
                 onChange(urlInput.trim())
                 setUrlInput('')
               }
-            }}
-            disabled={!urlInput.trim()}
-            className="px-3 py-1.5 rounded-lg bg-charcoal-light text-cream-muted hover:text-cream text-xs font-semibold disabled:opacity-40 transition-colors cursor-pointer"
-          >
-            Apply URL
-          </button>
-        </div>
-      )}
+            }
+          }}
+        />
+        <button
+          type="button"
+          onClick={() => {
+            if (urlInput.trim()) {
+              onChange(urlInput.trim())
+              setUrlInput('')
+            }
+          }}
+          disabled={!urlInput.trim() || isProcessing}
+          className="px-3 py-1.5 rounded-lg bg-gold/20 text-gold hover:bg-gold hover:text-obsidian text-xs font-semibold disabled:opacity-40 transition-colors cursor-pointer"
+        >
+          Apply URL
+        </button>
+      </div>
     </div>
   )
 }
@@ -234,8 +292,9 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
 
   const handleDrop = (e) => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragging(false)
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+    if (e.dataTransfer?.files && e.dataTransfer.files.length > 0) {
       handleFiles(e.dataTransfer.files)
     }
   }
@@ -251,48 +310,75 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
     onUpdateGallery(updated)
   }
 
+  const openFileBrowser = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+      fileInputRef.current.click()
+    }
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <label className="block text-xs font-semibold text-cream-muted">
-          Swipeable Product Carousel Images ({gallery.length} Photos)
+          Swipeable Carousel Photos ({gallery.length} Images)
         </label>
         <span className="text-[11px] text-cream-muted/50">
-          Users can swipe through these images on the product page
+          Photo #1 is always the primary cover displayed on storefront
         </span>
       </div>
 
       {/* Gallery Thumbnails */}
       {gallery.length > 0 && (
-        <div className="grid grid-cols-4 sm:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
           {gallery.map((img, idx) => (
             <div
               key={idx}
-              className="group relative aspect-square rounded-lg bg-obsidian border border-charcoal-light overflow-hidden"
+              className={`group relative aspect-square rounded-xl bg-obsidian overflow-hidden border transition-all ${
+                idx === 0
+                  ? 'border-gold ring-2 ring-gold/40 shadow-lg shadow-gold/10'
+                  : 'border-charcoal-light hover:border-gold/50'
+              }`}
             >
               <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
-              {idx === 0 && (
-                <span className="absolute bottom-1 left-1 text-[9px] font-bold px-1.5 py-0.5 rounded bg-gold text-obsidian tracking-wider uppercase">
-                  Cover
-                </span>
+
+              {/* Cover Badge on Photo 0 */}
+              {idx === 0 ? (
+                <div className="absolute top-1.5 left-1.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded-md bg-gold text-obsidian text-[10px] font-bold shadow-md tracking-wider uppercase">
+                  <Sparkles className="w-3 h-3" />
+                  <span>Cover</span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleMakeCover(idx)}
+                  className="absolute top-1.5 left-1.5 z-10 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-obsidian/90 backdrop-blur-md text-gold hover:bg-gold hover:text-obsidian text-[10px] font-semibold border border-gold/40 shadow cursor-pointer"
+                  title="Make this photo the primary cover"
+                >
+                  <Sparkles className="w-2.5 h-2.5" />
+                  <span>Make Cover</span>
+                </button>
               )}
-              {/* Overlay Actions */}
-              <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1 p-1">
+
+              {/* Action Controls */}
+              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 z-20">
                 {idx !== 0 && (
                   <button
                     type="button"
                     onClick={() => handleMakeCover(idx)}
-                    className="text-[10px] text-gold hover:underline font-semibold cursor-pointer"
+                    className="w-full py-1 px-2 rounded bg-gold text-obsidian text-[11px] font-bold hover:bg-gold-light transition-colors cursor-pointer shadow flex items-center justify-center gap-1"
                   >
-                    Set Cover
+                    <Sparkles className="w-3 h-3" />
+                    <span>Set Cover</span>
                   </button>
                 )}
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(idx)}
-                  className="text-[10px] text-rose-400 hover:underline font-semibold cursor-pointer"
+                  className="w-full py-1 px-2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-medium hover:bg-rose-500 hover:text-white transition-colors cursor-pointer flex items-center justify-center gap-1"
                 >
-                  Delete
+                  <Trash2 className="w-3 h-3" />
+                  <span>Delete</span>
                 </button>
               </div>
             </div>
@@ -304,14 +390,16 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
       <div
         onDragOver={(e) => {
           e.preventDefault()
+          e.stopPropagation()
           setIsDragging(true)
         }}
         onDragLeave={(e) => {
           e.preventDefault()
+          e.stopPropagation()
           setIsDragging(false)
         }}
         onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
+        onClick={openFileBrowser}
         className={`rounded-xl border-2 border-dashed p-4 text-center cursor-pointer transition-all ${
           isDragging
             ? 'border-gold bg-gold/10 scale-[1.01]'
@@ -330,12 +418,16 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
           {isUploading ? (
             <>
               <RefreshCw className="w-4 h-4 text-gold animate-spin" />
-              <span className="text-gold font-semibold">Uploading photos to Supabase Storage CDN...</span>
+              <span className="text-gold font-semibold">Uploading photos to Supabase CDN...</span>
             </>
           ) : (
             <>
               <Upload className="w-4 h-4 text-gold" />
-              <span>{isDragging ? 'Drop Multiple Photos to Add!' : 'Drag & Drop Multiple Images for Carousel, or Browse'}</span>
+              <span>
+                {isDragging
+                  ? 'Drop Photos Here!'
+                  : 'Drag & Drop Multiple Images for Carousel, or Browse'}
+              </span>
             </>
           )}
         </div>
@@ -347,8 +439,17 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
           type="url"
           value={urlInput}
           onChange={(e) => setUrlInput(e.target.value)}
-          placeholder="Add extra gallery image via web URL..."
+          placeholder="Add extra gallery image via direct web URL..."
           className="flex-1 px-3 py-1.5 rounded-lg bg-obsidian border border-charcoal-light text-xs text-cream placeholder-cream-muted/40 focus:outline-none focus:border-gold/50"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              if (urlInput.trim()) {
+                onUpdateGallery([...gallery, urlInput.trim()])
+                setUrlInput('')
+              }
+            }
+          }}
         />
         <button
           type="button"
@@ -358,11 +459,286 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
               setUrlInput('')
             }
           }}
-          disabled={!urlInput.trim()}
+          disabled={!urlInput.trim() || isUploading}
           className="px-3 py-1.5 rounded-lg bg-charcoal-light text-cream-muted hover:text-cream text-xs font-semibold disabled:opacity-40 transition-colors cursor-pointer"
         >
-          Add to Gallery
+          Add Photo
         </button>
+      </div>
+    </div>
+  )
+}
+
+// ── QUICK COVER SELECTOR & UPLOADER MODAL ──
+function QuickCoverModal({
+  product,
+  onClose,
+  onCoverUpdated,
+}) {
+  const [isDragging, setIsDragging] = useState(false)
+  const [urlInput, setUrlInput] = useState('')
+  const [isProcessing, setIsProcessing] = useState(false)
+  const fileInputRef = useRef(null)
+
+  if (!product) return null
+
+  const currentCover = product.image || (product.gallery && product.gallery[0]) || ''
+  const currentGallery = Array.isArray(product.gallery) && product.gallery.length > 0
+    ? product.gallery
+    : (currentCover ? [currentCover] : [])
+
+  const handleSelectCover = async (chosenUrl) => {
+    if (!chosenUrl || chosenUrl === currentCover) return
+    setIsProcessing(true)
+    try {
+      const cleanGallery = [chosenUrl, ...currentGallery.filter((u) => u !== chosenUrl)]
+      const updatedProduct = {
+        ...product,
+        image: chosenUrl,
+        gallery: cleanGallery,
+      }
+      await onCoverUpdated(updatedProduct)
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const handleUploadFile = async (file) => {
+    if (!file) return
+    setIsProcessing(true)
+    try {
+      const uploadedUrl = await uploadProductImage(file)
+      const cleanGallery = [uploadedUrl, ...currentGallery.filter((u) => u !== uploadedUrl)]
+      const updatedProduct = {
+        ...product,
+        image: uploadedUrl,
+        gallery: cleanGallery,
+      }
+      await onCoverUpdated(updatedProduct)
+    } catch (err) {
+      alert(err.message || 'Error uploading cover photo')
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const handleApplyUrl = async () => {
+    if (!urlInput.trim()) return
+    const newUrl = urlInput.trim()
+    setIsProcessing(true)
+    try {
+      const cleanGallery = [newUrl, ...currentGallery.filter((u) => u !== newUrl)]
+      const updatedProduct = {
+        ...product,
+        image: newUrl,
+        gallery: cleanGallery,
+      }
+      await onCoverUpdated(updatedProduct)
+      setUrlInput('')
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+    if (e.dataTransfer?.files && e.dataTransfer.files[0]) {
+      handleUploadFile(e.dataTransfer.files[0])
+    }
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+      <div className="fixed inset-0" onClick={onClose} />
+      <div className="relative w-full max-w-xl max-h-[90vh] flex flex-col rounded-2xl bg-charcoal border border-charcoal-light shadow-2xl z-10 overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-charcoal-light px-5 py-4 bg-charcoal shrink-0">
+          <div>
+            <h3 className="font-heading font-bold text-base text-cream flex items-center gap-2">
+              <ImageIcon className="w-4 h-4 text-gold" />
+              <span>Set Cover Photo: {product.name}</span>
+            </h3>
+            <p className="text-xs text-cream-muted/60 mt-0.5">
+              Click any photo to make it the active storefront cover, or upload a new one
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="p-1.5 rounded-lg border border-charcoal-light text-cream-muted hover:text-cream hover:border-gold/40 transition-colors cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="p-5 overflow-y-auto space-y-5 flex-1">
+          {/* Active Cover Display */}
+          <div>
+            <label className="block text-xs font-semibold text-cream-muted mb-2">
+              Current Active Storefront Cover
+            </label>
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-obsidian/70 border border-gold/40">
+              <div className="w-16 h-16 rounded-lg overflow-hidden bg-obsidian shrink-0 border border-gold/30">
+                <img src={currentCover} alt="Current Cover" className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-gold text-obsidian uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3" /> Live Cover
+                </span>
+                <p className="text-xs text-cream-muted truncate mt-1">
+                  {currentCover}
+                </p>
+                <p className="text-[11px] text-emerald-400 mt-0.5 flex items-center gap-1">
+                  <Check className="w-3 h-3" /> Displayed on Home, Categories & Product Page Carousel
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Existing Gallery Photos */}
+          {currentGallery.length > 0 && (
+            <div>
+              <label className="block text-xs font-semibold text-cream-muted mb-2">
+                Choose from Existing Product Gallery ({currentGallery.length} Photos)
+              </label>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
+                {currentGallery.map((imgUrl, idx) => {
+                  const isCover = imgUrl === currentCover
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => !isProcessing && handleSelectCover(imgUrl)}
+                      className={`group relative aspect-square rounded-xl bg-obsidian overflow-hidden border cursor-pointer transition-all ${
+                        isCover
+                          ? 'border-gold ring-2 ring-gold/40 scale-[1.02] shadow-lg shadow-gold/15'
+                          : 'border-charcoal-light hover:border-gold/60 hover:scale-[1.02]'
+                      }`}
+                    >
+                      <img src={imgUrl} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
+                      {isCover ? (
+                        <div className="absolute top-1.5 left-1.5 flex items-center gap-1 px-1.5 py-0.5 rounded bg-gold text-obsidian text-[9px] font-bold tracking-wider uppercase shadow">
+                          <Check className="w-2.5 h-2.5" />
+                          <span>Active</span>
+                        </div>
+                      ) : (
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-1">
+                          <span className="text-[10px] font-bold text-gold text-center bg-obsidian/90 px-2 py-1 rounded border border-gold/40 shadow">
+                            Click to Make Cover
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Upload New Cover Photo */}
+          <div>
+            <label className="block text-xs font-semibold text-cream-muted mb-2">
+              Or Upload a Brand New Cover Photo
+            </label>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => handleUploadFile(e.target.files?.[0])}
+            />
+            <div
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              onClick={() => {
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = ''
+                  fileInputRef.current.click()
+                }
+              }}
+              className={`rounded-xl border-2 border-dashed p-4 text-center cursor-pointer transition-all ${
+                isDragging
+                  ? 'border-gold bg-gold/15 scale-[1.01]'
+                  : 'border-charcoal-light/90 hover:border-gold/50 bg-obsidian/40'
+              }`}
+            >
+              <div className="flex flex-col items-center justify-center gap-1.5">
+                {isProcessing ? (
+                  <>
+                    <RefreshCw className="w-6 h-6 text-gold animate-spin" />
+                    <span className="text-xs font-semibold text-gold">Uploading to Supabase & Deploying Globally...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className={`w-6 h-6 ${isDragging ? 'text-gold' : 'text-cream-muted/50'}`} />
+                    <p className="text-xs font-semibold text-cream">
+                      {isDragging ? 'Drop photo here to set as cover!' : 'Drag & Drop photo here, or click to browse'}
+                    </p>
+                    <p className="text-[10px] text-cream-muted/50">
+                      Auto-uploaded to Supabase Storage and deployed globally
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Paste Direct Image Link */}
+          <div>
+            <label className="block text-xs font-semibold text-cream-muted mb-2">
+              Or Paste Direct Image Link
+            </label>
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={urlInput}
+                onChange={(e) => setUrlInput(e.target.value)}
+                placeholder="https://..."
+                className="flex-1 px-3 py-2 rounded-lg bg-obsidian border border-charcoal-light text-xs text-cream placeholder-cream-muted/40 focus:outline-none focus:border-gold/50"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    handleApplyUrl()
+                  }
+                }}
+              />
+              <button
+                type="button"
+                onClick={handleApplyUrl}
+                disabled={!urlInput.trim() || isProcessing}
+                className="px-4 py-2 rounded-lg bg-gold text-obsidian hover:bg-gold-light text-xs font-bold disabled:opacity-40 transition-colors cursor-pointer"
+              >
+                Set as Cover
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end border-t border-charcoal-light px-5 py-3 bg-charcoal shrink-0">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 rounded-lg bg-charcoal-light text-cream hover:bg-charcoal text-xs font-semibold cursor-pointer"
+          >
+            Done
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -537,6 +913,9 @@ export default function AdminPanelPage() {
 
   // Edit Product Modal State
   const [editingProduct, setEditingProduct] = useState(null)
+
+  // Quick Cover Selector Modal State
+  const [quickCoverProduct, setQuickCoverProduct] = useState(null)
 
   // Add Product Modal State
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -974,16 +1353,22 @@ export default function AdminPanelPage() {
     e.preventDefault()
     if (!editingProduct) return
 
+    const coverImage = editingProduct.image || (editingProduct.gallery && editingProduct.gallery[0]) || ''
+    const rawGallery = Array.isArray(editingProduct.gallery) && editingProduct.gallery.length > 0
+      ? editingProduct.gallery
+      : (coverImage ? [coverImage] : [])
+    const cleanGallery = coverImage
+      ? [coverImage, ...rawGallery.filter((u) => u && u !== coverImage)]
+      : rawGallery
+
     const productPayload = {
       ...editingProduct,
+      image: coverImage,
+      gallery: cleanGallery,
       price: Number(editingProduct.price),
-      originalPrice: Number(editingProduct.originalPrice || Math.round(editingProduct.price * 1.8)),
+      originalPrice: Number(editingProduct.originalPrice || Math.round(Number(editingProduct.price) * 1.8)),
       inStock: editingProduct.inStock !== false,
       isHidden: editingProduct.isHidden === true,
-      gallery:
-        editingProduct.gallery && editingProduct.gallery.length > 0
-          ? editingProduct.gallery
-          : [editingProduct.image],
     }
 
     // Update global store (affects Home, Category, Product Detail, Cart, Wishlist)
@@ -2293,7 +2678,7 @@ export default function AdminPanelPage() {
                     className="rounded-xl bg-charcoal border border-charcoal-light overflow-hidden flex flex-col group hover:border-gold/40 transition-all shadow-lg hover:shadow-2xl"
                   >
                     {/* Image Preview with Gallery Count */}
-                    <div className="relative aspect-square w-full bg-obsidian overflow-hidden">
+                    <div className="relative aspect-square w-full bg-obsidian overflow-hidden group/img">
                       <img
                         src={prod.image}
                         alt={prod.name}
@@ -2301,6 +2686,16 @@ export default function AdminPanelPage() {
                           prod.isHidden ? 'opacity-40 grayscale' : ''
                         }`}
                       />
+                      {/* 1-Click Quick Cover Selector on Card */}
+                      <button
+                        type="button"
+                        onClick={() => setQuickCoverProduct(prod)}
+                        className="absolute bottom-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-obsidian/90 backdrop-blur-md text-gold hover:bg-gold hover:text-obsidian text-[11px] font-semibold border border-gold/40 shadow-lg transition-all cursor-pointer z-10"
+                        title="Set or change cover photo"
+                      >
+                        <ImageIcon className="w-3.5 h-3.5" />
+                        <span>Set Cover</span>
+                      </button>
                       <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 flex-wrap">
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-obsidian/85 backdrop-blur-md text-gold border border-gold/30">
                           {prod.genre}
@@ -2583,18 +2978,23 @@ export default function AdminPanelPage() {
                           label="Main Cover Image (Drag & Drop or Browse)"
                           value={editingProduct.image}
                           onChange={(newUrl) => {
-                            const newGallery = editingProduct.gallery?.includes(newUrl)
-                              ? editingProduct.gallery
-                              : [newUrl, ...(editingProduct.gallery || [])]
+                            const currentGallery = editingProduct.gallery || []
+                            const cleanGallery = [newUrl, ...currentGallery.filter((u) => u !== newUrl)]
                             setEditingProduct({
                               ...editingProduct,
                               image: newUrl,
-                              gallery: newGallery,
+                              gallery: cleanGallery,
                             })
                           }}
-                          onRemove={() =>
-                            setEditingProduct({ ...editingProduct, image: '' })
-                          }
+                          onRemove={() => {
+                            const currentGallery = editingProduct.gallery || []
+                            const remaining = currentGallery.filter((u) => u !== editingProduct.image)
+                            setEditingProduct({
+                              ...editingProduct,
+                              image: remaining[0] || '',
+                              gallery: remaining,
+                            })
+                          }}
                           subtext="Drag and drop photo here to instantly update worldwide"
                         />
                       </div>
@@ -2602,7 +3002,13 @@ export default function AdminPanelPage() {
                       {/* 4. Multi-Image Swipeable Gallery with Drag & Drop */}
                       <div className="p-4 rounded-xl bg-obsidian/40 border border-charcoal-light space-y-2">
                         <GalleryDropzone
-                          gallery={editingProduct.gallery || [editingProduct.image]}
+                          gallery={
+                            editingProduct.gallery && editingProduct.gallery.length > 0
+                              ? (editingProduct.gallery[0] === editingProduct.image
+                                  ? editingProduct.gallery
+                                  : [editingProduct.image, ...editingProduct.gallery.filter((u) => u !== editingProduct.image)])
+                              : (editingProduct.image ? [editingProduct.image] : [])
+                          }
                           onUpdateGallery={(newGallery) => {
                             setEditingProduct({
                               ...editingProduct,
@@ -2784,6 +3190,20 @@ export default function AdminPanelPage() {
                 </div>
               )}
 
+              {/* ── QUICK COVER SELECTOR & UPLOADER MODAL ── */}
+              {quickCoverProduct && (
+                <QuickCoverModal
+                  product={quickCoverProduct}
+                  onClose={() => setQuickCoverProduct(null)}
+                  onCoverUpdated={async (updatedProduct) => {
+                    updateProduct(updatedProduct)
+                    await saveProduct(updatedProduct)
+                    setQuickCoverProduct(updatedProduct)
+                    showToast(`Cover photo updated globally for "${updatedProduct.name}"!`)
+                  }}
+                />
+              )}
+
               {/* ── ADD NEW PRODUCT MODAL (WITH DRAG & DROP) ── */}
               {isAddModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md overflow-hidden">
@@ -2892,16 +3312,23 @@ export default function AdminPanelPage() {
                           label="Main Cover Photo (Drag & Drop)"
                           value={newProduct.image}
                           onChange={(url) => {
-                            const newGallery = newProduct.gallery.includes(url)
-                              ? newProduct.gallery
-                              : [url, ...newProduct.gallery]
+                            const currentGallery = newProduct.gallery || []
+                            const cleanGallery = [url, ...currentGallery.filter((u) => u !== url)]
                             setNewProduct({
                               ...newProduct,
                               image: url,
-                              gallery: newGallery,
+                              gallery: cleanGallery,
                             })
                           }}
-                          onRemove={() => setNewProduct({ ...newProduct, image: '' })}
+                          onRemove={() => {
+                            const currentGallery = newProduct.gallery || []
+                            const remaining = currentGallery.filter((u) => u !== newProduct.image)
+                            setNewProduct({
+                              ...newProduct,
+                              image: remaining[0] || '',
+                              gallery: remaining,
+                            })
+                          }}
                         />
                       </div>
 
