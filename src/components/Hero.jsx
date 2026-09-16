@@ -200,8 +200,8 @@ export default function Hero() {
                   />
                 </div>
                 {/* Label */}
-                <span className="text-[10px] sm:text-[11px] lg:text-xs font-bold text-[#44403C] group-hover:text-[#991B33] transition-colors duration-200 text-center leading-tight max-w-[74px] truncate">
-                  {genre.label.length > 14 ? genre.label.slice(0, 13) + '…' : genre.label}
+                <span className="text-[10px] sm:text-[11px] lg:text-xs font-bold text-[#44403C] group-hover:text-[#991B33] transition-colors duration-200 text-center leading-tight max-w-[80px] sm:max-w-[90px] line-clamp-2">
+                  {genre.label}
                 </span>
               </button>
             ))}

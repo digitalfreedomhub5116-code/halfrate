@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useCartStore } from '../store/cartStore'
 import { useScrolled } from '../hooks/useScrollReveal'
 
-const TRENDING_SEARCHES = ['Selfie Stick', 'Pulse RGB Speaker', 'CyberWatt Cable', 'Car Mount', 'AquaArmor', 'Horizon Tripod']
+const TRENDING_SEARCHES = ['Cruzer Blade', 'SanDisk Pen Drive', 'Selfie Stick', 'Pulse RGB Speaker', 'CyberWatt Cable', 'Car Mount']
 
 export default function Navbar({ visible = true }) {
   const scrolled = useScrolled(20)

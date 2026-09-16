@@ -74,10 +74,12 @@ export const REVIEWS_POOL = {
       { name: "Tushar Bansal", text: "walnut wooden reference monitors deliver deep warm bass and pristine treble" },
       { name: "Aakash Pandey", text: "waterproof rugged speaker survived heavy outdoor rains battery lasts days" },
     ],
-    HEADPHONES: [
-      { name: "Aarav Sharma", text: "anc cuts out all traffic noise effortlessly 40mm drivers deliver rich sound" },
-      { name: "Rahul Saxena", text: "ultra low 38ms latency for gaming is spot on zero lag with pro mic" },
-      { name: "Harshit Sen", text: "memory foam ear cushions are ultra plush comfortable for all day listening" },
+    STORAGE_DEVICES: [
+      { name: "Rohit Agarwal", text: "original sandisk pendrive transfer speed is rock solid and genuine piece" },
+      { name: "Vikram Malhotra", text: "compact design fits easily on my keychain sandisk secureaccess encryption is great" },
+      { name: "Ananya Iyer", text: "works smoothly on both macbook and windows pc plug and play zero hassle" },
+      { name: "Amitabh Sen", text: "backed up all my college study material and photos great value for money" },
+      { name: "Kunal Verma", text: "fast delivery and genuine retail blister packing 5 year sandisk warranty" },
     ],
   },
 
