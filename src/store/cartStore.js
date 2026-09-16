@@ -12,13 +12,14 @@ import {
 } from '../lib/db.js'
 import { isSupabaseConfigured, supabase } from '../lib/supabase.js'
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v12'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v13'
 
 // Helper to load products from localStorage with fallback to default catalog
 const loadInitialProducts = () => {
   try {
     // Clear out deprecated legacy catalog caches if present
     try {
+      localStorage.removeItem('halfrate_catalog_v12')
       localStorage.removeItem('halfrate_catalog_v11')
       localStorage.removeItem('halfrate_catalog_v10')
       localStorage.removeItem('halfrate_catalog_v9')
