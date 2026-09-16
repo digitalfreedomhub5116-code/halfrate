@@ -30,8 +30,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'fitgear-fg-m4',
-    name: 'Fitgear FG-M4 Ultra-Long 1.8M Extended Selfie Stick & Tripod with Bluetooth Remote',
-    shortName: 'Fitgear FG-M4 Selfie Stick & Tripod',
+    name: 'Fitgear Horizon 1.8M Bluetooth Selfie Tripod',
+    shortName: 'Fitgear Horizon 1.8M Tripod',
     genre: 'MOBILE_ACCESSORIES',
     price: 999,
     originalPrice: 1999,
@@ -47,7 +47,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Aviation-Grade Aluminum Build',
     compliance: 'Fitgear® Official Certification',
-    pack: 'Fitgear FG-M4 Stick + Bluetooth Remote + User Guide',
+    pack: 'Fitgear Horizon Tripod + Bluetooth Remote + User Guide',
     dimensions: 'Folded: 29.5 cm | Full Extension: 180 cm (1.8m)',
     weight: '340g Ultra-Portable Design',
     material: '7-Section Aviation Aluminum Pole & Reinforced Tripod',
@@ -82,8 +82,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'fitgear-fg-15',
-    name: 'Fitgear FG-15 Secure-Grip Pro In-Car Phone Bracket & Windshield/Dashboard Mount',
-    shortName: 'Fitgear FG-15 In-Car Phone Mount',
+    name: 'Fitgear ProDrive 360° In-Car Phone Mount',
+    shortName: 'Fitgear ProDrive Mount',
     genre: 'CAR_ACCESSORIES',
     price: 339,
     originalPrice: 999,
@@ -100,7 +100,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Heavy-Duty ABS & Sticky Gel Suction',
     compliance: 'Fitgear® Official 2-Year Warranty',
-    pack: 'Fitgear FG-15 Bracket + Suction Base + User Manual',
+    pack: 'Fitgear ProDrive Mount + Suction Base + User Manual',
     dimensions: 'Telescopic Arm: 10cm - 16cm | Universal Phone Clamp',
     weight: '210g Reinforced Driving Stability',
     material: 'Thermal-Resistant ABS Body & Reusable Sticky Gel Pad',
@@ -134,8 +134,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'mz-m412sp',
-    name: 'MZ M412SP Portable Wireless Bluetooth Speaker with Dynamic RGB Ambient Light & Crystal Sound',
-    shortName: 'MZ M412SP Wireless Bluetooth Speaker',
+    name: 'MZ Pulse RGB Wireless Portable Speaker',
+    shortName: 'MZ Pulse RGB Speaker',
     genre: 'AUDIO_SPEAKERS',
     price: 499,
     originalPrice: 999,
@@ -150,7 +150,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Woven Acoustic Mesh & Silicone Lanyard',
     compliance: 'MZ™ Official Quality Certification',
-    pack: 'MZ M412SP Wireless Speaker + USB Charging Cable + 3.5mm AUX Cable + Quick Start Guide',
+    pack: 'MZ Pulse RGB Speaker + USB Charging Cable + 3.5mm AUX Cable + Quick Start Guide',
     dimensions: '100mm (W) × 70mm (H) × 40mm (D) | Pocket-Sized Form Factor',
     weight: '195g Ultra-Lightweight Portability',
     material: 'Impact-Resistant Polymer Chassis & Protective Fabric Acoustic Grille',
@@ -186,8 +186,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'fitgear-fg-c3',
-    name: 'Fitgear FG-C3 Smart Digital LED Display 45W PD Fast Charging Type-C Cable (2M)',
-    shortName: 'Fitgear FG-C3 Smart PD Cable',
+    name: 'Fitgear CyberWatt 45W Digital Display Cable (2M)',
+    shortName: 'Fitgear CyberWatt Cable',
     genre: 'MOBILE_ACCESSORIES',
     price: 299,
     originalPrice: 799,
@@ -202,7 +202,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'High-Density Braided Nylon & Zinc Alloy Shell',
     compliance: 'Fitgear® Official Certification & 2-Year Warranty',
-    pack: 'Fitgear FG-C3 PD Cable (2M) + Branded Cable Tie Wrap + Retail Box',
+    pack: 'Fitgear CyberWatt Cable (2M) + Branded Cable Tie Wrap + Retail Box',
     dimensions: 'Length: 2 Meters (6.6 ft) | Reinforced SR Strain-Relief Joint',
     weight: '65g Heavy-Duty Build',
     material: 'Anti-Tangle Double-Braided Nylon & Aerospace Zinc Alloy Housing',
@@ -238,8 +238,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'safe-view-mirror-bracket',
-    name: 'Safe-View Elite 360° Car Rearview Mirror Phone Bracket & Hands-Free GPS Mount',
-    shortName: 'Safe-View 360° Rearview Mirror Mount',
+    name: 'Safe-View ClearDrive 360° Rearview Mirror Mount',
+    shortName: 'Safe-View ClearDrive Mount',
     genre: 'CAR_ACCESSORIES',
     price: 349,
     originalPrice: 999,
@@ -255,7 +255,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'High-Tension Locking Knobs & Silicone Cushions',
     compliance: 'Safe-View™ Official Quality Guarantee',
-    pack: 'Safe-View 360° Rearview Mirror Bracket + Tightening Hardware + Retail Box',
+    pack: 'Safe-View ClearDrive Mirror Mount + Tightening Hardware + Retail Box',
     dimensions: 'Rearview Clamp: 5.5cm - 8.5cm | Phone Clamp: 6cm - 10cm',
     weight: '175g Ultra-Stable No-Shake Design',
     material: 'High-Strength Thermal-Resistant ABS & Precision Metal Pivot Springs',
@@ -291,8 +291,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'fly-aj581-phone-stand',
-    name: 'FLY AJ-581 360° Rotating Metal Desktop Phone & Tablet Stand (Foldable Double-Pivot)',
-    shortName: 'FLY AJ-581 360° Metal Phone Stand',
+    name: 'FLY Orbit 360° Metal Desktop Stand',
+    shortName: 'FLY Orbit 360° Stand',
     genre: 'MOBILE_ACCESSORIES',
     price: 299,
     originalPrice: 899,
@@ -307,7 +307,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Aerospace Aluminum Alloy & Anti-Slip Silicone Pads',
     compliance: 'FLY™ Official Premium Quality Certification',
-    pack: 'FLY AJ-581 Metal Stand + Anti-Scratch Cushions + Official Retail Box',
+    pack: 'FLY Orbit Metal Stand + Anti-Scratch Cushions + Official Retail Box',
     dimensions: 'Folded: 12cm × 8cm × 3cm | Height Adjustable up to 16cm',
     weight: '210g Weighted Base (Zero Tip-Over)',
     material: 'Solid Aviation-Grade Aluminum Alloy & Precision Steel Damping Hinges',
@@ -343,8 +343,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'pro-shield-m3c1-mount',
-    name: 'Pro-Shield M3-C1 IPX6 Waterproof Motorcycle & Bicycle Phone Mount Stand',
-    shortName: 'Pro-Shield M3-C1 Waterproof Bike Mount',
+    name: 'Pro-Shield AquaArmor IPX6 All-Weather Bike Mount',
+    shortName: 'Pro-Shield AquaArmor Mount',
     genre: 'CAR_ACCESSORIES',
     price: 399,
     originalPrice: 999,
@@ -359,7 +359,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'IPX6 Waterproof Seal & Dual-Ball Joint',
     compliance: 'Pro-Shield™ Official All-Weather Guarantee',
-    pack: 'Waterproof Case + Telescopic Dual-Ball Arm + Handlebar Clamp + 3 Spacers + Hex Tool',
+    pack: 'Pro-Shield AquaArmor Case + Telescopic Dual-Ball Arm + Handlebar Clamp + 3 Spacers + Hex Tool',
     dimensions: 'Case: 210 × 110 × 30 mm | Arm: 180mm - 260mm Adjustable Length',
     weight: '290g Heavy-Duty Shockproof Chassis',
     material: 'Impact-Resistant ABS Body, High-Sensitivity TPU Film & Stainless Steel Hardware',
@@ -395,8 +395,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'mz-tg113-speaker',
-    name: 'MZ TG113 Rugged Outdoor Portable Bluetooth Speaker with IPX6 Waterproofing & TWS Pairing',
-    shortName: 'MZ TG113 Rugged Bluetooth Speaker',
+    name: 'MZ StormRock IPX6 Rugged Outdoor Speaker',
+    shortName: 'MZ StormRock Speaker',
     genre: 'AUDIO_SPEAKERS',
     price: 499,
     originalPrice: 1299,
@@ -412,7 +412,7 @@ const RAW_PRODUCTS = [
     ],
     purity: 'IPX6 Waterproof Fabric Mesh & Carabiner Loop',
     compliance: 'MZ™ Official Quality Certified',
-    pack: 'MZ TG113 Speaker + Micro-USB Charging Cable + 3.5mm AUX Cable + Quick Guide',
+    pack: 'MZ StormRock Speaker + Micro-USB Charging Cable + 3.5mm AUX Cable + Quick Guide',
     dimensions: 'Height: 180mm (7.1 in) × Diameter: 75mm (2.9 in) | 500ml Bottle Form Factor',
     weight: '512g Heavy-Bass Cylinder Chassis',
     material: 'Rugged Camouflage Woven Acoustic Fabric & Rubberized Shockproof Base',
