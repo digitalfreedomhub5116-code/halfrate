@@ -135,9 +135,38 @@ export default function Hero() {
   // ── Bento Carousel Modules (Curated, responsive, lag-free) ──
   const bentoModules = useMemo(() => {
     if (!productList || productList.length === 0) return []
-    let expandedList = [...productList]
+
+    // ── Use only 1 pendrive in the Bento Grid so all cards have diverse, unique imagery ──
+    const nonPendrives = productList.filter((p) => {
+      const isPendrive =
+        p.genre === 'STORAGE_DEVICES' ||
+        p.id?.toLowerCase().includes('sandisk') ||
+        p.name?.toLowerCase().includes('pen drive') ||
+        p.name?.toLowerCase().includes('pendrive')
+      return !isPendrive
+    })
+
+    const pendrives = productList.filter((p) => {
+      const isPendrive =
+        p.genre === 'STORAGE_DEVICES' ||
+        p.id?.toLowerCase().includes('sandisk') ||
+        p.name?.toLowerCase().includes('pen drive') ||
+        p.name?.toLowerCase().includes('pendrive')
+      return isPendrive
+    })
+
+    // Pick only 1 representative pendrive (prefer 32GB sweet spot or 8GB Sabse Sasta, or first available)
+    const singlePendrive =
+      pendrives.find((p) => p.id === 'sandisk-cruzer-blade-32gb') ||
+      pendrives.find((p) => p.id === 'sandisk-cruzer-blade-64gb') ||
+      pendrives.find((p) => p.id === 'sandisk-cruzer-blade-8gb') ||
+      pendrives[0]
+
+    const bentoItems = singlePendrive ? [...nonPendrives, singlePendrive] : nonPendrives
+
+    let expandedList = [...bentoItems]
     while (expandedList.length < 8) {
-      expandedList = [...expandedList, ...productList]
+      expandedList = [...expandedList, ...bentoItems]
     }
     const mods = []
     let i = 0
