@@ -345,24 +345,31 @@ export default function ProductPage() {
             <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-visible pb-2 sm:pb-0 scrollbar-none">
               {product.gallery.map((imgUrl, index) => {
                 const isSelected = activeImageIndex === index
+                const isCert = imgUrl.includes('certificate')
                 return (
                   <button
                     key={index}
                     onClick={() => scrollToImage(index)}
-                    className={`h-16 w-16 sm:h-20 sm:w-20 aspect-square flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-stone-50 cursor-pointer ${
+                    className={`relative h-16 w-16 sm:h-20 sm:w-20 aspect-square flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-200 bg-stone-50 cursor-pointer ${
                       isSelected
-                        ? 'border-[#991B33] shadow-md shadow-[#991B33]/20 scale-105'
-                        : 'border-[#E7E2D9] hover:border-[#991B33]/50 opacity-70 hover:opacity-100'
+                        ? (isCert ? 'border-amber-500 shadow-md shadow-amber-500/30 scale-105' : 'border-[#991B33] shadow-md shadow-[#991B33]/20 scale-105')
+                        : (isCert ? 'border-amber-300/80 hover:border-amber-500 opacity-90 hover:opacity-100 ring-1 ring-amber-400/30' : 'border-[#E7E2D9] hover:border-[#991B33]/50 opacity-70 hover:opacity-100')
                     }`}
+                    title={isCert ? 'View Quality & Authenticity Certificate' : `${product.name} view ${index + 1}`}
                   >
                     <OptimizedImage
                       src={imgUrl}
-                      alt={`${product.name} view ${index + 1}`}
-                      fallbackText={product.name}
+                      alt={isCert ? 'Quality & Authenticity Certificate' : `${product.name} view ${index + 1}`}
+                      fallbackText={isCert ? 'ISO 9001:2015 Certificate' : product.name}
                       priority={index === 0}
                       containerClassName="w-full h-full"
-                      className="h-full w-full object-cover"
+                      className={`h-full w-full ${isCert ? 'object-contain p-1' : 'object-cover'}`}
                     />
+                    {isCert && (
+                      <span className="absolute bottom-0 inset-x-0 bg-gradient-to-r from-amber-600 to-amber-500 text-[8px] font-black tracking-wider text-white text-center py-0.5 uppercase shadow-xs">
+                        CERTIFIED
+                      </span>
+                    )}
                   </button>
                 )
               })}
@@ -379,22 +386,31 @@ export default function ProductPage() {
                 className="flex h-full w-full overflow-x-auto snap-x snap-mandatory scrollbar-none"
                 style={{ scrollBehavior: 'smooth', WebkitOverflowScrolling: 'touch' }}
               >
-                {product.gallery.map((imgUrl, index) => (
-                  <div
-                    key={index}
-                    className="w-full h-full min-w-full flex-shrink-0 snap-center snap-always flex items-center justify-center bg-stone-50"
-                  >
-                    <OptimizedImage
-                      src={imgUrl}
-                      alt={`${product.fullName} view ${index + 1}`}
-                      fallbackText={product.fullName}
-                      priority={index === 0}
-                      containerClassName="h-full w-full select-none"
-                      className="h-full w-full object-cover select-none"
-                      draggable={false}
-                    />
-                  </div>
-                ))}
+                {product.gallery.map((imgUrl, index) => {
+                  const isCert = imgUrl.includes('certificate')
+                  return (
+                    <div
+                      key={index}
+                      className="w-full h-full min-w-full flex-shrink-0 snap-center snap-always flex items-center justify-center bg-stone-50 relative"
+                    >
+                      <OptimizedImage
+                        src={imgUrl}
+                        alt={isCert ? `${product.fullName} Official ISO 9001:2015 Quality & Authenticity Certificate` : `${product.fullName} view ${index + 1}`}
+                        fallbackText={product.fullName}
+                        priority={index === 0}
+                        containerClassName="h-full w-full select-none flex items-center justify-center bg-stone-50"
+                        className={`h-full w-full select-none ${isCert ? 'object-contain p-2 sm:p-4 bg-stone-900/5' : 'object-cover'}`}
+                        draggable={false}
+                      />
+                      {isCert && (
+                        <div className="absolute top-3 left-3 bg-stone-900/85 backdrop-blur-md text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center gap-1.5 shadow-md z-10">
+                          <ShieldCheck className="h-3.5 w-3.5 text-amber-400 flex-shrink-0" />
+                          <span>100% Quality & Authenticity Guaranteed (ISO 9001:2015)</span>
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
 
               {/* Prev / Next Arrows */}
@@ -499,30 +515,51 @@ export default function ProductPage() {
               </h1>
 
               {/* Ratings and Reviews Bar */}
-              <div
-                onClick={() => scrollToSection('reviews')}
-                className="mt-3 inline-flex items-center gap-2.5 cursor-pointer group/rate"
-              >
-                <div className="flex items-center text-amber-500">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < Math.floor(product.rating)
-                          ? 'fill-amber-400 text-amber-400'
-                          : i < product.rating
-                          ? 'fill-amber-400/50 text-amber-400'
-                          : 'text-stone-300 fill-stone-200'
-                      }`}
-                    />
-                  ))}
+              <div className="mt-3 flex flex-wrap items-center gap-2.5">
+                <div
+                  onClick={() => scrollToSection('reviews')}
+                  className="inline-flex items-center gap-2 cursor-pointer group/rate"
+                >
+                  <div className="flex items-center text-amber-500">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-4 w-4 ${
+                          i < Math.floor(product.rating)
+                            ? 'fill-amber-400 text-amber-400'
+                            : i < product.rating
+                            ? 'fill-amber-400/50 text-amber-400'
+                            : 'text-stone-300 fill-stone-200'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm font-bold text-[#1C1917]">
+                    {product.rating}
+                  </span>
+                  <span className="text-xs text-[#78716C] underline decoration-[#991B33]/40 group-hover/rate:text-[#991B33] transition-colors">
+                    {product.reviewCount} verified buyer reviews
+                  </span>
                 </div>
-                <span className="text-sm font-bold text-[#1C1917]">
-                  {product.rating}
-                </span>
-                <span className="text-xs text-[#78716C] underline decoration-[#991B33]/40 group-hover/rate:text-[#991B33] transition-colors">
-                  {product.reviewCount} verified buyer reviews
-                </span>
+
+                <span className="hidden sm:inline-block text-[#D6D3D1]">•</span>
+
+                {product.gallery && product.gallery.some((u) => u.includes('certificate')) && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const certIdx = product.gallery.findIndex((u) => u.includes('certificate'))
+                      if (certIdx !== -1) {
+                        scrollToImage(certIdx)
+                      }
+                    }}
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 hover:bg-amber-100/80 px-2.5 py-0.5 rounded-full border border-amber-300 transition-all cursor-pointer shadow-2xs"
+                    title="Click to view ISO 9001:2015 Quality & Authenticity Certificate"
+                  >
+                    <ShieldCheck className="h-3 w-3 text-amber-600" />
+                    <span>ISO 9001:2015 Certified Proof</span>
+                  </button>
+                )}
               </div>
 
               {/* Pricing Section */}
@@ -718,6 +755,42 @@ export default function ProductPage() {
                   <span className="text-[10px] text-[#78716C] font-medium block">7-Day Replacement</span>
                 </div>
               </div>
+
+              {/* Quality & Authenticity Certificate Verification Card */}
+              {product.gallery && product.gallery.some((u) => u.includes('certificate')) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const certIdx = product.gallery.findIndex((u) => u.includes('certificate'))
+                    if (certIdx !== -1) {
+                      scrollToImage(certIdx)
+                      imageSectionRef.current?.scrollIntoView({ behavior: 'smooth' })
+                    }
+                  }}
+                  className="w-full mt-3 p-3 rounded-2xl bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent border border-amber-300/70 hover:border-amber-400 transition-all flex items-center justify-between group cursor-pointer shadow-xs text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-xs flex-shrink-0">
+                      <ShieldCheck className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-bold text-[#1C1917]">ISO 9001:2015 Quality & Authenticity</span>
+                        <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-900 border border-amber-400/50">
+                          Certified
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#78716C]">
+                        100% genuine guaranteed • Tap to inspect verified certificate
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs font-bold text-amber-700 group-hover:text-amber-900 group-hover:translate-x-0.5 transition-all flex-shrink-0">
+                    <span className="hidden sm:inline">View Proof</span>
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </div>
+                </button>
+              )}
             </div>
           </div>
         </div>

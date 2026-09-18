@@ -1,5 +1,7 @@
 import { supabase, isSupabaseConfigured } from './supabase.js'
-import { MOCK_PRODUCTS, GENRES } from '../data/productsData.js'
+import { MOCK_PRODUCTS, GENRES, AUTHENTICITY_CERTIFICATE_IMAGE } from '../data/productsData.js'
+
+export { AUTHENTICITY_CERTIFICATE_IMAGE }
 
 const LOCAL_STORAGE_ORDERS_KEY = 'halfrate_orders'
 const LOCAL_STORAGE_USER_KEY = 'halfrate_user'
@@ -25,7 +27,7 @@ const setLocalData = (key, value) => {
   }
 }
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v13'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v14'
 
 // ── 1. PRODUCT MAPPERS & IMAGE STORAGE ──
 export function mapDbRowToProduct(row) {
@@ -34,9 +36,10 @@ export function mapDbRowToProduct(row) {
   const rawGallery = Array.isArray(row.gallery) && row.gallery.length > 0
     ? row.gallery
     : (coverImage ? [coverImage] : [])
+  const withoutCert = rawGallery.filter((u) => u && u !== AUTHENTICITY_CERTIFICATE_IMAGE)
   const cleanGallery = coverImage
-    ? [coverImage, ...rawGallery.filter((u) => u && u !== coverImage)]
-    : rawGallery
+    ? [coverImage, ...withoutCert.filter((u) => u !== coverImage), AUTHENTICITY_CERTIFICATE_IMAGE]
+    : [...withoutCert, AUTHENTICITY_CERTIFICATE_IMAGE]
 
   return {
     id: String(row.id),
@@ -79,9 +82,10 @@ export function mapProductToDbRow(product) {
   const rawGallery = Array.isArray(product.gallery) && product.gallery.length > 0
     ? product.gallery
     : (coverImage ? [coverImage] : [])
+  const withoutCert = rawGallery.filter((u) => u && u !== AUTHENTICITY_CERTIFICATE_IMAGE)
   const cleanGallery = coverImage
-    ? [coverImage, ...rawGallery.filter((u) => u && u !== coverImage)]
-    : rawGallery
+    ? [coverImage, ...withoutCert.filter((u) => u !== coverImage), AUTHENTICITY_CERTIFICATE_IMAGE]
+    : [...withoutCert, AUTHENTICITY_CERTIFICATE_IMAGE]
 
   return {
     id: String(product.id),

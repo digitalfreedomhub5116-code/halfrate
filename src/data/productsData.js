@@ -1,5 +1,7 @@
 import { REVIEWS_POOL } from './reviewsData.js'
 
+export const AUTHENTICITY_CERTIFICATE_IMAGE = '/images/certification/halfrate-quality-authenticity-certificate.jpg'
+
 export const GENRES = [
   {
     id: 'MOBILE_ACCESSORIES',
@@ -51,6 +53,7 @@ const RAW_PRODUCTS = [
       '/images/products/fitgear-fg-m4/fitgear-fg-m4-2.jpg',
       '/images/products/fitgear-fg-m4/fitgear-fg-m4-3.jpg',
       '/images/products/fitgear-fg-m4/fitgear-fg-m4-4.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Aviation-Grade Aluminum Build',
     compliance: 'Fitgear® Official Certification',
@@ -104,6 +107,7 @@ const RAW_PRODUCTS = [
       '/images/products/fitgear-fg-15/fitgear-fg-15-3.jpg',
       '/images/products/fitgear-fg-15/fitgear-fg-15-4.jpg',
       '/images/products/fitgear-fg-15/fitgear-fg-15-5.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Heavy-Duty ABS & Sticky Gel Suction',
     compliance: 'Fitgear® Official 2-Year Warranty',
@@ -154,6 +158,7 @@ const RAW_PRODUCTS = [
       '/images/products/mz-m412sp/mz-m412sp-1.jpg',
       '/images/products/mz-m412sp/mz-m412sp-2.jpg',
       '/images/products/mz-m412sp/mz-m412sp-3.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Woven Acoustic Mesh & Silicone Lanyard',
     compliance: 'MZ™ Official Quality Certification',
@@ -206,6 +211,7 @@ const RAW_PRODUCTS = [
       '/images/products/fitgear-fg-c3/fitgear-fg-c3-1.jpg',
       '/images/products/fitgear-fg-c3/fitgear-fg-c3-2.jpg',
       '/images/products/fitgear-fg-c3/fitgear-fg-c3-3.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'High-Density Braided Nylon & Zinc Alloy Shell',
     compliance: 'Fitgear® Official Certification & 2-Year Warranty',
@@ -259,6 +265,7 @@ const RAW_PRODUCTS = [
       '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-2.jpg',
       '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-3.jpg',
       '/images/products/safe-view-mirror-bracket/safe-view-mirror-bracket-4.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'High-Tension Locking Knobs & Silicone Cushions',
     compliance: 'Safe-View™ Official Quality Guarantee',
@@ -311,6 +318,7 @@ const RAW_PRODUCTS = [
       '/images/products/fly-aj581-stand/fly-aj581-stand-1.jpg',
       '/images/products/fly-aj581-stand/fly-aj581-stand-2.jpg',
       '/images/products/fly-aj581-stand/fly-aj581-stand-3.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Aerospace Aluminum Alloy & Anti-Slip Silicone Pads',
     compliance: 'FLY™ Official Premium Quality Certification',
@@ -363,6 +371,7 @@ const RAW_PRODUCTS = [
       '/images/products/pro-shield-m3c1-mount/pro-shield-m3c1-1.jpg',
       '/images/products/pro-shield-m3c1-mount/pro-shield-m3c1-2.jpg',
       '/images/products/pro-shield-m3c1-mount/pro-shield-m3c1-3.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'IPX6 Waterproof Seal & Dual-Ball Joint',
     compliance: 'Pro-Shield™ Official All-Weather Guarantee',
@@ -416,6 +425,7 @@ const RAW_PRODUCTS = [
       '/images/products/mz-tg113-speaker/mz-tg113-speaker-2.jpg',
       '/images/products/mz-tg113-speaker/mz-tg113-speaker-3.jpg',
       '/images/products/mz-tg113-speaker/mz-tg113-speaker-4.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'IPX6 Waterproof Fabric Mesh & Carabiner Loop',
     compliance: 'MZ™ Official Quality Certified',
@@ -467,6 +477,7 @@ const RAW_PRODUCTS = [
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-8gb-hero.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-8gb-features.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-8gb-pack.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
@@ -516,6 +527,7 @@ const RAW_PRODUCTS = [
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-16gb-hero.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-16gb-features.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-16gb-pack.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
@@ -565,6 +577,7 @@ const RAW_PRODUCTS = [
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-32gb-hero.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-32gb-features.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-32gb-pack.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
@@ -614,6 +627,7 @@ const RAW_PRODUCTS = [
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-64gb-hero.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-64gb-features.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-64gb-pack.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
@@ -663,6 +677,7 @@ const RAW_PRODUCTS = [
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-128gb-hero.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-128gb-features.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-128gb-pack.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
@@ -712,6 +727,7 @@ const RAW_PRODUCTS = [
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-256gb-hero.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-256gb-features.jpg',
       '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-256gb-pack.jpg',
+      AUTHENTICITY_CERTIFICATE_IMAGE,
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
@@ -823,7 +839,11 @@ export const MOCK_PRODUCTS = RAW_PRODUCTS.map((p) => {
     discountPercent,
     discountBadge,
     image: p.image,
-    gallery: p.gallery || [p.image],
+    gallery: (() => {
+      const base = Array.isArray(p.gallery) && p.gallery.length > 0 ? p.gallery : [p.image]
+      const withoutCert = base.filter((u) => u && u !== AUTHENTICITY_CERTIFICATE_IMAGE)
+      return [...withoutCert, AUTHENTICITY_CERTIFICATE_IMAGE]
+    })(),
     purity: p.purity || 'GRADE A+',
     compliance: p.compliance || 'Certified Quality Standard',
     pack: p.pack || 'Signature Presentation Box',

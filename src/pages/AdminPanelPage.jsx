@@ -306,7 +306,10 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
 
   const handleMakeCover = (index) => {
     const target = gallery[index]
-    const updated = [target, ...gallery.filter((_, idx) => idx !== index)]
+    const withoutTarget = gallery.filter((_, idx) => idx !== index)
+    const certImage = withoutTarget.find((u) => u.includes('certificate'))
+    const rest = withoutTarget.filter((u) => !u.includes('certificate'))
+    const updated = certImage ? [target, ...rest, certImage] : [target, ...rest]
     onUpdateGallery(updated)
   }
 
@@ -331,58 +334,73 @@ function GalleryDropzone({ gallery = [], onUpdateGallery }) {
       {/* Gallery Thumbnails */}
       {gallery.length > 0 && (
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
-          {gallery.map((img, idx) => (
-            <div
-              key={idx}
-              className={`group relative aspect-square rounded-xl bg-obsidian overflow-hidden border transition-all ${
-                idx === 0
-                  ? 'border-gold ring-2 ring-gold/40 shadow-lg shadow-gold/10'
-                  : 'border-charcoal-light hover:border-gold/50'
-              }`}
-            >
-              <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
+          {gallery.map((img, idx) => {
+            const isCert = img.includes('certificate')
+            return (
+              <div
+                key={idx}
+                className={`group relative aspect-square rounded-xl bg-obsidian overflow-hidden border transition-all ${
+                  isCert
+                    ? 'border-amber-500/80 ring-1 ring-amber-500/40 shadow-md shadow-amber-500/10'
+                    : idx === 0
+                    ? 'border-gold ring-2 ring-gold/40 shadow-lg shadow-gold/10'
+                    : 'border-charcoal-light hover:border-gold/50'
+                }`}
+              >
+                <img src={img} alt={`Gallery ${idx + 1}`} className={`w-full h-full ${isCert ? 'object-contain p-2 bg-stone-900/40' : 'object-cover'}`} />
 
-              {/* Cover Badge on Photo 0 */}
-              {idx === 0 ? (
-                <div className="absolute top-1.5 left-1.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded-md bg-gold text-obsidian text-[10px] font-bold shadow-md tracking-wider uppercase">
-                  <Sparkles className="w-3 h-3" />
-                  <span>Cover</span>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => handleMakeCover(idx)}
-                  className="absolute top-1.5 left-1.5 z-10 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-obsidian/90 backdrop-blur-md text-gold hover:bg-gold hover:text-obsidian text-[10px] font-semibold border border-gold/40 shadow cursor-pointer"
-                  title="Make this photo the primary cover"
-                >
-                  <Sparkles className="w-2.5 h-2.5" />
-                  <span>Make Cover</span>
-                </button>
-              )}
-
-              {/* Action Controls */}
-              <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 z-20">
-                {idx !== 0 && (
+                {/* Cover / Certificate Badge */}
+                {isCert ? (
+                  <div className="absolute top-1.5 left-1.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500 text-stone-950 text-[10px] font-black shadow-md tracking-wider uppercase">
+                    <ShieldCheck className="w-3 h-3" />
+                    <span>Certificate</span>
+                  </div>
+                ) : idx === 0 ? (
+                  <div className="absolute top-1.5 left-1.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded-md bg-gold text-obsidian text-[10px] font-bold shadow-md tracking-wider uppercase">
+                    <Sparkles className="w-3 h-3" />
+                    <span>Cover</span>
+                  </div>
+                ) : (
                   <button
                     type="button"
                     onClick={() => handleMakeCover(idx)}
-                    className="w-full py-1 px-2 rounded bg-gold text-obsidian text-[11px] font-bold hover:bg-gold-light transition-colors cursor-pointer shadow flex items-center justify-center gap-1"
+                    className="absolute top-1.5 left-1.5 z-10 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-obsidian/90 backdrop-blur-md text-gold hover:bg-gold hover:text-obsidian text-[10px] font-semibold border border-gold/40 shadow cursor-pointer"
+                    title="Make this photo the primary cover"
                   >
-                    <Sparkles className="w-3 h-3" />
-                    <span>Set Cover</span>
+                    <Sparkles className="w-2.5 h-2.5" />
+                    <span>Make Cover</span>
                   </button>
                 )}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveImage(idx)}
-                  className="w-full py-1 px-2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-medium hover:bg-rose-500 hover:text-white transition-colors cursor-pointer flex items-center justify-center gap-1"
-                >
-                  <Trash2 className="w-3 h-3" />
-                  <span>Delete</span>
-                </button>
+
+                {/* Action Controls */}
+                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-2 z-20">
+                  {!isCert && idx !== 0 && (
+                    <button
+                      type="button"
+                      onClick={() => handleMakeCover(idx)}
+                      className="w-full py-1 px-2 rounded bg-gold text-obsidian text-[11px] font-bold hover:bg-gold-light transition-colors cursor-pointer shadow flex items-center justify-center gap-1"
+                    >
+                      <Sparkles className="w-3 h-3" />
+                      <span>Set Cover</span>
+                    </button>
+                  )}
+                  {isCert && (
+                    <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider text-center">
+                      Quality Seal
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(idx)}
+                    className="w-full py-1 px-2 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40 text-[11px] font-medium hover:bg-rose-500 hover:text-white transition-colors cursor-pointer flex items-center justify-center gap-1"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>Delete</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
 
