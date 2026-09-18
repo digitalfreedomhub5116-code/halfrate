@@ -29,7 +29,7 @@ export const GENRES = [
     label: 'Pen Drives & Storage',
     slug: 'pen-drives',
     image: '/images/products/sandisk-cruzer-blade/sandisk-cruzer-blade-main-hero.jpg',
-    description: 'Original SanDisk Cruzer Blade USB 2.0 pen drives from 8GB to 256GB at wholesale Sabse Sasta rates.',
+    description: 'Original SanDisk USB 2.0 pen drives from 8GB to 256GB at wholesale Sabse Sasta rates.',
   },
 ]
 
@@ -464,8 +464,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'sandisk-cruzer-blade-8gb',
-    name: 'SanDisk Cruzer Blade 8GB Pen Drive',
-    shortName: 'Cruzer Blade 8GB',
+    name: 'SanDisk 8GB Pen Drive',
+    shortName: 'SanDisk 8GB',
     genre: 'STORAGE_DEVICES',
     price: 199,
     originalPrice: 499,
@@ -481,12 +481,12 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
-    pack: 'SanDisk Cruzer Blade 8GB Flash Drive + Retail Blister Pack',
+    pack: 'SanDisk 8GB Flash Drive + Retail Blister Pack',
     dimensions: '41.5mm × 17.6mm × 7.4mm | Pocket Sized',
     weight: '2.5g Ultra-Lightweight',
     material: 'Contoured High-Impact Thermal Polymer Chassis',
     chipset: '8GB Capacity • USB 2.0 High Speed • 128-bit AES Encryption',
-    description: 'The SanDisk Cruzer Blade 8GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
+    description: 'The SanDisk 8GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
     features: [
       'Iconic Red & Black Pocket Profile — Compact, featherweight 2.5g contoured body easily slips into pockets, bags, or keychains via integrated lanyard loop.',
       '8GB High-Reliability Storage — High-speed flash NAND storage ideal for photos, full HD videos, music, assignments, and office documents.',
@@ -514,8 +514,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'sandisk-cruzer-blade-16gb',
-    name: 'SanDisk Cruzer Blade 16GB Pen Drive',
-    shortName: 'Cruzer Blade 16GB',
+    name: 'SanDisk 16GB Pen Drive',
+    shortName: 'SanDisk 16GB',
     genre: 'STORAGE_DEVICES',
     price: 249,
     originalPrice: 599,
@@ -531,12 +531,12 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
-    pack: 'SanDisk Cruzer Blade 16GB Flash Drive + Retail Blister Pack',
+    pack: 'SanDisk 16GB Flash Drive + Retail Blister Pack',
     dimensions: '41.5mm × 17.6mm × 7.4mm | Pocket Sized',
     weight: '2.5g Ultra-Lightweight',
     material: 'Contoured High-Impact Thermal Polymer Chassis',
     chipset: '16GB Capacity • USB 2.0 High Speed • 128-bit AES Encryption',
-    description: 'The SanDisk Cruzer Blade 16GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
+    description: 'The SanDisk 16GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
     features: [
       'Iconic Red & Black Pocket Profile — Compact, featherweight 2.5g contoured body easily slips into pockets, bags, or keychains via integrated lanyard loop.',
       '16GB High-Reliability Storage — High-speed flash NAND storage ideal for photos, full HD videos, music, assignments, and office documents.',
@@ -564,8 +564,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'sandisk-cruzer-blade-32gb',
-    name: 'SanDisk Cruzer Blade 32GB Pen Drive',
-    shortName: 'Cruzer Blade 32GB',
+    name: 'SanDisk 32GB Pen Drive',
+    shortName: 'SanDisk 32GB',
     genre: 'STORAGE_DEVICES',
     price: 299,
     originalPrice: 799,
@@ -581,12 +581,12 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
-    pack: 'SanDisk Cruzer Blade 32GB Flash Drive + Retail Blister Pack',
+    pack: 'SanDisk 32GB Flash Drive + Retail Blister Pack',
     dimensions: '41.5mm × 17.6mm × 7.4mm | Pocket Sized',
     weight: '2.5g Ultra-Lightweight',
     material: 'Contoured High-Impact Thermal Polymer Chassis',
     chipset: '32GB Capacity • USB 2.0 High Speed • 128-bit AES Encryption',
-    description: 'The SanDisk Cruzer Blade 32GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, 4K videos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
+    description: 'The SanDisk 32GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, 4K videos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
     features: [
       'Iconic Red & Black Pocket Profile — Compact, featherweight 2.5g contoured body easily slips into pockets, bags, or keychains via integrated lanyard loop.',
       '32GB High-Reliability Storage — High-speed flash NAND storage ideal for photos, full HD/4K videos, music, assignments, and office documents.',
@@ -614,8 +614,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'sandisk-cruzer-blade-64gb',
-    name: 'SanDisk Cruzer Blade 64GB Pen Drive',
-    shortName: 'Cruzer Blade 64GB',
+    name: 'SanDisk 64GB Pen Drive',
+    shortName: 'SanDisk 64GB',
     genre: 'STORAGE_DEVICES',
     price: 399,
     originalPrice: 1099,
@@ -631,12 +631,12 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
-    pack: 'SanDisk Cruzer Blade 64GB Flash Drive + Retail Blister Pack',
+    pack: 'SanDisk 64GB Flash Drive + Retail Blister Pack',
     dimensions: '41.5mm × 17.6mm × 7.4mm | Pocket Sized',
     weight: '2.5g Ultra-Lightweight',
     material: 'Contoured High-Impact Thermal Polymer Chassis',
     chipset: '64GB Capacity • USB 2.0 High Speed • 128-bit AES Encryption',
-    description: 'The SanDisk Cruzer Blade 64GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, 4K videos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
+    description: 'The SanDisk 64GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, 4K videos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
     features: [
       'Iconic Red & Black Pocket Profile — Compact, featherweight 2.5g contoured body easily slips into pockets, bags, or keychains via integrated lanyard loop.',
       '64GB High-Reliability Storage — High-speed flash NAND storage ideal for photos, full HD/4K videos, music, assignments, and office documents.',
@@ -664,8 +664,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'sandisk-cruzer-blade-128gb',
-    name: 'SanDisk Cruzer Blade 128GB Pen Drive',
-    shortName: 'Cruzer Blade 128GB',
+    name: 'SanDisk 128GB Pen Drive',
+    shortName: 'SanDisk 128GB',
     genre: 'STORAGE_DEVICES',
     price: 649,
     originalPrice: 1699,
@@ -681,12 +681,12 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
-    pack: 'SanDisk Cruzer Blade 128GB Flash Drive + Retail Blister Pack',
+    pack: 'SanDisk 128GB Flash Drive + Retail Blister Pack',
     dimensions: '41.5mm × 17.6mm × 7.4mm | Pocket Sized',
     weight: '2.5g Ultra-Lightweight',
     material: 'Contoured High-Impact Thermal Polymer Chassis',
     chipset: '128GB Capacity • USB 2.0 High Speed • 128-bit AES Encryption',
-    description: 'The SanDisk Cruzer Blade 128GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, 4K videos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
+    description: 'The SanDisk 128GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up essential documents, high-res photos, 4K videos, music libraries, and work files. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
     features: [
       'Iconic Red & Black Pocket Profile — Compact, featherweight 2.5g contoured body easily slips into pockets, bags, or keychains via integrated lanyard loop.',
       '128GB High-Reliability Storage — High-speed flash NAND storage ideal for photos, full HD/4K videos, music, assignments, and office documents.',
@@ -714,8 +714,8 @@ const RAW_PRODUCTS = [
   // ══════════════════════════════════════════════════════════════════
   {
     id: 'sandisk-cruzer-blade-256gb',
-    name: 'SanDisk Cruzer Blade 256GB Pen Drive',
-    shortName: 'Cruzer Blade 256GB',
+    name: 'SanDisk 256GB Pen Drive',
+    shortName: 'SanDisk 256GB',
     genre: 'STORAGE_DEVICES',
     price: 1199,
     originalPrice: 2999,
@@ -731,12 +731,12 @@ const RAW_PRODUCTS = [
     ],
     purity: 'Genuine SanDisk 5-Year Warranty',
     compliance: 'Official SanDisk® Quality Certified',
-    pack: 'SanDisk Cruzer Blade 256GB Flash Drive + Retail Blister Pack',
+    pack: 'SanDisk 256GB Flash Drive + Retail Blister Pack',
     dimensions: '41.5mm × 17.6mm × 7.4mm | Pocket Sized',
     weight: '2.5g Ultra-Lightweight',
     material: 'Contoured High-Impact Thermal Polymer Chassis',
     chipset: '256GB Capacity • USB 2.0 High Speed • 128-bit AES Encryption',
-    description: 'The SanDisk Cruzer Blade 256GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up massive file collections, 4K videos, heavy raw photos, and system backups. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
+    description: 'The SanDisk 256GB USB Flash Drive combines an ultra-compact contoured profile with reliable data storage in its iconic red and black design. Perfect for backing up massive file collections, 4K videos, heavy raw photos, and system backups. Features high-speed USB 2.0 plug-and-play simplicity across Windows, Mac, smart TVs, and car stereos, backed by SanDisk SecureAccess™ password protection with 128-bit AES encryption to keep private files safe.',
     features: [
       'Iconic Red & Black Pocket Profile — Compact, featherweight 2.5g contoured body easily slips into pockets, bags, or keychains via integrated lanyard loop.',
       '256GB Massive High-Reliability Storage — High-speed flash NAND storage ideal for entire media libraries, full HD/4K videos, and bulk file archives.',

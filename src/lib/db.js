@@ -27,7 +27,7 @@ const setLocalData = (key, value) => {
   }
 }
 
-const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v14'
+const LOCAL_STORAGE_PRODUCTS_KEY = 'halfrate_catalog_v15'
 
 // ── 1. PRODUCT MAPPERS & IMAGE STORAGE ──
 export function mapDbRowToProduct(row) {
